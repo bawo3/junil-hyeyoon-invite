@@ -2072,8 +2072,9 @@ body {
       <div class="date-time" id="date-time">—</div>
 
       <!-- 날짜 이미지 -->
-      <div class="date-photo-wrap">
-        <img src="./images/1107date.png" alt="예식일" loading="lazy">
+      <!-- 날짜 이미지 — photo.html에서 설정한 사진이 있을 때만 표시 (JS에서 display 제어) -->
+      <div class="date-photo-wrap" id="date-photo-wrap" style="display:none;">
+        <img src="" alt="예식일" loading="lazy">
       </div>
 
       <!-- 디데이 -->
@@ -2708,6 +2709,15 @@ function renderDateTime() {
 
   /* 시간 — 양 옆에 점 장식이 CSS로 자동 추가됨 */
   document.getElementById('date-time').textContent = d.time;
+
+  /* 날짜 이미지 — photo.html "예식 일정 사진"에 저장한 값이 있을 때만 표시 */
+  const datePhotoWrap = document.getElementById('date-photo-wrap');
+  if (d.photo) {
+    datePhotoWrap.querySelector('img').src = d.photo;
+    datePhotoWrap.style.display = '';
+  } else {
+    datePhotoWrap.style.display = 'none';
+  }
 
   /* 디데이 */
   const badge = document.getElementById('dday-badge');

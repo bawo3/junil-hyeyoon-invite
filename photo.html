@@ -446,6 +446,22 @@ body {
     <div style="font-size:11px; color: var(--text-light); margin: 8px 0 12px; line-height:1.6;">
       💡 요일은 날짜에 맞춰 자동 계산되고, 청첩장에는 "오후 12시 30분" 형식으로 자동 표시됩니다. RSVP 마감일(예식 3주 전)과 캘린더 알림(예식 7일 전)도 이 날짜 기준으로 자동 계산됩니다.
     </div>
+
+    <div class="acc-group" style="border-top:1px solid rgba(201,169,110,0.18); padding-top:16px; margin-top:4px;">
+      <div class="acc-group-label" style="margin-bottom:8px;">📷 예식 일정 사진</div>
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="width:96px; height:96px; border-radius:14px; overflow:hidden; background: var(--cream-dark); flex-shrink:0;">
+          <img id="datePhotoPreview" src="" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div style="flex:1; min-width:160px;">
+          <input type="file" id="datePhotoInput" accept="image/*" style="display:none;">
+          <button class="action-btn" type="button" onclick="document.getElementById('datePhotoInput').click()">사진 선택</button>
+          <button class="action-btn" type="button" onclick="removeDatePhoto()" style="margin-left:6px;">삭제</button>
+          <div style="font-size:11px; color: var(--text-light); margin-top:6px;">청첩장 "예식 일정" 섹션 중간(시간 표시와 D-Day 사이)에 삽입됩니다. 비워두면 표시되지 않습니다.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="acc-actions">
       <button class="btn-primary" id="dateSaveBtn" onclick="saveWeddingDate()">저장</button>
     </div>
@@ -640,7 +656,7 @@ body {
 /* ── 비밀번호 인증 ──
    주의: 클라이언트 사이드 잠금이라 완벽한 보안은 아님.
    하지만 일반 하객이 우연히 접근하는 것을 막는 용도로는 충분. */
-const ADMIN_PW = '01120309';
+const ADMIN_PW = '684600';
 const AUTH_KEY = 'photoAdminAuth';
 
 function checkAuth() {
@@ -1164,7 +1180,7 @@ async function saveTransport() {
    /api/date 엔드포인트(Vercel KV)와 동기화
    필드: year, month, day, hour, minute, dayOfWeek, time */
 const DOW_KR = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-const DEFAULT_DATE = { year: 2026, month: 11, day: 7, hour: 12, minute: 30 };
+const DEFAULT_DATE = { year: 2026, month: 12, day: 27, hour: 14, minute: 30, photo: '' };
 
 function formatKoreanTime(hour24, minute) {
   const period = hour24 < 12 ? '오전' : '오후';
@@ -1173,10 +1189,33 @@ function formatKoreanTime(hour24, minute) {
   return minute > 0 ? `${period} ${h12}시 ${minute}분` : `${period} ${h12}시`;
 }
 
+let datePhotoData = '';
+
 function fillDateFields(d) {
   const pad = n => String(n).padStart(2, '0');
   document.getElementById('wedding-date-input').value = `${d.year}-${pad(d.month)}-${pad(d.day)}`;
   document.getElementById('wedding-time-input').value = `${pad(d.hour ?? 12)}:${pad(d.minute ?? 0)}`;
+  datePhotoData = d.photo || '';
+  document.getElementById('datePhotoPreview').src = datePhotoData;
+}
+
+/* 예식 일정 사진 업로드 — 다른 사진 카드와 동일한 압축 로직 재사용 */
+document.getElementById('datePhotoInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !file.type.startsWith('image/')) return;
+  try {
+    const { src } = await compressImage(file);
+    datePhotoData = src;
+    document.getElementById('datePhotoPreview').src = src;
+  } catch (err) {
+    showToast('이미지를 불러오지 못했습니다');
+  }
+});
+
+function removeDatePhoto() {
+  datePhotoData = '';
+  document.getElementById('datePhotoPreview').src = '';
 }
 
 async function loadWeddingDate() {
@@ -1206,7 +1245,7 @@ async function saveWeddingDate() {
   const dayOfWeek = DOW_KR[new Date(year, month - 1, day).getDay()];
   const time = formatKoreanTime(hour, minute);
 
-  const data = { year, month, day, hour, minute, dayOfWeek, time };
+  const data = { year, month, day, hour, minute, dayOfWeek, time, photo: datePhotoData };
 
   btn.disabled = true;
   btn.textContent = '저장 중...';
