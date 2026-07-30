@@ -1,0 +1,88 @@
+{
+  "site": {
+    "url": "https://invite-wedding-groom-bride.vercel.app/",
+    "title": "준일 ♥ 혜윤 청첩장",
+    "description": "2026.12.27 SUN · 부산 W웨딩 (국민연금 웨딩홀) 1층 컨벤션홀 · 14:30",
+    "ogImage": "./images/og-cover.png"
+  },
+  "wedding": {
+    "groom": {
+      "name": "김준일",
+      "englishName": "Kim Jun Il",
+      "fatherName": "아버지 성함",
+      "fatherPhone": "010-0000-0000",
+      "motherName": "어머니 성함",
+      "motherPhone": "010-0000-0000",
+      "contact": "010-0000-0000"
+    },
+    "bride": {
+      "name": "방혜윤",
+      "englishName": "Bang Hye Yoon",
+      "fatherName": "아버지 성함",
+      "fatherPhone": "010-0000-0000",
+      "motherName": "어머니 성함",
+      "motherPhone": "010-0000-0000",
+      "contact": "010-0000-0000"
+    },
+    "date": {
+      "year": 2026,
+      "month": 12,
+      "day": 27,
+      "dayOfWeek": "일요일",
+      "time": "오후 2시 30분"
+    },
+    "venue": {
+      "name": "부산 W웨딩 (국민연금 웨딩홀)",
+      "hall": "1층 컨벤션홀",
+      "address": "부산광역시 연제구 중앙대로 1000",
+      "lat": 35.1778498,
+      "lng": 129.0756195,
+      "photo": ""
+    },
+    "message": {
+      "main": "두 사람이 하나 되어\n새로운 이야기를 시작합니다",
+      "sub": "귀한 걸음으로 자리를 빛내어 주시기를\n진심으로 청합니다",
+      "invitation": "오랜 시간을 지나 마주한 두 사람이\n이제 하나의 길을 함께 걷고자 합니다\n\n그 첫 발걸음에\n소중한 분들의 따뜻한 마음을 더해 주신다면\n더없는 기쁨이 될 것입니다"
+    },
+    "account": {
+      "groom": {
+        "bank": "은행명",
+        "number": "000-000-000000",
+        "holder": "김준일"
+      },
+      "bride": {
+        "bank": "은행명",
+        "number": "000-000-000000",
+        "holder": "방혜윤"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "photos": [
+        {
+          "src": "./images/photo1.svg",
+          "caption": "처음 만난 날"
+        },
+        {
+          "src": "./images/photo2.svg",
+          "caption": "함께한 봄날"
+        },
+        {
+          "src": "./images/photo3.svg",
+          "caption": "영원히 함께"
+        }
+      ]
+    },
+    "rsvp": {
+      "enabled": true,
+      "deadline": "2026-12-06"
+    }
+  },
+  "theme": {
+    "primaryColor": "#C9A96E",
+    "accentColor": "#8B6F47",
+    "roseGold": "#B76E79",
+    "cream": "#FAF7F2",
+    "darkGold": "#8B6F47"
+  }
+}

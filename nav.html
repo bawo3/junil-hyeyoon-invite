@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>길찾기 · 부산 W웨딩 (국민연금 웨딩홀)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;600&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&amp;family=Noto+Sans+KR:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A96E;
+  --gold-light: #E8D5B0;
+  --gold-dark: #8B6F47;
+  --cream: #FAF7F2;
+  --text-dark: #2C2420;
+  --text-mid: #5C4A3A;
+  --text-light: #8B7355;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(232,213,176,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(183,110,121,0.12) 0%, transparent 55%),
+    linear-gradient(160deg, #FAF7F2 0%, #F0EAE0 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 24px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+/* 헤더 카드 */
+.card {
+  width: 100%; max-width: 380px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 36px 28px;
+  box-shadow: 0 20px 60px rgba(139,111,71,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
+  text-align: center;
+}
+.eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+.addr {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px; color: var(--gold-dark);
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.line {
+  width: 28px; height: 1px;
+  background: var(--gold-light);
+  margin: 0 auto 28px;
+}
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.nav-btn {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  padding: 18px 8px;
+  border: none;
+  border-radius: 18px;
+  background: rgba(250,247,242,0.85);
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-mid);
+  letter-spacing: 1px;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+.nav-btn:hover, .nav-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139,111,71,0.18);
+  background: white;
+}
+.nav-ico {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 14px;
+  color: white;
+  letter-spacing: 0;
+}
+.ico-kmap  { background: linear-gradient(135deg, #FEE500, #F0D000); color: #3A1D1D !important; }
+.ico-knavi { background: linear-gradient(135deg, #FFD400, #FFA500); color: #3A1D1D !important; }
+.ico-nmap  { background: linear-gradient(135deg, #03C75A, #02A14A); }
+.ico-tmap  { background: linear-gradient(135deg, #1B64DA, #0046B5); }
+
+.copy-row {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(201,169,110,0.2);
+}
+.copy-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.7);
+  font-family: 'Noto Serif KR', sans-serif;
+  font-size: 12px; color: var(--text-mid);
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(139,111,71,0.08);
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: white; }
+
+.home-link {
+  display: block;
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px; letter-spacing: 2px;
+  color: var(--gold-dark);
+  text-decoration: none;
+  text-align: center;
+  opacity: 0.7;
+}
+.home-link:hover { opacity: 1; }
+
+/* 토스트 */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text-dark); color: var(--cream);
+  padding: 12px 24px; border-radius: 30px;
+  font-size: 12px; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 9999; pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="eyebrow">Wedding Venue</div>
+  <div class="title" id="venue-title">부산 W웨딩 (국민연금 웨딩홀)</div>
+  <div class="addr" id="venue-addr-line">부산광역시 연제구 중앙대로 1000 · 1층 컨벤션홀</div>
+  <div class="line"></div>
+
+  <div class="btn-grid">
+    <button class="nav-btn" onclick="openNav('kakaomap')">
+      <div class="nav-ico ico-kmap">K</div>
+      <span>카카오맵</span>
+    </button>
+    <button class="nav-btn" onclick="openNav('kakaonavi')">
+      <div class="nav-ico ico-knavi">🚗</div>
+      <span>카카오내비</span>
+    </button>
+    <button class="nav-btn" onclick="openNav('navermap')">
+      <div class="nav-ico ico-nmap">N</div>
+      <span>네이버지도</span>
+    </button>
+    <button class="nav-btn" onclick="openNav('tmap')">
+      <div class="nav-ico ico-tmap">T</div>
+      <span>티맵</span>
+    </button>
+  </div>
+
+  <div class="copy-row">
+    <button class="copy-btn" onclick="copyAddr()">📋 주소 복사</button>
+  </div>
+
+  <a class="home-link" href="/">← 청첩장으로 돌아가기</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* 예식장 좌표 — photo.html에서 저장한 값이 있으면 아래를 덮어씀 */
+const VENUE = {
+  name:  '부산 W웨딩',                 /* 지도 검색/딥링크용 — navName 우선 사용 */
+  lat:   35.1778498,
+  lng:   129.0756195,
+  addr:  '부산광역시 연제구 중앙대로 1000'
+};
+
+(async function loadVenueOverride() {
+  try {
+    const res = await fetch('/api/venue');
+    if (!res.ok) return;
+    const d = await res.json();
+    if (!d) return;
+    if (d.navName || d.name) VENUE.name = d.navName || d.name;
+    if (d.lat)     VENUE.lat  = d.lat;
+    if (d.lng)     VENUE.lng  = d.lng;
+    if (d.address) VENUE.addr = d.address;
+
+    /* 화면에 보이는 제목/주소도 실제 저장된 값으로 갱신 (지금까지는 딥링크만 갱신되고
+       화면 텍스트는 그대로였음 — 예식장이 바뀌었는데 이 페이지만 옛 이름이 남는 문제 수정) */
+    const displayName = d.name || VENUE.name;
+    document.title = `길찾기 · ${displayName}`;
+    const titleEl = document.getElementById('venue-title');
+    const addrEl  = document.getElementById('venue-addr-line');
+    if (titleEl) titleEl.textContent = displayName;
+    if (addrEl)  addrEl.textContent  = `${VENUE.addr}${d.hall ? ' · ' + d.hall : ''}`;
+  } catch (e) { console.warn('예식장 정보 로드 실패:', e); }
+})();
+
+const ua = navigator.userAgent || '';
+const isIOS = /iPhone|iPad|iPod/i.test(ua);
+const isAndroid = /Android/i.test(ua);
+const isMobile = isIOS || isAndroid;
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* 딥링크 시도 → 일정 시간 내 페이지 떠나지 않으면 웹으로 폴백 */
+function tryDeepLink(deepUrl, fallbackUrl) {
+  let didLeave = false;
+  const onHide = () => { didLeave = true; };
+  document.addEventListener('visibilitychange', onHide);
+  window.addEventListener('pagehide', onHide);
+
+  window.location.href = deepUrl;
+  setTimeout(() => {
+    if (!didLeave && fallbackUrl) window.open(fallbackUrl, '_blank');
+  }, 1500);
+}
+
+function openNav(app) {
+  const name = encodeURIComponent(VENUE.name);
+  const addr = encodeURIComponent(VENUE.addr);
+
+  if (app === 'kakaomap') {
+    /* 카카오맵 — 장소 보기 (앱 우선, 웹 폴백) */
+    if (isMobile) {
+      const deep = `kakaomap://look?p=${VENUE.lat},${VENUE.lng}`;
+      const web  = `https://map.kakao.com/link/map/${name},${VENUE.lat},${VENUE.lng}`;
+      tryDeepLink(deep, web);
+    } else {
+      window.open(`https://map.kakao.com/link/map/${name},${VENUE.lat},${VENUE.lng}`, '_blank');
+    }
+  }
+  else if (app === 'kakaonavi') {
+    /* 카카오내비 — 자동차 길안내 */
+    if (isMobile) {
+      const deep = `kakaomap://route?ep=${VENUE.lat},${VENUE.lng}&by=CAR`;
+      const web  = `https://map.kakao.com/link/to/${name},${VENUE.lat},${VENUE.lng}`;
+      tryDeepLink(deep, web);
+    } else {
+      window.open(`https://map.kakao.com/link/to/${name},${VENUE.lat},${VENUE.lng}`, '_blank');
+    }
+  }
+  else if (app === 'navermap') {
+    /* 네이버지도 — 앱 딥링크는 좌표(dlat/dlng)로 정확히 지정, dname 은 표시 라벨.
+       웹 폴백은 좌표 없는 순수 텍스트 검색이라 주소로 검색해야 정확 */
+    if (isMobile) {
+      const deep = `nmap://route/car?dlat=${VENUE.lat}&dlng=${VENUE.lng}&dname=${name}&appname=invite.wedding`;
+      const web  = `https://map.naver.com/v5/search/${addr}`;
+      tryDeepLink(deep, web);
+    } else {
+      window.open(`https://map.naver.com/v5/search/${addr}`, '_blank');
+    }
+  }
+  else if (app === 'tmap') {
+    /* 티맵 — 자동차 길안내 */
+    if (isMobile) {
+      const deep = `tmap://route?goalname=${name}&goalx=${VENUE.lng}&goaly=${VENUE.lat}&goaladdr=${addr}`;
+      const web  = `https://tmap.life/route?goalname=${name}&goalx=${VENUE.lng}&goaly=${VENUE.lat}`;
+      tryDeepLink(deep, web);
+    } else {
+      window.open(`https://tmap.life/route?goalname=${name}&goalx=${VENUE.lng}&goaly=${VENUE.lat}`, '_blank');
+    }
+  }
+}
+
+function copyAddr() {
+  const text = VENUE.addr;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast('주소가 복사되었습니다'))
+      .catch(() => fallback(text));
+  } else {
+    fallback(text);
+  }
+}
+function fallback(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showToast('주소가 복사되었습니다'); }
+  catch { showToast('복사에 실패했습니다'); }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>

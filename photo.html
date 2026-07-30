@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사진 업로드 · 준일 ♥ 혜윤</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;600&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&amp;family=Noto+Sans+KR:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A96E;
+  --gold-light: #E8D5B0;
+  --gold-dark: #8B6F47;
+  --rose: #B76E79;
+  --cream: #FAF7F2;
+  --cream-dark: #F0EAE0;
+  --text-dark: #2C2420;
+  --text-mid: #5C4A3A;
+  --text-light: #8B7355;
+  --white: #FFFFFF;
+  --no-bg: #FCEAEC;
+  --no-color: #C84050;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(232,213,176,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(183,110,121,0.12) 0%, transparent 50%),
+    linear-gradient(160deg, #FAF7F2 0%, #F5EFE6 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  padding: 24px 16px 60px;
+}
+
+/* 헤더 */
+.head {
+  max-width: 720px; margin: 0 auto 24px;
+  text-align: center;
+  padding: 28px 20px;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.head-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.head-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 3px;
+}
+.head-sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 13px; color: var(--gold-dark);
+  margin-top: 6px; letter-spacing: 1px;
+}
+
+.wrap { max-width: 720px; margin: 0 auto; }
+
+/* 업로드 카드 */
+.upload-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 32px rgba(139,111,71,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.upload-zone {
+  border: 2px dashed var(--gold-light);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(250,247,242,0.5);
+  transition: all 0.25s;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  background: rgba(232,213,176,0.25);
+  border-color: var(--gold);
+}
+.upload-icon { font-size: 36px; margin-bottom: 8px; opacity: 0.7; }
+.upload-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px; color: var(--text-mid);
+  letter-spacing: 1px;
+}
+.upload-hint {
+  font-size: 11px; color: var(--text-light);
+  margin-top: 6px;
+}
+#fileInput { display: none; }
+
+/* 진행 상태 */
+.progress-list { margin-top: 16px; }
+.progress-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  background: rgba(250,247,242,0.7);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.progress-name { flex: 1; color: var(--text-mid); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.progress-status { font-family: 'Cormorant Garamond', serif; letter-spacing: 1px; }
+.progress-status.ok   { color: #5A9A5D; }
+.progress-status.err  { color: var(--no-color); }
+.progress-status.wait { color: var(--gold); }
+
+/* 사진 목록 */
+.photos-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 6px 32px rgba(139,111,71,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.photos-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.photos-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px; letter-spacing: 2px;
+  color: var(--text-dark);
+}
+.photos-count {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; color: var(--gold-dark);
+}
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.photo-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--cream-dark);
+  box-shadow: 0 2px 12px rgba(139,111,71,0.10);
+}
+.photo-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-del {
+  position: absolute; top: 6px; right: 6px;
+  background: rgba(44,36,32,0.7);
+  color: white; border: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.photo-del:hover { background: var(--no-color); }
+.photo-caption-input {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 6px 8px;
+  font-size: 11px;
+  border: none;
+  background: rgba(255,255,255,0.92);
+  font-family: 'Noto Sans KR', sans-serif;
+  outline: none;
+  border-top: 1px solid rgba(201,169,110,0.2);
+}
+
+.empty {
+  text-align: center; padding: 40px 20px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px; color: var(--text-light);
+  letter-spacing: 1px;
+}
+.empty-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
+
+/* 계좌 관리 카드 */
+.acc-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 22px 20px;
+  margin-top: 20px;
+  box-shadow: 0 6px 32px rgba(139,111,71,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.acc-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.acc-card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px; letter-spacing: 2px;
+  color: var(--text-dark);
+}
+.acc-group {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(201,169,110,0.18);
+}
+.acc-group:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+.acc-group-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.acc-group-label.groom { color: #3A6FB5; }
+.acc-group-label.bride { color: #C84050; }
+.acc-row {
+  display: grid;
+  grid-template-columns: 80px 90px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.acc-row.with-name {
+  grid-template-columns: 80px 90px 1fr;
+}
+.acc-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  color: var(--text-dark);
+  outline: none;
+  transition: border 0.2s;
+}
+.acc-input:focus { border-color: var(--gold); }
+.acc-input::placeholder { color: var(--text-light); opacity: 0.6; }
+.acc-row-label {
+  display: flex; align-items: center;
+  font-size: 12px; color: var(--text-mid);
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 520px) {
+  .acc-row { grid-template-columns: 70px 1fr; gap: 6px; }
+  .acc-row .acc-input:first-of-type { grid-column: 1 / -1; }
+}
+
+/* 부모님 연락처 입력 — 성함/전화 2열 */
+.parent-phone-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+@media (max-width: 520px) {
+  .parent-phone-row { grid-template-columns: 1fr; gap: 6px; }
+}
+
+.acc-actions {
+  display: flex; gap: 8px;
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+.btn-primary {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(139,111,71,0.25);
+  transition: all 0.2s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(139,111,71,0.32); }
+.btn-primary:disabled { opacity: 0.6; cursor: wait; }
+
+/* 비밀번호 잠금 화면 */
+.auth-gate {
+  position: fixed; inset: 0;
+  z-index: 10000;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(232,213,176,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 100%, rgba(183,110,121,0.22) 0%, transparent 55%),
+    linear-gradient(160deg, #FAF7F2 0%, #F0EAE0 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.auth-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 48px 32px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(139,111,71,0.18), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.auth-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.auth-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 3px;
+  margin-bottom: 6px;
+}
+.auth-sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 13px; color: var(--gold-dark);
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.auth-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(201,169,110,0.4);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.9);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  letter-spacing: 4px;
+  color: var(--text-dark);
+  text-align: center;
+  outline: none;
+  margin-bottom: 14px;
+  transition: border 0.2s;
+}
+.auth-input:focus { border-color: var(--gold); }
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 500;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(139,111,71,0.25);
+  transition: all 0.2s;
+}
+.auth-btn:hover { transform: translateY(-1px); }
+.auth-err {
+  font-size: 12px;
+  color: var(--no-color);
+  margin-top: 12px;
+  min-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* 토스트 */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text-dark); color: var(--cream);
+  padding: 12px 24px; border-radius: 30px;
+  font-size: 12px; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 9999; pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* 액션 버튼 */
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.85);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; color: var(--text-mid);
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(139,111,71,0.08);
+  transition: all 0.2s;
+}
+.action-btn:hover { background: var(--white); transform: translateY(-1px); }
+.action-btn.danger { color: var(--no-color); }
+.action-btn.danger:hover { background: var(--no-bg); }
+</style>
+</head>
+<body>
+
+<!-- 비밀번호 잠금 화면 -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
+    <div class="auth-eyebrow">Photo Manager</div>
+    <div class="auth-title">관리자 인증</div>
+    <div class="auth-sub">비밀번호를 입력해 주세요</div>
+    <input type="password" class="auth-input" id="authInput" inputmode="numeric" autocomplete="off" placeholder="• • • • • • • •">
+    <button class="auth-btn" onclick="checkAuth()">확인</button>
+    <div class="auth-err" id="authErr">&nbsp;</div>
+  </div>
+</div>
+
+<!-- 헤더 -->
+<header class="head">
+  <div class="head-eyebrow">Photo Manager</div>
+  <div class="head-title">사진 업로드</div>
+  <div class="head-sub">준일 &amp; 혜윤 · Wedding Gallery</div>
+</header>
+
+<div class="wrap">
+
+  <!-- 업로드 -->
+  <div class="upload-card">
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">📷</div>
+      <div class="upload-text">사진을 선택하거나 끌어다 놓으세요</div>
+      <div class="upload-hint">여러 장 한 번에 업로드 가능 · JPG/PNG/WebP</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <div class="progress-list" id="progressList"></div>
+  </div>
+
+  <!-- 사진 목록 -->
+  <div class="photos-card">
+    <div class="photos-header">
+      <div class="photos-title">등록된 사진</div>
+      <div style="display:flex; gap:8px; align-items:center">
+        <div class="photos-count" id="photosCount">0장</div>
+        <button class="action-btn danger" onclick="clearAll()">전체 삭제</button>
+      </div>
+    </div>
+    <div class="photos-grid" id="photosGrid"></div>
+  </div>
+
+  <!-- 예식 일자 관리 -->
+  <div class="acc-card">
+    <div class="acc-card-header">
+      <div class="acc-card-title">📅 예식 일자 관리</div>
+    </div>
+    <div class="parent-phone-row" style="grid-template-columns: 1fr 1fr;">
+      <input class="acc-input" type="date" id="wedding-date-input">
+      <input class="acc-input" type="time" id="wedding-time-input">
+    </div>
+    <div style="font-size:11px; color: var(--text-light); margin: 8px 0 12px; line-height:1.6;">
+      💡 요일은 날짜에 맞춰 자동 계산되고, 청첩장에는 "오후 12시 30분" 형식으로 자동 표시됩니다. RSVP 마감일(예식 3주 전)과 캘린더 알림(예식 7일 전)도 이 날짜 기준으로 자동 계산됩니다.
+    </div>
+    <div class="acc-actions">
+      <button class="btn-primary" id="dateSaveBtn" onclick="saveWeddingDate()">저장</button>
+    </div>
+  </div>
+
+  <!-- 예식장 정보 관리 -->
+  <div class="acc-card">
+    <div class="acc-card-header">
+      <div class="acc-card-title">🏛️ 예식장 정보 관리</div>
+    </div>
+
+    <div class="acc-group">
+      <div class="parent-phone-row" style="grid-template-columns: 1fr 1fr;">
+        <input class="acc-input" id="venue-name" placeholder="예식장 이름 (예: 부산 W웨딩)">
+        <input class="acc-input" id="venue-hall" placeholder="홀 이름 (예: 1층 컨벤션홀)">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr;">
+        <input class="acc-input" id="venue-navname" placeholder="길찾기 검색 이름 (선택 — 비워두면 위 예식장 이름 사용)">
+      </div>
+      <div style="font-size:11px; color: var(--text-light); margin: 2px 0 10px; line-height:1.6;">
+        💡 청첩장 화면(커버·사진)에는 위 "예식장 이름"이 표시되고, 길찾기 버튼·지도 검색에는 이 값이 우선 사용됩니다. 네이버·카카오맵에서 실제로 검색되는 이름(예: "OO웨딩컨벤션")을 넣으면 길찾기 정확도가 올라갑니다.
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr;">
+        <input class="acc-input" id="venue-address" placeholder="주소">
+      </div>
+      <button class="action-btn" type="button" id="venueGeocodeBtn" onclick="findCoordsFromAddress()" style="margin-bottom:10px;">🔍 주소로 좌표 찾기</button>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr 1fr;">
+        <input class="acc-input" id="venue-lat" placeholder="위도 (lat)" inputmode="decimal">
+        <input class="acc-input" id="venue-lng" placeholder="경도 (lng)" inputmode="decimal">
+      </div>
+      <label style="display:flex; align-items:center; gap:6px; font-size:12px; color: var(--text-mid); margin: 2px 0 10px; cursor:pointer;">
+        <input type="checkbox" id="venue-use-coords" checked style="width:16px; height:16px; accent-color: var(--gold);">
+        길찾기 시 좌표 우선 사용 (해제하면 좌표가 있어도 주소로 검색)
+      </label>
+      <div style="font-size:11px; color: var(--text-light); margin: 2px 0 12px; line-height:1.6;">
+        💡 주소 입력 후 "주소로 좌표 찾기"를 누르면 위도·경도가 자동으로 채워집니다. 결과가 정확한지는 아래 지도 미리보기로 확인하고, 필요하면 위도·경도를 직접 수정하세요.
+      </div>
+      <button class="action-btn" type="button" onclick="previewVenueMap()">📍 지도 미리보기로 위치 확인</button>
+      <div id="venueMapPreviewWrap" style="display:none; margin-top:12px; border-radius:14px; overflow:hidden; aspect-ratio:16/10;">
+        <iframe id="venueMapPreview" src="" style="width:100%; height:100%; border:0;" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="acc-group" style="border-top:1px solid rgba(201,169,110,0.18); padding-top:16px; margin-top:16px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+        <div class="acc-group-label" style="margin-bottom:0;">➕ 추가 장소 (지상/지하주차장 등)</div>
+        <button class="action-btn" type="button" onclick="addExtraLocation()">+ 장소 추가</button>
+      </div>
+      <div id="extraLocationsList"></div>
+    </div>
+
+    <div class="acc-group">
+      <div class="acc-group-label">📷 예식장 사진</div>
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="width:96px; height:96px; border-radius:14px; overflow:hidden; background: var(--cream-dark); flex-shrink:0;">
+          <img id="venuePhotoPreview" src="" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div style="flex:1; min-width:160px;">
+          <input type="file" id="venuePhotoInput" accept="image/*" style="display:none;">
+          <button class="action-btn" type="button" onclick="document.getElementById('venuePhotoInput').click()">사진 선택</button>
+          <div style="font-size:11px; color: var(--text-light); margin-top:6px;">청첩장 "오시는 길"에 표시될 예식장 실제 사진</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-actions">
+      <button class="btn-primary" id="venueSaveBtn" onclick="saveVenue()">저장</button>
+    </div>
+  </div>
+
+  <!-- 오시는 길 교통정보 -->
+  <div class="acc-card">
+    <div class="acc-card-header">
+      <div class="acc-card-title">🚗 오시는 길 교통정보</div>
+    </div>
+    <div style="font-size:11px; color: var(--text-light); margin: -6px 0 14px; line-height:1.6;">
+      💡 줄바꿈한 그대로 청첩장에 표시됩니다.
+    </div>
+
+    <div class="acc-group">
+      <div class="acc-group-label">🚌 버스</div>
+      <textarea class="acc-input" id="transport-bus" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="정류장 이름&#10;버스 번호"></textarea>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label">🚕 택시</div>
+      <textarea class="acc-input" id="transport-taxi" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="기사님께 말씀드릴 장소명&#10;주소"></textarea>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label">🅿️ 주차</div>
+      <textarea class="acc-input" id="transport-parking" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="주차 가능 여부/안내"></textarea>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label">🚗 자가용</div>
+      <textarea class="acc-input" id="transport-car" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="공항/기차역에서 거리·시간"></textarea>
+    </div>
+
+    <div class="acc-actions">
+      <button class="btn-primary" id="transportSaveBtn" onclick="saveTransport()">저장</button>
+    </div>
+  </div>
+
+  <!-- 계좌 · 연락처 관리 -->
+  <div class="acc-card">
+    <div class="acc-card-header">
+      <div class="acc-card-title">💳📞 계좌 · 연락처 관리</div>
+    </div>
+
+    <!-- 신랑/신부 본인 -->
+    <div class="acc-group">
+      <div class="acc-group-label groom">🤵 신랑 본인</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-groom-name"   placeholder="예금주"   value="김준일">
+        <input class="acc-input" id="acc-groom-bank"   placeholder="은행"     value="">
+        <input class="acc-input" id="acc-groom-number" placeholder="계좌번호" value="">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-groom-contact" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label bride">👰 신부 본인</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-bride-name"   placeholder="예금주"   value="방혜윤">
+        <input class="acc-input" id="acc-bride-bank"   placeholder="은행"     value="">
+        <input class="acc-input" id="acc-bride-number" placeholder="계좌번호" value="">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-bride-contact" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
+
+    <!-- 신랑측 부모님 -->
+    <div class="acc-group">
+      <div class="acc-group-label groom">🤵 신랑 아버지</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-gf-name"   placeholder="성함"     value="김주영">
+        <input class="acc-input" id="acc-gf-bank"   placeholder="은행"     value="농협">
+        <input class="acc-input" id="acc-gf-number" placeholder="계좌번호" value="882-12-045-901">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-gf-phone" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label groom">🤵 신랑 어머니</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-gm-name"   placeholder="성함"     value="강민선">
+        <input class="acc-input" id="acc-gm-bank"   placeholder="은행"     value="우리">
+        <input class="acc-input" id="acc-gm-number" placeholder="계좌번호" value="184-230012-02-001">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-gm-phone" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+
+    <!-- 신부측 부모님 -->
+    <div class="acc-group">
+      <div class="acc-group-label bride">👰 신부 아버지</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-bf-name"   placeholder="성함"     value="이홍기">
+        <input class="acc-input" id="acc-bf-bank"   placeholder="은행"     value="농협">
+        <input class="acc-input" id="acc-bf-number" placeholder="계좌번호" value="001-0001-00010">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-bf-phone" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+    <div class="acc-group">
+      <div class="acc-group-label bride">👰 신부 어머니</div>
+      <div class="acc-row">
+        <input class="acc-input" id="acc-bm-name"   placeholder="성함"     value="이은희">
+        <input class="acc-input" id="acc-bm-bank"   placeholder="은행"     value="농협">
+        <input class="acc-input" id="acc-bm-number" placeholder="계좌번호" value="222-000-33333">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr; margin-top:6px;">
+        <input class="acc-input" id="ph-bm-phone" placeholder="연락처 (예: 010-0000-0000)" inputmode="tel">
+      </div>
+    </div>
+
+    <div class="acc-actions">
+      <button class="btn-primary" id="accSaveBtn" onclick="saveAccountsAndContacts()">저장</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── 비밀번호 인증 ──
+   주의: 클라이언트 사이드 잠금이라 완벽한 보안은 아님.
+   하지만 일반 하객이 우연히 접근하는 것을 막는 용도로는 충분. */
+const ADMIN_PW = '01120309';
+const AUTH_KEY = 'photoAdminAuth';
+
+function checkAuth() {
+  const input = document.getElementById('authInput');
+  const err   = document.getElementById('authErr');
+  if (input.value === ADMIN_PW) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('authGate').style.display = 'none';
+    loadPhotos();
+    loadWeddingDate();
+    loadVenue();
+    loadTransport();
+    loadAccountsAndContacts();
+  } else {
+    err.textContent = '비밀번호가 일치하지 않습니다';
+    input.value = '';
+    input.focus();
+    setTimeout(() => { err.textContent = ' '; }, 3000);
+  }
+}
+
+/* 엔터 키로 제출 */
+document.getElementById('authInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkAuth();
+});
+
+/* 페이지 로드 시 — 이미 인증된 세션이면 잠금 해제 */
+(function initAuth() {
+  if (sessionStorage.getItem(AUTH_KEY) === '1') {
+    document.getElementById('authGate').style.display = 'none';
+  } else {
+    /* 인증 전에는 자동 호출 막기 위해 input 에 포커스만 */
+    setTimeout(() => document.getElementById('authInput').focus(), 200);
+  }
+})();
+
+/* ── 토스트 ── */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* ── 이미지 리사이즈 + JPEG 변환 (브라우저에서) ──
+   maxSize 1080px / quality 0.72 — 청첩장 갤러리 용도로 충분.
+   결과 base64 한 장 당 보통 60~200KB 수준이라 KV 누적 부담↓ + 로딩 빠름.
+   목표 사이즈 초과 시 quality 를 자동으로 더 내리는 폴백 포함. */
+async function compressImage(file, maxSize = 1080, quality = 0.72, maxBytes = 350 * 1024) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('파일 읽기 실패'));
+    reader.onload  = e => { img.src = e.target.result; };
+    img.onerror = () => reject(new Error('이미지를 디코딩할 수 없습니다 (손상되었거나 미지원 포맷)'));
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxSize || height > maxSize) {
+        const ratio = Math.min(maxSize / width, maxSize / height);
+        width  = Math.round(width  * ratio);
+        height = Math.round(height * ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width  = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, width, height);
+
+      /* 사이즈가 maxBytes(약 350KB) 초과면 quality 단계적으로 내림 */
+      let q = quality;
+      let dataUrl = canvas.toDataURL('image/jpeg', q);
+      let approxBytes = Math.round(dataUrl.length * 0.75);
+      while (approxBytes > maxBytes && q > 0.45) {
+        q -= 0.08;
+        dataUrl = canvas.toDataURL('image/jpeg', q);
+        approxBytes = Math.round(dataUrl.length * 0.75);
+      }
+      resolve({ src: dataUrl, kb: Math.round(approxBytes / 1024), w: width, h: height });
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ── 사진 1장 업로드 ── */
+async function uploadOne(file, progressEl) {
+  const statusEl = progressEl.querySelector('.progress-status');
+  const setStatus = (txt, cls = 'wait') => {
+    statusEl.textContent = txt;
+    statusEl.className   = 'progress-status ' + cls;
+  };
+  try {
+    setStatus('압축...', 'wait');
+    const { src, kb, w, h } = await compressImage(file);
+
+    setStatus(`업로드 ${kb}KB (${w}×${h})...`, 'wait');
+    const res = await fetch('/api/photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ src })
+    });
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} ${res.statusText} ${errBody}`);
+    }
+
+    setStatus(`완료 ✓ ${kb}KB`, 'ok');
+    setTimeout(() => progressEl.remove(), 2000);
+    return true;
+  } catch (e) {
+    console.error('업로드 실패:', file.name, e);
+    setStatus('실패: ' + (e.message || e), 'err');
+    return false;
+  }
+}
+
+/* ── 여러 장 순차 업로드 ── */
+async function handleFiles(files) {
+  if (!files || !files.length) return;
+  const list = document.getElementById('progressList');
+
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const item = document.createElement('div');
+    item.className = 'progress-item';
+    item.innerHTML = `
+      <div class="progress-name">${file.name}</div>
+      <div class="progress-status wait">대기</div>`;
+    list.appendChild(item);
+    await uploadOne(file, item);
+  }
+  await loadPhotos();
+}
+
+/* ── 입력 / 드래그 핸들러 ── */
+document.getElementById('fileInput').addEventListener('change', e => {
+  handleFiles(e.target.files);
+  e.target.value = '';
+});
+
+const zone = document.getElementById('uploadZone');
+['dragenter', 'dragover'].forEach(ev =>
+  zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('dragover'); })
+);
+['dragleave', 'drop'].forEach(ev =>
+  zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('dragover'); })
+);
+zone.addEventListener('drop', e => {
+  handleFiles(e.dataTransfer.files);
+});
+
+/* ── 목록 로드 / 렌더 ── */
+async function loadPhotos() {
+  try {
+    const res = await fetch('/api/photos');
+    if (!res.ok) throw new Error('서버 오류');
+    const list = await res.json();
+    renderPhotos(list);
+  } catch (e) {
+    console.error(e);
+    document.getElementById('photosGrid').innerHTML =
+      '<div class="empty"><div class="empty-icon">⚠️</div>목록을 불러오지 못했습니다</div>';
+  }
+}
+
+function renderPhotos(list) {
+  document.getElementById('photosCount').textContent = `${list.length}장`;
+  const grid = document.getElementById('photosGrid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🌸</div>아직 등록된 사진이 없습니다</div>';
+    return;
+  }
+  /* 최신 사진이 뒤로 — 등록 순서 유지 */
+  grid.innerHTML = list.map(p => `
+    <div class="photo-item" data-id="${p.id}">
+      <img src="${p.src}" alt="${p.caption || ''}" loading="lazy">
+      <button class="photo-del" onclick="deletePhoto(${p.id})" title="삭제">✕</button>
+    </div>
+  `).join('');
+}
+
+/* ── 사진 1장 삭제 ── */
+async function deletePhoto(id) {
+  if (!confirm('이 사진을 삭제하시겠어요?')) return;
+  try {
+    const res = await fetch(`/api/photos?id=${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('서버 오류');
+    await loadPhotos();
+    showToast('삭제되었습니다');
+  } catch (e) {
+    showToast('삭제에 실패했습니다');
+  }
+}
+
+/* ── 전체 삭제 ── */
+async function clearAll() {
+  if (!confirm('등록된 모든 사진을 삭제하시겠어요?\n이 작업은 되돌릴 수 없습니다.')) return;
+  try {
+    const res = await fetch('/api/photos', { method: 'DELETE' });
+    if (!res.ok) throw new Error('서버 오류');
+    await loadPhotos();
+    showToast('모든 사진이 삭제되었습니다');
+  } catch (e) {
+    showToast('삭제에 실패했습니다');
+  }
+}
+
+/* ── 예식장 정보 관리 ──
+   /api/venue 엔드포인트(Vercel KV)와 동기화
+   필드: name, hall, navName, address, lat, lng, photo, transport, extraLocations */
+const DEFAULT_VENUE = {
+  name: '부산 W웨딩 (국민연금 웨딩홀)',
+  hall: '1층 컨벤션홀',
+  navName: '부산 W웨딩',
+  address: '부산광역시 연제구 중앙대로 1000',
+  lat: 35.1778498,
+  lng: 129.0756195,
+  photo: ''
+};
+let venuePhotoData = DEFAULT_VENUE.photo;
+
+function fillVenueFields(v) {
+  document.getElementById('venue-name').value    = v.name || '';
+  document.getElementById('venue-hall').value    = v.hall || '';
+  document.getElementById('venue-navname').value = v.navName || '';
+  document.getElementById('venue-address').value = v.address || '';
+  document.getElementById('venue-lat').value     = (v.lat ?? '') === null ? '' : (v.lat ?? '');
+  document.getElementById('venue-lng').value     = (v.lng ?? '') === null ? '' : (v.lng ?? '');
+  document.getElementById('venue-use-coords').checked = v.useCoords !== false;
+  venuePhotoData = v.photo || '';
+  document.getElementById('venuePhotoPreview').src = venuePhotoData;
+}
+
+async function loadVenue() {
+  fillVenueFields(DEFAULT_VENUE);
+  extraLocations = DEFAULT_EXTRA_LOCATIONS.map(l => ({ id: Date.now() + Math.random(), ...l }));
+  renderExtraLocations();
+  try {
+    const res = await fetch('/api/venue');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data) {
+      fillVenueFields(data);
+      if (Array.isArray(data.extraLocations)) {
+        extraLocations = data.extraLocations.map(l => ({ id: Date.now() + Math.random(), ...l }));
+        renderExtraLocations();
+      }
+    }
+  } catch (e) {
+    console.error('예식장 정보 로드 실패:', e);
+  }
+}
+
+/* 예식장 사진 업로드 — 갤러리와 동일한 압축 로직 재사용 */
+document.getElementById('venuePhotoInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !file.type.startsWith('image/')) return;
+  try {
+    const { src } = await compressImage(file);
+    venuePhotoData = src;
+    document.getElementById('venuePhotoPreview').src = src;
+  } catch (err) {
+    showToast('이미지를 불러오지 못했습니다');
+  }
+});
+
+/* 주소 → 좌표 자동 검색 (카카오 주소 검색 API, /api/geocode 프록시 경유) */
+async function findCoordsFromAddress() {
+  const address = document.getElementById('venue-address').value.trim();
+  if (!address) { showToast('주소를 입력해 주세요'); return; }
+
+  const btn = document.getElementById('venueGeocodeBtn');
+  btn.disabled = true;
+  btn.textContent = '검색 중...';
+  try {
+    const res = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.error || '좌표를 찾지 못했습니다');
+      return;
+    }
+    document.getElementById('venue-lat').value = data.lat;
+    document.getElementById('venue-lng').value = data.lng;
+    showToast(`좌표를 찾았습니다: ${data.matchedAddress}`);
+    previewVenueMap();
+  } catch (e) {
+    showToast('좌표 검색에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔍 주소로 좌표 찾기';
+  }
+}
+
+/* 입력된 주소/좌표로 구글맵 미리보기 — 저장 전에 위치가 맞는지 확인 */
+function previewVenueMap() {
+  const name    = document.getElementById('venue-name').value.trim();
+  const address = document.getElementById('venue-address').value.trim();
+  const lat     = document.getElementById('venue-lat').value.trim();
+  const lng     = document.getElementById('venue-lng').value.trim();
+
+  let mapQuery;
+  if (lat && lng) {
+    mapQuery = `${lat},${lng}`;
+  } else if (address) {
+    mapQuery = encodeURIComponent(`${name} ${address}`.trim());
+  } else {
+    showToast('주소를 입력해 주세요');
+    return;
+  }
+
+  document.getElementById('venueMapPreview').src =
+    `https://maps.google.com/maps?q=${mapQuery}&z=16&hl=ko&output=embed`;
+  document.getElementById('venueMapPreviewWrap').style.display = '';
+}
+
+/* ── 추가 장소 (지상/지하주차장 등) ──
+   메인 예식장과 별도로 이름/주소/좌표를 몇 개든 추가 등록.
+   청첩장에서는 각각 "[이름] 주소 카드 + [이름] 길찾기" 블록으로 반복 표시되고,
+   카카오 알림톡 공유의 길찾기는 항상 메인 예식장(위 필드) 1곳만 사용한다. */
+const DEFAULT_EXTRA_LOCATIONS = [
+  { name: '지하주차장', address: '부산광역시 연제구 중앙대로 1000',    lat: null, lng: null },
+  { name: '지상주차장', address: '울산 울주군 삼남읍 신화리 1616-2', lat: null, lng: null },
+];
+let extraLocations = [];
+
+function escapeAttr(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderExtraLocations() {
+  const wrap = document.getElementById('extraLocationsList');
+  if (!extraLocations.length) {
+    wrap.innerHTML = '<div style="font-size:12px; color: var(--text-light); padding: 6px 0 2px;">등록된 추가 장소가 없습니다</div>';
+    return;
+  }
+  wrap.innerHTML = extraLocations.map(loc => `
+    <div style="border-top:1px solid rgba(201,169,110,0.18); padding-top:14px; margin-top:14px;">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:6px;">
+        <button class="action-btn danger" type="button" onclick="removeExtraLocation(${loc.id})">✕ 이 장소 삭제</button>
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr;">
+        <input class="acc-input" placeholder="장소 이름 (예: 지하주차장)" value="${escapeAttr(loc.name)}"
+               oninput="updateExtraLocationField(${loc.id}, 'name', this.value)">
+      </div>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr;">
+        <input class="acc-input" placeholder="주소" value="${escapeAttr(loc.address)}"
+               oninput="updateExtraLocationField(${loc.id}, 'address', this.value)">
+      </div>
+      <button class="action-btn" type="button" onclick="geocodeExtraLocation(${loc.id})" style="margin-bottom:10px;">🔍 주소로 좌표 찾기</button>
+      <div class="parent-phone-row" style="grid-template-columns: 1fr 1fr;">
+        <input class="acc-input" placeholder="위도 (lat)" inputmode="decimal" value="${loc.lat ?? ''}"
+               oninput="updateExtraLocationField(${loc.id}, 'lat', this.value)">
+        <input class="acc-input" placeholder="경도 (lng)" inputmode="decimal" value="${loc.lng ?? ''}"
+               oninput="updateExtraLocationField(${loc.id}, 'lng', this.value)">
+      </div>
+      <label style="display:flex; align-items:center; gap:6px; font-size:12px; color: var(--text-mid); margin-top:2px; cursor:pointer;">
+        <input type="checkbox" ${loc.useCoords !== false ? 'checked' : ''}
+               onchange="updateExtraLocationCheckbox(${loc.id}, this.checked)"
+               style="width:16px; height:16px; accent-color: var(--gold);">
+        길찾기 시 좌표 우선 사용 (해제하면 좌표가 있어도 주소로 검색)
+      </label>
+    </div>
+  `).join('');
+}
+
+function addExtraLocation() {
+  extraLocations.push({ id: Date.now() + Math.random(), name: '', address: '', lat: '', lng: '', useCoords: true });
+  renderExtraLocations();
+}
+
+function removeExtraLocation(id) {
+  extraLocations = extraLocations.filter(l => l.id !== id);
+  renderExtraLocations();
+}
+
+function updateExtraLocationField(id, field, value) {
+  const loc = extraLocations.find(l => l.id === id);
+  if (loc) loc[field] = value;
+}
+
+function updateExtraLocationCheckbox(id, checked) {
+  const loc = extraLocations.find(l => l.id === id);
+  if (loc) loc.useCoords = checked;
+}
+
+async function geocodeExtraLocation(id) {
+  const loc = extraLocations.find(l => l.id === id);
+  if (!loc || !loc.address || !loc.address.trim()) { showToast('주소를 입력해 주세요'); return; }
+  try {
+    const res = await fetch(`/api/geocode?address=${encodeURIComponent(loc.address.trim())}`);
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || '좌표를 찾지 못했습니다'); return; }
+    loc.lat = data.lat;
+    loc.lng = data.lng;
+    renderExtraLocations();
+    showToast(`좌표를 찾았습니다: ${data.matchedAddress}`);
+  } catch (e) {
+    showToast('좌표 검색에 실패했습니다');
+  }
+}
+
+async function saveVenue() {
+  const btn     = document.getElementById('venueSaveBtn');
+  const name    = document.getElementById('venue-name').value.trim();
+  const hall    = document.getElementById('venue-hall').value.trim();
+  const navName = document.getElementById('venue-navname').value.trim();
+  const address = document.getElementById('venue-address').value.trim();
+  const latRaw  = document.getElementById('venue-lat').value.trim();
+  const lngRaw  = document.getElementById('venue-lng').value.trim();
+  const useCoords = document.getElementById('venue-use-coords').checked;
+
+  if (!name || !address) {
+    showToast('예식장 이름과 주소는 필수입니다');
+    return;
+  }
+
+  const extras = extraLocations
+    .filter(l => (l.name && l.name.trim()) || (l.address && l.address.trim()))
+    .map(l => ({
+      name: (l.name || '').trim(),
+      address: (l.address || '').trim(),
+      lat: l.lat !== '' && l.lat != null ? parseFloat(l.lat) : null,
+      lng: l.lng !== '' && l.lng != null ? parseFloat(l.lng) : null,
+      useCoords: l.useCoords !== false,
+    }));
+
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    /* 기존 저장값을 불러와 병합 — transport 등 다른 카드가 저장한 필드를 덮어쓰지 않도록 */
+    const getRes = await fetch('/api/venue');
+    const current = getRes.ok ? ((await getRes.json()) || {}) : {};
+    const data = {
+      ...current,
+      name, hall, navName, address,
+      lat: latRaw ? parseFloat(latRaw) : null,
+      lng: lngRaw ? parseFloat(lngRaw) : null,
+      useCoords,
+      photo: venuePhotoData,
+      extraLocations: extras,
+    };
+
+    const res = await fetch('/api/venue', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('서버 오류');
+    showToast('예식장 정보가 저장되었습니다');
+  } catch (e) {
+    showToast('저장에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
+  }
+}
+
+/* ── 오시는 길 교통정보 (Bus/Taxi/Parking/Car) ──
+   /api/venue 의 transport 필드에 저장 — 다른 필드를 덮어쓰지 않도록 읽기→병합→쓰기 */
+const DEFAULT_TRANSPORT = {
+  bus: '',
+  taxi: '"국민연금 부산회관" 말씀 후\n연제구 중앙대로 1000',
+  parking: '건물 전용 주차장\n이용 가능',
+  car: '',
+};
+
+function fillTransportFields(t) {
+  document.getElementById('transport-bus').value     = t.bus || '';
+  document.getElementById('transport-taxi').value    = t.taxi || '';
+  document.getElementById('transport-parking').value = t.parking || '';
+  document.getElementById('transport-car').value     = t.car || '';
+}
+
+async function loadTransport() {
+  fillTransportFields(DEFAULT_TRANSPORT);
+  try {
+    const res = await fetch('/api/venue');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.transport) fillTransportFields(data.transport);
+  } catch (e) {
+    console.error('교통정보 로드 실패:', e);
+  }
+}
+
+async function saveTransport() {
+  const btn = document.getElementById('transportSaveBtn');
+  const transport = {
+    bus:     document.getElementById('transport-bus').value.trim(),
+    taxi:    document.getElementById('transport-taxi').value.trim(),
+    parking: document.getElementById('transport-parking').value.trim(),
+    car:     document.getElementById('transport-car').value.trim(),
+  };
+
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    const getRes = await fetch('/api/venue');
+    const current = getRes.ok ? ((await getRes.json()) || {}) : {};
+    const data = { ...current, transport };
+
+    const res = await fetch('/api/venue', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('서버 오류');
+    showToast('교통정보가 저장되었습니다');
+  } catch (e) {
+    showToast('저장에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
+  }
+}
+
+/* ── 예식 일자 관리 ──
+   /api/date 엔드포인트(Vercel KV)와 동기화
+   필드: year, month, day, hour, minute, dayOfWeek, time */
+const DOW_KR = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+const DEFAULT_DATE = { year: 2026, month: 11, day: 7, hour: 12, minute: 30 };
+
+function formatKoreanTime(hour24, minute) {
+  const period = hour24 < 12 ? '오전' : '오후';
+  let h12 = hour24 % 12;
+  if (h12 === 0) h12 = 12;
+  return minute > 0 ? `${period} ${h12}시 ${minute}분` : `${period} ${h12}시`;
+}
+
+function fillDateFields(d) {
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('wedding-date-input').value = `${d.year}-${pad(d.month)}-${pad(d.day)}`;
+  document.getElementById('wedding-time-input').value = `${pad(d.hour ?? 12)}:${pad(d.minute ?? 0)}`;
+}
+
+async function loadWeddingDate() {
+  fillDateFields(DEFAULT_DATE);
+  try {
+    const res = await fetch('/api/date');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data) fillDateFields(data);
+  } catch (e) {
+    console.error('예식 일자 로드 실패:', e);
+  }
+}
+
+async function saveWeddingDate() {
+  const btn     = document.getElementById('dateSaveBtn');
+  const dateVal = document.getElementById('wedding-date-input').value;
+  const timeVal = document.getElementById('wedding-time-input').value;
+
+  if (!dateVal || !timeVal) {
+    showToast('날짜와 시간을 모두 입력해 주세요');
+    return;
+  }
+
+  const [year, month, day] = dateVal.split('-').map(Number);
+  const [hour, minute]     = timeVal.split(':').map(Number);
+  const dayOfWeek = DOW_KR[new Date(year, month - 1, day).getDay()];
+  const time = formatKoreanTime(hour, minute);
+
+  const data = { year, month, day, hour, minute, dayOfWeek, time };
+
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    const res = await fetch('/api/date', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('서버 오류');
+    showToast('예식 일자가 저장되었습니다');
+  } catch (e) {
+    showToast('저장에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
+  }
+}
+
+/* ── 계좌 · 연락처 관리 ──
+   한 사람당 계좌(예금주/은행/계좌번호)와 연락처(전화번호)를 한 블록에서 관리.
+   저장 시 내부적으로 /api/accounts, /api/parents 두 곳에 나눠서 PUT 한다
+   (다른 페이지들이 이미 이 두 엔드포인트를 따로 읽고 있어서 데이터 구조는 유지). */
+const PERSON_FIELDS = [
+  ['groom',       'acc-groom-name', 'acc-groom-bank', 'acc-groom-number', 'ph-groom-contact'],
+  ['bride',       'acc-bride-name', 'acc-bride-bank', 'acc-bride-number', 'ph-bride-contact'],
+  ['groomFather', 'acc-gf-name',    'acc-gf-bank',    'acc-gf-number',    'ph-gf-phone'],
+  ['groomMother', 'acc-gm-name',    'acc-gm-bank',    'acc-gm-number',    'ph-gm-phone'],
+  ['brideFather', 'acc-bf-name',    'acc-bf-bank',    'acc-bf-number',    'ph-bf-phone'],
+  ['brideMother', 'acc-bm-name',    'acc-bm-bank',    'acc-bm-number',    'ph-bm-phone'],
+];
+
+async function loadAccountsAndContacts() {
+  try {
+    const [accRes, parRes] = await Promise.all([fetch('/api/accounts'), fetch('/api/parents')]);
+    const accData = accRes.ok ? await accRes.json() : null;
+    const parData = parRes.ok ? await parRes.json() : null;
+
+    PERSON_FIELDS.forEach(([key, nameId, bankId, numId, phoneId]) => {
+      const acc = accData && accData[key];
+      if (acc) {
+        if (acc.name)   document.getElementById(nameId).value = acc.name;
+        if (acc.bank)   document.getElementById(bankId).value = acc.bank;
+        if (acc.number) document.getElementById(numId).value  = acc.number;
+      }
+      let phone = '', parentName = '';
+      if (key === 'groom')      phone = parData?.groomContact?.phone || '';
+      else if (key === 'bride') phone = parData?.brideContact?.phone || '';
+      else if (parData && parData[key]) {
+        phone = parData[key].phone || '';
+        parentName = parData[key].name || '';
+      }
+      if (parentName && !document.getElementById(nameId).value) document.getElementById(nameId).value = parentName;
+      if (phone) document.getElementById(phoneId).value = phone;
+    });
+  } catch (e) {
+    console.error('계좌/연락처 로드 실패:', e);
+  }
+}
+
+async function saveAccountsAndContacts() {
+  const btn = document.getElementById('accSaveBtn');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+
+  const accData = {};
+  const parData = {};
+  PERSON_FIELDS.forEach(([key, nameId, bankId, numId, phoneId]) => {
+    const name  = document.getElementById(nameId).value.trim();
+    const phone = document.getElementById(phoneId).value.trim();
+    accData[key] = {
+      name,
+      bank:   document.getElementById(bankId).value.trim(),
+      number: document.getElementById(numId).value.trim(),
+    };
+    if (key === 'groom')      parData.groomContact = { phone };
+    else if (key === 'bride') parData.brideContact = { phone };
+    else                      parData[key] = { name, phone };
+  });
+
+  try {
+    const [accRes, parRes] = await Promise.all([
+      fetch('/api/accounts', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(accData) }),
+      fetch('/api/parents',  { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(parData) }),
+    ]);
+    if (!accRes.ok || !parRes.ok) throw new Error('서버 오류');
+    showToast('계좌 · 연락처 정보가 저장되었습니다');
+  } catch (e) {
+    showToast('저장에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
+  }
+}
+
+/* ── 시작 ── (인증된 세션일 때만 자동 로드) */
+if (sessionStorage.getItem(AUTH_KEY) === '1') {
+  loadPhotos();
+  loadWeddingDate();
+  loadVenue();
+  loadTransport();
+  loadAccountsAndContacts();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="60%" stop-color="#FAF0E8"/>
+      <stop offset="100%" stop-color="#F0E8F5"/>
+    </radialGradient>
+    <radialGradient id="skin5" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FDDBB4"/>
+      <stop offset="100%" stop-color="#F5C490"/>
+    </radialGradient>
+    <radialGradient id="skin6" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FDE0C8"/>
+      <stop offset="100%" stop-color="#F8C8A8"/>
+    </radialGradient>
+    <filter id="shadow3">
+      <feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="rgba(180,140,160,0.15)"/>
+    </filter>
+    <!-- 하트 그라데이션 -->
+    <radialGradient id="heartGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFB8C8"/>
+      <stop offset="100%" stop-color="#C9A96E"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect x="8" y="8" width="384" height="484" rx="30" fill="url(#bg3)" filter="url(#shadow3)"/>
+
+  <!-- 골드 이중 테두리 -->
+  <rect x="8" y="8" width="384" height="484" rx="30" fill="none" stroke="#C9A96E" stroke-width="1.5" opacity="0.5"/>
+  <rect x="18" y="18" width="364" height="464" rx="22" fill="none" stroke="#C9A96E" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- ── 배경 장식 (빛 효과) ── -->
+  <radialGradient id="glow1" cx="30%" cy="30%" r="40%">
+    <stop offset="0%" stop-color="#FFE0F0" stop-opacity="0.6"/>
+    <stop offset="100%" stop-color="#FFE0F0" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glow2" cx="70%" cy="70%" r="40%">
+    <stop offset="0%" stop-color="#E0E8FF" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#E0E8FF" stop-opacity="0"/>
+  </radialGradient>
+  <rect x="8" y="8" width="384" height="484" rx="30" fill="url(#glow1)"/>
+  <rect x="8" y="8" width="384" height="484" rx="30" fill="url(#glow2)"/>
+
+  <!-- ── 흩날리는 하트 & 꽃잎 ── -->
+  <!-- 하트들 -->
+  <g opacity="0.25">
+    <path d="M60,80 C58,74 50,74 50,82 C50,88 60,96 60,96 C60,96 70,88 70,82 C70,74 62,74 60,80Z" fill="#C9A96E"/>
+    <path d="M340,60 C338,55 331,55 331,62 C331,68 340,75 340,75 C340,75 349,68 349,62 C349,55 342,55 340,60Z" fill="#FFB8C8"/>
+    <path d="M80,420 C78,415 71,415 71,422 C71,428 80,435 80,435 C80,435 89,428 89,422 C89,415 82,415 80,420Z" fill="#C9A96E"/>
+    <path d="M320,410 C318,405 311,405 311,412 C311,418 320,425 320,425 C320,425 329,418 329,412 C329,405 322,405 320,410Z" fill="#FFB8C8"/>
+  </g>
+
+  <!-- 꽃잎 -->
+  <ellipse cx="50" cy="200" rx="8" ry="4" fill="#FFD0E0" opacity="0.4" transform="rotate(-40,50,200)"/>
+  <ellipse cx="350" cy="180" rx="7" ry="3.5" fill="#FFD0E0" opacity="0.35" transform="rotate(30,350,180)"/>
+  <ellipse cx="60" cy="350" rx="6" ry="3" fill="#FFD0E0" opacity="0.3" transform="rotate(50,60,350)"/>
+  <ellipse cx="345" cy="320" rx="7" ry="3.5" fill="#E8D0F0" opacity="0.35" transform="rotate(-20,345,320)"/>
+
+  <!-- ── 중앙 대형 하트 (배경) ── -->
+  <g transform="translate(200, 300)" opacity="0.07">
+    <path d="M0,-60 C-15,-90 -70,-90 -70,-30 C-70,20 0,70 0,70 C0,70 70,20 70,-30 C70,-90 15,-90 0,-60Z"
+          fill="#C9A96E"/>
+  </g>
+
+  <!-- ── 신랑 (왼쪽 클로즈업) ── -->
+  <!-- 어깨/상체 -->
+  <path d="M30,440 Q80,390 135,370 L155,490 L30,490Z" fill="#2C3E50"/>
+  <!-- 수트 디테일 -->
+  <path d="M100,385 Q120,380 135,370 L130,410 Q115,415 100,385Z" fill="#34495E"/>
+  <rect x="112" y="368" width="16" height="5" rx="2" fill="#FAFAFA"/>
+
+  <!-- 목 -->
+  <rect x="112" y="340" width="22" height="28" rx="8" fill="url(#skin5)"/>
+
+  <!-- 신랑 얼굴 -->
+  <ellipse cx="123" cy="300" rx="50" ry="58" fill="url(#skin5)"/>
+
+  <!-- 머리카락 (세련된 사이드파트) -->
+  <path d="M73,285 Q75,248 123,242 Q171,248 173,285 L170,298 Q155,272 123,270 Q91,272 76,298Z" fill="#2C2420"/>
+  <!-- 사이드파트 선 -->
+  <path d="M95,248 Q100,258 98,270" stroke="#1A1810" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- 하이라이트 -->
+  <path d="M105,252 Q118,246 133,250" stroke="#4A3830" stroke-width="2.5" fill="none" opacity="0.4"/>
+
+  <!-- 신랑 눈썹 (짙음) -->
+  <path d="M98,288 Q110,282 122,287" stroke="#1A1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M124,287 Q136,282 148,288" stroke="#1A1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- 신랑 눈 (크고 다정한) -->
+  <ellipse cx="110" cy="297" rx="10" ry="8" fill="white"/>
+  <ellipse cx="136" cy="297" rx="10" ry="8" fill="white"/>
+  <circle cx="111" cy="297" r="6" fill="#2C2420"/>
+  <circle cx="137" cy="297" r="6" fill="#2C2420"/>
+  <!-- 홍채 반짝임 -->
+  <circle cx="113" cy="294" r="2.5" fill="white"/>
+  <circle cx="139" cy="294" r="2.5" fill="white"/>
+  <!-- 속눈썹 -->
+  <path d="M100,292 Q105,287 110,290" stroke="#2C2420" stroke-width="1.5" fill="none"/>
+  <path d="M136,290 Q141,287 146,292" stroke="#2C2420" stroke-width="1.5" fill="none"/>
+
+  <!-- 코 -->
+  <path d="M123,305 Q118,314 116,318 Q123,323 130,318 Q128,314 123,305Z" fill="#E8A878" opacity="0.65"/>
+
+  <!-- 볼 -->
+  <ellipse cx="97" cy="312" rx="14" ry="9" fill="#FFA090" opacity="0.25"/>
+  <ellipse cx="149" cy="312" rx="14" ry="9" fill="#FFA090" opacity="0.25"/>
+
+  <!-- 다정한 미소 -->
+  <path d="M106,328 Q123,340 140,328" stroke="#C07050" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M106,328 Q123,336 140,328" fill="white" opacity="0.6"/>
+
+  <!-- 귀 -->
+  <ellipse cx="73" cy="300" rx="8" ry="12" fill="url(#skin5)"/>
+  <ellipse cx="173" cy="300" rx="8" ry="12" fill="url(#skin5)"/>
+
+  <!-- ── 신부 (오른쪽 클로즈업) ── -->
+  <!-- 드레스 어깨 -->
+  <path d="M245,370 Q300,390 370,440 L370,490 L240,490Z" fill="white" opacity="0.95"/>
+  <path d="M245,370 Q300,385 370,430" fill="none" stroke="#C9A96E" stroke-width="1" opacity="0.4"/>
+
+  <!-- 목 -->
+  <rect x="258" y="340" width="22" height="28" rx="8" fill="url(#skin6)"/>
+  <!-- 목걸이 -->
+  <path d="M250,364 Q269,375 290,364" fill="none" stroke="#C9A96E" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="269" cy="375" r="3" fill="#C9A96E"/>
+
+  <!-- 신부 얼굴 -->
+  <ellipse cx="275" cy="300" rx="50" ry="58" fill="url(#skin6)"/>
+
+  <!-- 머리카락 (반묶음 웨이브) -->
+  <path d="M225,285 Q227,248 275,242 Q323,248 325,285 L322,300 Q308,270 275,268 Q242,270 228,300Z" fill="#3D2B1F"/>
+  <!-- 반묶음 -->
+  <path d="M225,285 Q228,310 232,360 Q240,348 238,310 Q236,295 240,285" fill="#3D2B1F"/>
+  <path d="M325,285 Q322,310 318,360 Q310,348 312,310 Q314,295 310,285" fill="#3D2B1F"/>
+  <!-- 묶은 부분 -->
+  <ellipse cx="275" cy="248" rx="22" ry="14" fill="#4D3528"/>
+  <ellipse cx="275" cy="244" rx="16" ry="10" fill="#3D2B1F"/>
+  <!-- 머리띠/화관 -->
+  <path d="M253,258 Q275,250 297,258" fill="none" stroke="#C9A96E" stroke-width="2" opacity="0.7"/>
+  <!-- 작은 꽃들 -->
+  <circle cx="260" cy="256" r="4" fill="white"/>
+  <circle cx="260" cy="256" r="2" fill="#C9A96E"/>
+  <circle cx="275" cy="252" r="5" fill="white"/>
+  <circle cx="275" cy="252" r="2.5" fill="#C9A96E"/>
+  <circle cx="290" cy="256" r="4" fill="white"/>
+  <circle cx="290" cy="256" r="2" fill="#C9A96E"/>
+  <ellipse cx="255" cy="254" rx="3" ry="5" fill="#FFD0E0" opacity="0.7" transform="rotate(-20,255,254)"/>
+  <ellipse cx="280" cy="250" rx="3" ry="5" fill="#FFD0E0" opacity="0.7" transform="rotate(15,280,250)"/>
+
+  <!-- 신부 눈썹 (자연스러운 아치) -->
+  <path d="M250,288 Q262,282 274,287" stroke="#3D2B1F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M276,287 Q288,282 300,288" stroke="#3D2B1F" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- 신부 눈 (윙크 또는 특별한 눈) -->
+  <ellipse cx="262" cy="297" rx="10" ry="8" fill="white"/>
+  <ellipse cx="288" cy="297" rx="10" ry="8" fill="white"/>
+  <circle cx="263" cy="297" r="6" fill="#3D2B1F"/>
+  <circle cx="289" cy="297" r="6" fill="#3D2B1F"/>
+  <circle cx="265" cy="294" r="2.5" fill="white"/>
+  <circle cx="291" cy="294" r="2.5" fill="white"/>
+  <!-- 속눈썹 (길고 화려) -->
+  <path d="M252,292 Q257,287 262,290" stroke="#3D2B1F" stroke-width="1.8" fill="none"/>
+  <path d="M288,290 Q293,287 298,292" stroke="#3D2B1F" stroke-width="1.8" fill="none"/>
+  <path d="M255,290 Q258,285 261,289" stroke="#3D2B1F" stroke-width="1.2" fill="none"/>
+  <path d="M289,289 Q292,285 295,290" stroke="#3D2B1F" stroke-width="1.2" fill="none"/>
+
+  <!-- 코 -->
+  <path d="M275,305 Q270,314 268,318 Q275,323 282,318 Q280,314 275,305Z" fill="#E8B090" opacity="0.55"/>
+
+  <!-- 볼터치 (선명) -->
+  <ellipse cx="248" cy="314" rx="16" ry="10" fill="#F4A0A0" opacity="0.35"/>
+  <ellipse cx="302" cy="314" rx="16" ry="10" fill="#F4A0A0" opacity="0.35"/>
+
+  <!-- 입술 (포인트) -->
+  <path d="M266,326 Q275,322 284,326 Q275,334 266,326Z" fill="#D45870"/>
+  <path d="M266,326 Q275,330 284,326" fill="none" stroke="#C04060" stroke-width="1"/>
+  <!-- 위 입술 하이라이트 -->
+  <path d="M268,324 Q275,321 282,324" fill="none" stroke="#E870A0" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- 귀 -->
+  <ellipse cx="225" cy="300" rx="8" ry="12" fill="url(#skin6)"/>
+  <ellipse cx="325" cy="300" rx="8" ry="12" fill="url(#skin6)"/>
+  <!-- 귀걸이 (드롭형) -->
+  <line x1="225" y1="310" x2="225" y2="325" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="225" cy="330" rx="4" ry="6" fill="#C9A96E"/>
+  <line x1="325" y1="310" x2="325" y2="325" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="325" cy="330" rx="4" ry="6" fill="#C9A96E"/>
+
+  <!-- ── 중앙 하트 (두 사람 사이) ── -->
+  <g transform="translate(200, 340)">
+    <path d="M0,-18 C-6,-30 -24,-30 -24,-12 C-24,0 0,18 0,18 C0,18 24,0 24,-12 C24,-30 6,-30 0,-18Z"
+          fill="url(#heartGrad)" opacity="0.9"/>
+    <!-- 하트 하이라이트 -->
+    <path d="M-8,-18 C-10,-24 -18,-22 -16,-14" stroke="white" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- ── 하단 텍스트 ── -->
+  <text x="200" y="458" text-anchor="middle" font-family="Georgia, serif" font-style="italic"
+        font-size="14" fill="#8B6F47" letter-spacing="2" opacity="0.85">With All My Heart</text>
+
+  <!-- 장식 -->
+  <line x1="80" y1="470" x2="140" y2="470" stroke="#C9A96E" stroke-width="0.8" opacity="0.4"/>
+  <path d="M195,470 C196,467 198,467 200,470 C202,467 204,467 205,470 C204,473 200,476 200,476 C200,476 196,473 195,470Z"
+        fill="#C9A96E" opacity="0.5"/>
+  <line x1="260" y1="470" x2="320" y2="470" stroke="#C9A96E" stroke-width="0.8" opacity="0.4"/>
+</svg>

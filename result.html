@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참석 회신 집계 · 준일 ♥ 혜윤</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;600&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Noto+Sans+KR:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A96E;
+  --gold-light: #E8D5B0;
+  --gold-dark: #8B6F47;
+  --rose: #B76E79;
+  --cream: #FAF7F2;
+  --cream-dark: #F0EAE0;
+  --text-dark: #2C2420;
+  --text-mid: #5C4A3A;
+  --text-light: #8B7355;
+  --white: #FFFFFF;
+  --groom-bg: #E8F0FB;
+  --groom-color: #3A6FB5;
+  --bride-bg: #FCEAEE;
+  --bride-color: #C84050;
+  --yes-bg: #E8F5E8;
+  --yes-color: #5A9A5D;
+  --no-bg: #FCEAEC;
+  --no-color: #C84050;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(232,213,176,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(183,110,121,0.12) 0%, transparent 50%),
+    linear-gradient(160deg, #FAF7F2 0%, #F5EFE6 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  padding: 24px 16px 60px;
+}
+
+/* ── 헤더 ── */
+.head {
+  max-width: 960px; margin: 0 auto 24px;
+  text-align: center;
+  padding: 28px 20px;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.head-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.head-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 3px;
+}
+.head-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px; color: var(--gold-dark);
+  margin-top: 6px; letter-spacing: 1px;
+}
+
+/* ── 컨테이너 ── */
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── 통계 카드 ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 24px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: radial-gradient(ellipse at center, var(--gold-light) 0%, transparent 70%);
+}
+.stat-side {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-side.groom { color: var(--groom-color); }
+.stat-side.bride { color: var(--bride-color); }
+.stat-card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+.stat-rows {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.stat-row {
+  text-align: center;
+  padding: 10px 4px;
+  background: rgba(250,247,242,0.7);
+  border-radius: 14px;
+}
+.stat-row-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--text-light); text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.stat-row-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 400;
+  color: var(--text-dark); line-height: 1;
+}
+.stat-row-value .unit {
+  font-size: 12px; color: var(--text-light);
+  letter-spacing: 1px; margin-left: 4px;
+}
+
+/* ── 총 합계 ── */
+.total-card {
+  background: linear-gradient(135deg,
+    rgba(232,213,176,0.6) 0%,
+    rgba(240,234,224,0.85) 100%);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: 0 6px 32px rgba(139,111,71,0.12), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.total-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold-dark); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.total-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px; font-weight: 400;
+  background: linear-gradient(135deg, var(--text-dark) 0%, var(--gold-dark) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.total-unit {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px; color: var(--text-mid);
+  letter-spacing: 2px; margin-top: 6px;
+}
+.total-detail {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; color: var(--text-light);
+  margin-top: 10px; letter-spacing: 0.5px;
+}
+
+/* ── 필터 바 ── */
+.toolbar {
+  display: flex; flex-wrap: wrap;
+  gap: 8px; margin-bottom: 16px;
+  align-items: center;
+}
+.filter-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 14px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-weight: 400;
+  color: var(--text-mid); cursor: pointer;
+  transition: all 0.25s;
+}
+.filter-btn:hover { transform: translateY(-1px); }
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--white);
+  box-shadow: 0 4px 18px rgba(139,111,71,0.25);
+}
+.toolbar-spacer { flex: 1; }
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.85);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; color: var(--text-mid);
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(139,111,71,0.08);
+  transition: all 0.25s;
+}
+.action-btn:hover { background: var(--white); transform: translateY(-1px); }
+.action-btn.danger { color: var(--bride-color); }
+.action-btn.danger:hover { background: var(--no-bg); }
+
+/* ── 테이블 (카드 형태) ── */
+.table-wrap {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 32px rgba(139,111,71,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.table-head {
+  display: grid;
+  grid-template-columns: 110px 1fr 110px 80px 140px;
+  gap: 0;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(232,213,176,0.4), rgba(240,234,224,0.6));
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--gold-dark); text-transform: uppercase;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 110px 80px 140px;
+  gap: 0;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(232,213,176,0.3);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: var(--text-mid);
+  align-items: center;
+  transition: background 0.2s;
+}
+.table-row:hover { background: rgba(250,247,242,0.5); }
+.table-row .name { font-weight: 500; color: var(--text-dark); letter-spacing: 1px; }
+.table-row .count {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 500;
+  color: var(--text-dark);
+}
+.table-row .time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px; color: var(--text-light); letter-spacing: 0.5px;
+}
+
+/* 뱃지 */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 1px;
+  text-align: center;
+  width: fit-content;
+}
+.badge.groom { background: var(--groom-bg); color: var(--groom-color); }
+.badge.bride { background: var(--bride-bg); color: var(--bride-color); }
+.badge.yes   { background: var(--yes-bg);   color: var(--yes-color); }
+.badge.no    { background: var(--no-bg);    color: var(--no-color); }
+/* 출처 뱃지 — 메인/신랑부모님/신부부모님 */
+.badge.src-main    { background: rgba(232,213,176,0.45); color: var(--gold-dark); }
+.badge.src-gparent { background: rgba(58,111,181,0.12);  color: #3A6FB5; }
+.badge.src-bparent { background: rgba(200,64,80,0.12);   color: #C84050; }
+
+/* 개별 삭제 버튼 */
+.del-btn {
+  background: none; border: none;
+  font-size: 14px; cursor: pointer;
+  padding: 4px 8px; border-radius: 8px;
+  color: var(--text-light);
+  transition: background 0.2s, color 0.2s;
+  line-height: 1;
+}
+.del-btn:hover { background: var(--no-bg); color: var(--no-color); }
+
+/* 빈 상태 */
+.empty {
+  text-align: center; padding: 60px 20px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px; color: var(--text-light);
+  letter-spacing: 1px;
+}
+.empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+
+/* 토스트 */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text-dark); color: var(--cream);
+  padding: 12px 24px; border-radius: 30px;
+  font-size: 12px; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 9999; pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* 휴대폰 — 카드형 레이아웃 */
+@media (max-width: 720px) {
+  .stats { grid-template-columns: 1fr; }
+  .table-head { display: none; }
+  .table-row {
+    display: block;
+    padding: 18px 16px;
+    border-top: 1px solid rgba(232,213,176,0.3);
+  }
+  .table-row > * { display: block; }
+  .table-row .row-line {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+  .table-row .row-line:last-child { margin-bottom: 0; }
+  .row-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--gold); text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .row-value { text-align: right; }
+  .table-row .name { font-size: 16px; }
+  .total-value { font-size: 44px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header class="head">
+  <div class="head-eyebrow">RSVP Result</div>
+  <div class="head-title">참석 회신 집계</div>
+  <div class="head-sub">준일 &amp; 혜윤 · Wedding Day</div>
+</header>
+
+<div class="wrap">
+
+  <!-- 통계 카드 (신랑측 / 신부측) -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-side groom">Groom Side</div>
+      <div class="stat-card-title">🤵 신랑측</div>
+      <div class="stat-rows">
+        <div class="stat-row">
+          <div class="stat-row-label">참석</div>
+          <div class="stat-row-value" id="g-yes">0<span class="unit">명</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-row-label">불참</div>
+          <div class="stat-row-value" id="g-no">0<span class="unit">명</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-row-label">총합</div>
+          <div class="stat-row-value" id="g-total">0<span class="unit">명</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-side bride">Bride Side</div>
+      <div class="stat-card-title">👰 신부측</div>
+      <div class="stat-rows">
+        <div class="stat-row">
+          <div class="stat-row-label">참석</div>
+          <div class="stat-row-value" id="b-yes">0<span class="unit">명</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-row-label">불참</div>
+          <div class="stat-row-value" id="b-no">0<span class="unit">명</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-row-label">총합</div>
+          <div class="stat-row-value" id="b-total">0<span class="unit">명</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 총 합계 -->
+  <div class="total-card">
+    <div class="total-label">Total Confirmed Guests</div>
+    <div class="total-value"><span id="grand-total">0</span></div>
+    <div class="total-unit">명 참석 예정</div>
+    <div class="total-detail" id="grand-detail">— 신랑측 0명 · 신부측 0명 —</div>
+  </div>
+
+  <!-- 필터 + 액션 -->
+  <div class="toolbar">
+    <button class="filter-btn active" data-f="all"     onclick="setFilter('all')">전체</button>
+    <button class="filter-btn"        data-f="groom"   onclick="setFilter('groom')">🤵 신랑측</button>
+    <button class="filter-btn"        data-f="bride"   onclick="setFilter('bride')">👰 신부측</button>
+    <button class="filter-btn"        data-f="yes"     onclick="setFilter('yes')">참석</button>
+    <button class="filter-btn"        data-f="no"      onclick="setFilter('no')">불참</button>
+    <button class="filter-btn"        data-f="main"    onclick="setFilter('main')">📜 메인</button>
+    <button class="filter-btn"        data-f="gparent" onclick="setFilter('gparent')">🤵 신랑 부모님</button>
+    <button class="filter-btn"        data-f="bparent" onclick="setFilter('bparent')">👰 신부 부모님</button>
+    <div class="toolbar-spacer"></div>
+    <button class="action-btn" onclick="exportCSV()">📥 CSV</button>
+    <button class="action-btn danger" onclick="clearAll()">🗑 초기화</button>
+  </div>
+
+  <!-- 응답 목록 -->
+  <div class="table-wrap">
+    <div class="table-head">
+      <div>구분</div>
+      <div>성함</div>
+      <div>참석</div>
+      <div>인원</div>
+      <div>등록 시간</div>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let curFilter = 'all';
+
+/* DB에서 RSVP 목록 가져오기 */
+async function load() {
+  const res = await fetch('/api/rsvp');
+  if (!res.ok) throw new Error('서버 오류');
+  return await res.json();
+}
+
+function fmtTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
+  const yy = String(d.getFullYear()).slice(2);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${yy}.${mm}.${dd} ${hh}:${mi}`;
+}
+
+function escHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s ?? '';
+  return div.innerHTML;
+}
+
+/* 통계 갱신 */
+function renderStats(list) {
+  const stat = {
+    groom: { yes: 0, no: 0 },
+    bride: { yes: 0, no: 0 },
+  };
+
+  list.forEach(r => {
+    const side = (r.side === 'groom' || r.side === 'bride') ? r.side : 'groom';
+    const at   = r.attend === 'yes' ? 'yes' : 'no';
+    /* 인원수 — 최소 1 보장 */
+    let cnt = parseInt(r.count, 10);
+    if (!Number.isFinite(cnt) || cnt < 1) cnt = 1;
+    stat[side][at] += cnt;
+  });
+
+  const set = (id, v) => document.getElementById(id).innerHTML = `${v}<span class="unit">명</span>`;
+  set('g-yes',   stat.groom.yes);
+  set('g-no',    stat.groom.no);
+  set('g-total', stat.groom.yes + stat.groom.no);
+  set('b-yes',   stat.bride.yes);
+  set('b-no',    stat.bride.no);
+  set('b-total', stat.bride.yes + stat.bride.no);
+
+  /* 참석 확정 인원 (yes만) */
+  const totalYes = stat.groom.yes + stat.bride.yes;
+  document.getElementById('grand-total').textContent = totalYes;
+  document.getElementById('grand-detail').textContent =
+    `— 신랑측 ${stat.groom.yes}명 · 신부측 ${stat.bride.yes}명 —`;
+}
+
+/* 출처 메타 — id, 라벨, 뱃지 클래스 */
+const SOURCE_META = {
+  'main':         { label: '📜 메인 청첩장',    cls: 'src-main'    },
+  'groom-parent': { label: '🤵 신랑 부모님 청첩장', cls: 'src-gparent' },
+  'bride-parent': { label: '👰 신부 부모님 청첩장', cls: 'src-bparent' },
+};
+function srcMeta(s) {
+  return SOURCE_META[s] || { label: '— 미상 —', cls: 'src-main' };
+}
+
+/* 행 갱신 */
+function renderRows(list) {
+  /* 필터 */
+  let filtered = list;
+  if      (curFilter === 'groom')   filtered = list.filter(r => r.side === 'groom');
+  else if (curFilter === 'bride')   filtered = list.filter(r => r.side === 'bride');
+  else if (curFilter === 'yes')     filtered = list.filter(r => r.attend === 'yes');
+  else if (curFilter === 'no')      filtered = list.filter(r => r.attend === 'no');
+  else if (curFilter === 'main')    filtered = list.filter(r => (r.source || 'main') === 'main');
+  else if (curFilter === 'gparent') filtered = list.filter(r => r.source === 'groom-parent');
+  else if (curFilter === 'bparent') filtered = list.filter(r => r.source === 'bride-parent');
+
+  /* 최신순 정렬 */
+  filtered.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+  const el = document.getElementById('rows');
+  if (!filtered.length) {
+    el.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">🌸</div>
+        ${list.length ? '조건에 맞는 응답이 없습니다' : '아직 등록된 응답이 없습니다'}
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(r => {
+    const sideLabel = r.side === 'bride' ? '신부측' : '신랑측';
+    const sideCls   = r.side === 'bride' ? 'bride'  : 'groom';
+    const sideIcon  = r.side === 'bride' ? '👰'      : '🤵';
+    const attendLbl = r.attend === 'yes' ? '참석'    : '불참';
+    const attendCls = r.attend === 'yes' ? 'yes'     : 'no';
+    /* 인원수 — 최소 1 보장 */
+    let cnt = parseInt(r.count, 10);
+    if (!Number.isFinite(cnt) || cnt < 1) cnt = 1;
+
+    const src = srcMeta(r.source);
+    return `
+      <div class="table-row" id="row-${r.id}">
+        <div class="row-line">
+          <span class="row-label">구분</span>
+          <span class="row-value"><span class="badge ${sideCls}">${sideIcon} ${sideLabel}</span></span>
+        </div>
+        <div class="row-line">
+          <span class="row-label">출처</span>
+          <span class="row-value"><span class="badge ${src.cls}">${src.label}</span></span>
+        </div>
+        <div class="row-line">
+          <span class="row-label">성함</span>
+          <span class="row-value name">${escHtml(r.name)}</span>
+        </div>
+        <div class="row-line">
+          <span class="row-label">참석</span>
+          <span class="row-value"><span class="badge ${attendCls}">${attendLbl}</span></span>
+        </div>
+        <div class="row-line">
+          <span class="row-label">인원</span>
+          <span class="row-value count">${cnt}<span style="font-size:11px;color:var(--text-light);margin-left:3px">명</span></span>
+        </div>
+        <div class="row-line">
+          <span class="row-label">등록</span>
+          <span class="row-value time">${fmtTime(r.createdAt)}</span>
+        </div>
+        <div class="row-line" style="justify-content:flex-end;margin-top:4px">
+          <button class="del-btn" onclick="deleteEntry(${r.id})">🗑 삭제</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function render() {
+  try {
+    const list = await load();
+    renderStats(list);
+    renderRows(list);
+  } catch (e) {
+    console.error('데이터 로드 실패:', e);
+    document.getElementById('rows').innerHTML =
+      '<div class="empty"><div class="empty-icon">⚠️</div>데이터를 불러오지 못했습니다<br><small style="color:var(--text-light);font-size:11px;margin-top:6px;display:block">잠시 후 새로고침 해주세요</small></div>';
+  }
+}
+
+async function setFilter(f) {
+  curFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.f === f));
+  await render();
+}
+
+/* CSV 내보내기 */
+async function exportCSV() {
+  const list = await load().catch(() => []);
+  if (!list.length) return showToast('내보낼 데이터가 없습니다');
+
+  const rows = [
+    ['구분', '출처', '성함', '참석여부', '인원', '등록시간'].join(','),
+    ...list.map(r => {
+      let cnt = parseInt(r.count, 10);
+      if (!Number.isFinite(cnt) || cnt < 1) cnt = 1;
+      return [
+        r.side === 'bride' ? '신부측' : '신랑측',
+        `"${srcMeta(r.source).label.replace(/^[^\s]+\s/, '')}"`,   /* 이모지 제거 후 라벨만 */
+        `"${(r.name || '').replace(/"/g, '""')}"`,
+        r.attend === 'yes' ? '참석' : '불참',
+        cnt,
+        fmtTime(r.createdAt),
+      ].join(',');
+    })
+  ];
+
+  const blob = new Blob(['﻿' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `rsvp_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV 파일이 저장되었습니다');
+}
+
+/* 개별 항목 삭제 */
+async function deleteEntry(id) {
+  if (!confirm('이 응답을 삭제하시겠어요?')) return;
+  try {
+    const res = await fetch(`/api/rsvp?id=${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('서버 오류');
+    /* 행 즉시 제거 후 통계 갱신 */
+    document.getElementById(`row-${id}`)?.remove();
+    await render();
+    showToast('삭제되었습니다');
+  } catch (e) {
+    showToast('삭제에 실패했습니다');
+  }
+}
+
+async function clearAll() {
+  if (!confirm('정말 모든 응답을 삭제하시겠어요?\n이 작업은 되돌릴 수 없습니다.')) return;
+  try {
+    const res = await fetch('/api/rsvp', { method: 'DELETE' });
+    if (!res.ok) throw new Error('서버 오류');
+    await render();
+    showToast('모든 데이터가 삭제되었습니다');
+  } catch (e) {
+    showToast('삭제에 실패했습니다');
+  }
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* 30초마다 자동 갱신 */
+setInterval(render, 30000);
+
+/* 실행 */
+render();
+</script>
+</body>
+</html>

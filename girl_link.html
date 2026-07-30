@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청첩장 공유 · 신부측 부모님 전용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;600&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&amp;family=Noto+Sans+KR:wght@300;400;500&amp;display=swap" rel="stylesheet">
+
+<!-- 카카오톡 공유 SDK -->
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
+
+<style>
+:root {
+  --gold: #C9A96E;
+  --gold-light: #E8D5B0;
+  --gold-dark: #8B6F47;
+  --cream: #FAF7F2;
+  --cream-dark: #F0EAE0;
+  --text-dark: #2C2420;
+  --text-mid: #5C4A3A;
+  --text-light: #8B7355;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(232,213,176,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(183,110,121,0.12) 0%, transparent 55%),
+    linear-gradient(160deg, #FAF7F2 0%, #F0EAE0 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.card {
+  width: 100%; max-width: 420px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 28px;
+  padding: 40px 26px;
+  box-shadow: 0 20px 60px rgba(139,111,71,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
+  text-align: center;
+}
+
+.eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px; font-weight: 400;
+  color: var(--text-dark); letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+.sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 14px; color: var(--gold-dark);
+  letter-spacing: 1px;
+  margin-bottom: 22px;
+}
+.line {
+  width: 32px; height: 1px;
+  background: var(--gold-light);
+  margin: 0 auto 24px;
+}
+.desc {
+  font-size: 13.5px; color: var(--text-mid);
+  line-height: 1.85; letter-spacing: 0.5px;
+  margin-bottom: 28px;
+}
+.desc strong { color: var(--text-dark); font-weight: 500; }
+
+/* 공유 버튼 */
+.share-list {
+  display: grid; gap: 12px;
+}
+.share-btn {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid rgba(201,169,110,0.22);
+  border-radius: 16px;
+  background: rgba(250,247,242,0.7);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: left;
+  transition: all 0.22s;
+}
+.share-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,111,71,0.14); }
+.share-btn:active { transform: translateY(0); }
+
+.share-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: #3A1D1D; font-size: 20px;
+  flex-shrink: 0;
+}
+.share-icon.kakao  { background: linear-gradient(135deg, #FEE500, #F0D000); }
+.share-icon.copy   { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: white; }
+
+.share-text { flex: 1; min-width: 0; }
+.share-name {
+  font-size: 14px; font-weight: 500;
+  color: var(--text-dark); letter-spacing: 0.5px;
+}
+.share-sub {
+  font-size: 11.5px; color: var(--text-light);
+  margin-top: 3px;
+}
+
+.home-link {
+  display: block;
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px; letter-spacing: 2px;
+  color: var(--gold-dark);
+  text-decoration: none;
+  opacity: 0.75;
+}
+.home-link:hover { opacity: 1; }
+
+/* 토스트 */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text-dark); color: var(--cream);
+  padding: 12px 22px; border-radius: 30px;
+  font-size: 12.5px; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  z-index: 9999; pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="eyebrow">Share</div>
+  <div class="title">청첩장 공유</div>
+  <div class="sub">신부측 부모님 전용</div>
+  <div class="line"></div>
+
+  <div class="desc">
+    공유할 연락처 범위를 선택해 주세요.<br>
+    선택한 옵션에 따라 <strong>신부측 부모님</strong><br>
+    연락처 표시가 달라집니다.
+  </div>
+
+  <div class="share-list">
+    <!-- 1. 아버지만 -->
+    <button class="share-btn" onclick="shareWith('father')">
+      <div class="share-icon kakao">💛</div>
+      <div class="share-text">
+        <div class="share-name">아버지 연락처만 공유</div>
+        <div class="share-sub">신부 아버지 연락처만 표시</div>
+      </div>
+    </button>
+
+    <!-- 2. 어머니만 -->
+    <button class="share-btn" onclick="shareWith('mother')">
+      <div class="share-icon kakao">💛</div>
+      <div class="share-text">
+        <div class="share-name">어머니 연락처만 공유</div>
+        <div class="share-sub">신부 어머니 연락처만 표시</div>
+      </div>
+    </button>
+
+    <!-- 3. 둘 다 -->
+    <button class="share-btn" onclick="shareWith('both')">
+      <div class="share-icon kakao">💛</div>
+      <div class="share-text">
+        <div class="share-name">부모님 연락처 모두 공유</div>
+        <div class="share-sub">아버지·어머니 연락처 모두 표시</div>
+      </div>
+    </button>
+
+    <!-- 4. 연락처 없이 -->
+    <button class="share-btn" onclick="shareWith('hide')">
+      <div class="share-icon kakao">💛</div>
+      <div class="share-text">
+        <div class="share-name">연락처 없이 공유</div>
+        <div class="share-sub">부모님 연락처를 표시하지 않음</div>
+      </div>
+    </button>
+
+    <!-- 5. 링크 복사 -->
+    <button class="share-btn" onclick="copyLink()">
+      <div class="share-icon copy">🔗</div>
+      <div class="share-text">
+        <div class="share-name">링크 복사하기</div>
+        <div class="share-sub">문자·메시지에 붙여넣기 하세요</div>
+      </div>
+    </button>
+  </div>
+
+  <a class="home-link" href="/bride-parent_3.html">← 청첩장 보기</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── 설정 ── */
+const KAKAO_JS_KEY = 'dcd1c068f6af150c317890b1ad802bf2';
+const BASE         = location.origin;
+const IMG          = `${BASE}/images/og-cover.png?v=5`;
+const MAP_URL      = `${BASE}/nav.html`;
+
+/* setting.json 에서 정보 로드 */
+let CFG = null;
+async function loadCfg() {
+  try {
+    const res = await fetch('./setting.json');
+    if (res.ok) CFG = (await res.json()).wedding;
+
+    /* 예식장 정보 — photo.html에서 저장한 값이 있으면 setting.json 기본값을 덮어씀 */
+    const vRes = await fetch('/api/venue');
+    if (vRes.ok) {
+      const vData = await vRes.json();
+      if (vData && typeof vData === 'object' && CFG) {
+        CFG.venue = { ...CFG.venue, ...vData };
+      }
+    }
+
+    /* 신랑/신부 이름 — photo.html "신랑 본인/신부 본인" 예금주 칸에 저장한 값이 있으면 덮어씀 */
+    const aRes = await fetch('/api/accounts');
+    if (aRes.ok) {
+      const aData = await aRes.json();
+      if (CFG) {
+        if (aData?.groom?.name) CFG.groom.name = aData.groom.name;
+        if (aData?.bride?.name) CFG.bride.name = aData.bride.name;
+      }
+    }
+  } catch (e) { console.error('setting.json 로드 실패:', e); }
+}
+loadCfg();
+
+/* Kakao SDK 초기화 */
+(function initKakao() {
+  if (window.Kakao && !Kakao.isInitialized()) {
+    try { Kakao.init(KAKAO_JS_KEY); } catch (e) { console.warn('Kakao init 실패:', e); }
+  }
+})();
+
+/* 날짜 한줄 문자열 생성 */
+function dateLine() {
+  if (!CFG) return '';
+  const d = CFG.date, v = CFG.venue;
+  const day = (d.dayOfWeek || '').replace('요일', '');
+  return `${d.year}.${String(d.month).padStart(2,'0')}.${String(d.day).padStart(2,'0')} (${day}) ${d.time}\n${v.name} ${v.hall}`;
+}
+
+/* 성이 필요 없는 표기용 — 3글자 이상(성+이름)이면 맨 앞 성 1글자만 떼고 이름만 반환 */
+function shortName(n) {
+  n = String(n || '');
+  return n.length >= 3 ? n.slice(1) : n;
+}
+
+/* ── 카카오톡 공유 — 연락처 옵션별 분기 ── */
+function shareWith(contactType) {
+  if (!window.Kakao || !Kakao.isInitialized()) {
+    showToast('카카오 SDK 로드 대기 중 — 잠시 후 다시 시도해주세요');
+    return;
+  }
+  const groom = shortName(CFG?.groom?.name) || '준일';
+  const bride = shortName(CFG?.bride?.name) || '혜윤';
+  const targetUrl = `${BASE}/bride-parent_3.html?contact=${contactType}`;
+  try {
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title:       `${groom} ♥ ${bride} 청첩장 · 신부측 혼주`,
+        description: dateLine(),
+        imageUrl:    IMG,
+        link: { mobileWebUrl: targetUrl, webUrl: targetUrl }
+      },
+      buttons: [
+        { title: '💌 청첩장 보기', link: { mobileWebUrl: targetUrl, webUrl: targetUrl } },
+        { title: '🧭 길찾기',     link: { mobileWebUrl: MAP_URL,   webUrl: MAP_URL   } }
+      ]
+    });
+  } catch (e) {
+    console.error('카카오 공유 실패:', e);
+    showToast('공유에 실패했습니다');
+  }
+}
+
+/* ── 링크 복사 ── */
+function copyLink() {
+  const url = `${BASE}/bride-parent_3.html`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => showToast('청첩장 링크가 복사되었습니다'))
+      .catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity  = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('청첩장 링크가 복사되었습니다'); }
+  catch (e) { showToast('복사 실패 — 직접 주소창에서 복사해주세요'); }
+  finally { document.body.removeChild(ta); }
+}
+
+/* ── 토스트 ── */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
