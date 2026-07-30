@@ -2096,6 +2096,15 @@ body {
 
   <!-- ── 오시는 길 ── -->
   <section class="section location">
+    <!-- 웨딩홀 실제 사진 (장소명+홀 표시) -->
+    <div class="venue-photo-wrap" id="venue-photo-wrap" style="display:none; margin-bottom: 24px;">
+      <img id="venue-photo-img" src="" alt="">
+      <div class="venue-photo-label">
+        <div class="venue-photo-label-name" id="venue-photo-name">—</div>
+        <div class="venue-photo-label-hall" id="venue-photo-hall">—</div>
+      </div>
+    </div>
+
     <div class="section-label">Location</div>
     <div class="section-title">오시는 길</div>
     <!-- 지도 -->
@@ -2124,15 +2133,6 @@ body {
     <button class="map-btn" onclick="openNavModal()">
       🗺 <span id="nav-btn-label">길찾기</span>
     </button>
-
-    <!-- 웨딩홀 실제 사진 (장소명+홀 표시) -->
-    <div class="venue-photo-wrap" id="venue-photo-wrap" style="display:none; margin-top: 24px;">
-      <img id="venue-photo-img" src="" alt="">
-      <div class="venue-photo-label">
-        <div class="venue-photo-label-name" id="venue-photo-name">—</div>
-        <div class="venue-photo-label-hall" id="venue-photo-hall">—</div>
-      </div>
-    </div>
 
     <!-- 추가 장소 (지상/지하주차장 등) — photo.html에서 등록한 만큼 동적으로 생성 -->
     <div id="extra-locations-wrap"></div>
