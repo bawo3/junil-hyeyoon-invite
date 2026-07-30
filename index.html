@@ -223,6 +223,8 @@ body {
           mask-composite: intersect;
 }
 .cover-bg.loaded { transform: scaleX(-1); }
+/* 사진 모드는 좌우반전 없이 원본 그대로 */
+.cover-bg.cover-photo, .cover-bg.cover-photo.loaded { transform: none; object-fit: cover; }
 .cover-overlay { display: none; }
 /* 커버 자식 콘텐츠 z-index */
 .cover > *:not(.cover-bg) { position: relative; z-index: 2; }
@@ -350,7 +352,7 @@ body {
 }
 .cover-venue-hall {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12px; font-weight: 300;
+  font-size: 14px; font-weight: 300;
   color: var(--text-light); letter-spacing: 1.5px;
 }
 
@@ -1068,8 +1070,8 @@ body {
   filter: drop-shadow(0 3px 8px rgba(139,111,71,0.2));
   transition: filter 0.3s ease;
 }
-.acc-character.panda  { right: -12px; animation: charBounceR 3s ease-in-out infinite; transform-origin: bottom center; }
-.acc-character.rabbit { left:  -12px; animation: charBounceL 3s ease-in-out infinite; transform-origin: bottom center; }
+.acc-character.groom { right: -12px; animation: charBounceR 3s ease-in-out infinite; transform-origin: bottom center; }
+.acc-character.bride { left:  -12px; animation: charBounceL 3s ease-in-out infinite; transform-origin: bottom center; }
 @keyframes charBounceR {
   0%, 100% { transform: rotate(10deg) translateY(0); }
   50%      { transform: rotate(10deg) translateY(-5px); }
@@ -1830,12 +1832,14 @@ body {
 
   <!-- ── 커버 ── -->
   <section class="cover" id="cover">
-    <!-- 배경 영상 (좌우반전, 자동재생, 무한반복, 음소거) -->
+    <!-- 배경 영상 (좌우반전, 자동재생, 무한반복, 음소거) — photo.html에 커버 사진을 등록하면 아래 사진으로 대체됨 -->
     <video class="cover-bg" id="cover-bg"
            src="./images/top.mp4"
            autoplay muted loop playsinline preload="auto"
            webkit-playsinline="true"
            disablepictureinpicture></video>
+    <!-- 커버 사진 — photo.html "메인 사진" 등록 시에만 표시, 미등록 시 위 영상 유지 -->
+    <img class="cover-bg cover-photo" id="cover-photo" src="" alt="" style="display:none;">
     <div class="cover-overlay"></div>
 
     <div class="cover-eyebrow">We're Getting Married</div>
@@ -2148,35 +2152,39 @@ body {
     <div class="account-toggle">
       <!-- 신랑 카드 (오른쪽 상단에 판다) -->
       <button class="acc-btn" onclick="openPayModal('groom')">
-        <!-- 판다 캐릭터 -->
-        <svg class="acc-character panda" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <!-- 귀 (검은색) -->
-          <ellipse cx="14" cy="14" rx="7" ry="8" fill="#2C2420"/>
-          <ellipse cx="46" cy="14" rx="7" ry="8" fill="#2C2420"/>
-          <ellipse cx="14" cy="14" rx="3.5" ry="4" fill="#5C4A3A"/>
-          <ellipse cx="46" cy="14" rx="3.5" ry="4" fill="#5C4A3A"/>
-          <!-- 얼굴 (흰색) -->
-          <ellipse cx="30" cy="32" rx="22" ry="20" fill="#FFFFFF"/>
+        <!-- 신랑 캐릭터 -->
+        <svg class="acc-character groom" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <!-- 머리카락 (뒤) -->
+          <path d="M9 26 C9 10 51 10 51 26 C51 20 47 15 30 15 C13 15 9 20 9 26 Z" fill="#2C2420"/>
+          <!-- 귀 -->
+          <ellipse cx="11" cy="30" rx="4" ry="5" fill="#FFDCB8"/>
+          <ellipse cx="49" cy="30" rx="4" ry="5" fill="#FFDCB8"/>
+          <!-- 얼굴 -->
+          <ellipse cx="30" cy="31" rx="21" ry="19" fill="#FFDCB8"/>
+          <!-- 앞머리 -->
+          <path d="M11 24 C11 13 49 13 49 24 C46 17 38 14 30 14 C22 14 14 17 11 24 Z" fill="#2C2420"/>
           <!-- 볼 (분홍) -->
-          <ellipse cx="14" cy="36" rx="4.5" ry="3" fill="#FFB8C8" opacity="0.7"/>
-          <ellipse cx="46" cy="36" rx="4.5" ry="3" fill="#FFB8C8" opacity="0.7"/>
-          <!-- 눈 주변 검은 패치 -->
-          <ellipse cx="22" cy="28" rx="6" ry="7" fill="#2C2420" transform="rotate(-15,22,28)"/>
-          <ellipse cx="38" cy="28" rx="6" ry="7" fill="#2C2420" transform="rotate(15,38,28)"/>
-          <!-- 눈 (흰자) -->
-          <circle cx="22" cy="29" r="2.5" fill="#FFFFFF"/>
-          <circle cx="38" cy="29" r="2.5" fill="#FFFFFF"/>
-          <!-- 눈동자 -->
-          <circle cx="22.5" cy="29.5" r="1.5" fill="#2C2420"/>
-          <circle cx="38.5" cy="29.5" r="1.5" fill="#2C2420"/>
-          <!-- 반짝임 -->
-          <circle cx="23" cy="29" r="0.6" fill="#FFFFFF"/>
-          <circle cx="39" cy="29" r="0.6" fill="#FFFFFF"/>
+          <ellipse cx="15" cy="35" rx="4" ry="2.6" fill="#FFB8C8" opacity="0.6"/>
+          <ellipse cx="45" cy="35" rx="4" ry="2.6" fill="#FFB8C8" opacity="0.6"/>
+          <!-- 눈썹 -->
+          <path d="M17 25 Q21 23 25 25" stroke="#2C2420" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <path d="M35 25 Q39 23 43 25" stroke="#2C2420" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <!-- 눈 -->
+          <circle cx="21" cy="30" r="2.1" fill="#2C2420"/>
+          <circle cx="39" cy="30" r="2.1" fill="#2C2420"/>
+          <circle cx="21.7" cy="29.2" r="0.7" fill="#FFFFFF"/>
+          <circle cx="39.7" cy="29.2" r="0.7" fill="#FFFFFF"/>
           <!-- 코 -->
-          <ellipse cx="30" cy="36" rx="2.2" ry="1.6" fill="#2C2420"/>
+          <path d="M30 33 L30 36" stroke="#E0A878" stroke-width="1.1" stroke-linecap="round"/>
           <!-- 입 -->
-          <path d="M27 39 Q30 41 33 39" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-          <path d="M30 38 L30 39" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
+          <path d="M26 39 Q30 41.5 34 39" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <!-- 셔츠 칼라 -->
+          <path d="M22 48 L30 42 L27 52 Z" fill="#FFFFFF"/>
+          <path d="M38 48 L30 42 L33 52 Z" fill="#FFFFFF"/>
+          <!-- 나비넥타이 -->
+          <path d="M26 49 L30 51.5 L26 54 Z" fill="#B76E79"/>
+          <path d="M34 49 L30 51.5 L34 54 Z" fill="#B76E79"/>
+          <circle cx="30" cy="51.5" r="1.5" fill="#8B6F47"/>
         </svg>
 
         <span class="acc-btn-label">Groom</span>
@@ -2186,34 +2194,45 @@ body {
 
       <!-- 신부 카드 (왼쪽 상단에 토끼) -->
       <button class="acc-btn" onclick="openPayModal('bride')">
-        <!-- 토끼 캐릭터 -->
-        <svg class="acc-character rabbit" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <!-- 귀 (왼쪽) -->
-          <ellipse cx="20" cy="11" rx="4" ry="11" fill="#FFFFFF" stroke="#E0CFC0" stroke-width="0.8" transform="rotate(-12,20,11)"/>
-          <ellipse cx="20" cy="13" rx="2" ry="7" fill="#FFD0D8" transform="rotate(-12,20,13)"/>
-          <!-- 귀 (오른쪽) -->
-          <ellipse cx="40" cy="11" rx="4" ry="11" fill="#FFFFFF" stroke="#E0CFC0" stroke-width="0.8" transform="rotate(12,40,11)"/>
-          <ellipse cx="40" cy="13" rx="2" ry="7" fill="#FFD0D8" transform="rotate(12,40,13)"/>
+        <!-- 신부 캐릭터 -->
+        <svg class="acc-character bride" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <!-- 면사포 (뒤) -->
+          <path d="M6 34 C4 16 14 6 30 6 C46 6 56 16 54 34 C54 24 46 16 30 16 C14 16 6 24 6 34 Z" fill="#FFFFFF" opacity="0.9" stroke="#EDE0D4" stroke-width="0.6"/>
+          <path d="M9 30 C9 44 9 52 13 58" stroke="#EDE0D4" stroke-width="0.6" fill="none" opacity="0.7"/>
+          <path d="M51 30 C51 44 51 52 47 58" stroke="#EDE0D4" stroke-width="0.6" fill="none" opacity="0.7"/>
+          <!-- 머리카락 -->
+          <path d="M12 26 C12 12 48 12 48 26 C48 19 42 15 30 15 C18 15 12 19 12 26 Z" fill="#3A2A20"/>
+          <!-- 귀 -->
+          <ellipse cx="12" cy="31" rx="3.5" ry="4.5" fill="#FFDCB8"/>
+          <ellipse cx="48" cy="31" rx="3.5" ry="4.5" fill="#FFDCB8"/>
           <!-- 얼굴 -->
-          <ellipse cx="30" cy="34" rx="20" ry="19" fill="#FFFFFF" stroke="#E8DCD0" stroke-width="0.6"/>
+          <ellipse cx="30" cy="32" rx="20" ry="18" fill="#FFDCB8"/>
+          <!-- 옆머리 -->
+          <path d="M11 24 C10 30 11 37 14 41 C12 34 12 28 13 23 Z" fill="#3A2A20"/>
+          <path d="M49 24 C50 30 49 37 46 41 C48 34 48 28 47 23 Z" fill="#3A2A20"/>
+          <!-- 티아라 -->
+          <path d="M23 15 L27 10 L30 14 L33 10 L37 15 Z" fill="#F0DCA0"/>
+          <circle cx="30" cy="13" r="1.6" fill="#E87090"/>
           <!-- 볼 (분홍) -->
-          <ellipse cx="14" cy="38" rx="4.5" ry="3" fill="#FFB8C8" opacity="0.85"/>
-          <ellipse cx="46" cy="38" rx="4.5" ry="3" fill="#FFB8C8" opacity="0.85"/>
+          <ellipse cx="15" cy="36" rx="3.8" ry="2.5" fill="#FFB8C8" opacity="0.7"/>
+          <ellipse cx="45" cy="36" rx="3.8" ry="2.5" fill="#FFB8C8" opacity="0.7"/>
           <!-- 눈 (감은 듯한 행복한 눈) -->
-          <path d="M19 30 Q23 27 27 30" stroke="#2C2420" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <path d="M33 30 Q37 27 41 30" stroke="#2C2420" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <!-- 코 (분홍 하트) -->
-          <path d="M30 35 C28.5 33.5 27 34.5 27.5 36 C28 37 30 38.5 30 38.5 C30 38.5 32 37 32.5 36 C33 34.5 31.5 33.5 30 35Z"
-                fill="#E87090"/>
+          <path d="M17 30 Q21 27 25 30" stroke="#2C2420" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M35 30 Q39 27 43 30" stroke="#2C2420" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- 속눈썹 -->
+          <path d="M17 29 L15.5 27.5" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
+          <path d="M43 29 L44.5 27.5" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
+          <!-- 코 -->
+          <path d="M30 34 L30 37" stroke="#E0A878" stroke-width="1" stroke-linecap="round"/>
           <!-- 입 -->
-          <path d="M30 38.5 L30 40" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
-          <path d="M27 41 Q30 43 33 41" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-          <!-- 작은 이빨 -->
-          <rect x="29" y="41.5" width="2" height="2" fill="#FFFFFF" stroke="#E0CFC0" stroke-width="0.4"/>
-          <!-- 머리 리본 -->
-          <path d="M44 22 L48 18 L48 24 Z" fill="#FFB8C8"/>
-          <path d="M48 18 L52 22 L48 24 Z" fill="#FFB8C8"/>
-          <circle cx="48" cy="22" r="1.5" fill="#E87090"/>
+          <path d="M27 40 Q30 42 33 40" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <!-- 드레스 네크라인 -->
+          <path d="M16 50 Q30 44 44 50 L44 58 L16 58 Z" fill="#FFFFFF" stroke="#EDE0D4" stroke-width="0.6"/>
+          <!-- 꽃 장식 -->
+          <circle cx="27" cy="50.5" r="1.6" fill="#F5D0DA"/>
+          <circle cx="33" cy="50.5" r="1.6" fill="#F5D0DA"/>
+          <circle cx="30" cy="49" r="2" fill="#FFB8C8"/>
+          <circle cx="30" cy="49" r="0.8" fill="#E87090"/>
         </svg>
 
         <span class="acc-btn-label">Bride</span>
@@ -2462,6 +2481,8 @@ body {
 <script>
 /* ── setting.json에서 데이터 불러와 렌더링 ── */
 let CFG = null;
+let coverPhotoUrl = null;
+let coverMode = 'video';
 
 async function init() {
   try {
@@ -2503,6 +2524,16 @@ async function init() {
         if (aData?.bride?.name) CFG.bride.name = aData.bride.name;
       }
     } catch (e) { console.warn('신랑/신부 이름 로드 실패:', e); }
+
+    /* 커버 표시 방식 — photo.html에서 "영상"/"사진" 중 고른 값 + 등록한 사진 */
+    try {
+      const cRes = await fetch('/api/cover');
+      if (cRes.ok) {
+        const cData = await cRes.json();
+        if (cData?.photo) coverPhotoUrl = cData.photo;
+        if (cData?.mode)  coverMode = cData.mode;
+      }
+    } catch (e) { console.warn('커버 설정 로드 실패:', e); }
 
     /* 렌더링 */
     renderCover();
@@ -2786,9 +2817,15 @@ function renderVenue() {
   /* 추가 장소 (지상/지하주차장 등) 렌더링 */
   renderExtraNavLocations();
 
-  /* 커버 영상 — 자동재생 보장 + 살짝 줌인 트랜지션 */
-  const bg = document.getElementById('cover-bg');
-  if (bg) {
+  /* 커버 — photo.html에서 "사진"을 선택하고 사진이 등록되어 있으면 사진을, 그 외엔 기존 영상을 표시 */
+  const bg    = document.getElementById('cover-bg');
+  const photo = document.getElementById('cover-photo');
+  if (coverMode === 'photo' && coverPhotoUrl && photo) {
+    if (bg) { bg.pause(); bg.style.display = 'none'; }
+    photo.src = coverPhotoUrl;
+    photo.style.display = '';
+    requestAnimationFrame(() => photo.classList.add('loaded'));
+  } else if (bg) {
     bg.addEventListener('loadeddata', () => {
       requestAnimationFrame(() => bg.classList.add('loaded'));
     }, { once: true });

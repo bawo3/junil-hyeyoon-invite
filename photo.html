@@ -411,6 +411,37 @@ body {
 
 <div class="wrap">
 
+  <!-- 메인 사진 (커버) -->
+  <div class="acc-card">
+    <div class="acc-card-header">
+      <div class="acc-card-title">🖼 메인 사진 (커버)</div>
+    </div>
+    <div style="display:flex; gap:16px; margin-bottom:12px;">
+      <label style="display:flex; align-items:center; gap:6px; font-size:13px; color: var(--text-mid); cursor:pointer;">
+        <input type="radio" name="coverMode" value="video" id="coverModeVideo" checked style="accent-color: var(--gold);">
+        🎥 영상 (판다 인사)
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:13px; color: var(--text-mid); cursor:pointer;">
+        <input type="radio" name="coverMode" value="photo" id="coverModePhoto" style="accent-color: var(--gold);">
+        🖼 사진
+      </label>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <div style="width:96px; height:96px; border-radius:14px; overflow:hidden; background: var(--cream-dark); flex-shrink:0;">
+        <img id="coverPhotoPreview" src="" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div style="flex:1; min-width:160px;">
+        <input type="file" id="coverPhotoInput" accept="image/*" style="display:none;">
+        <button class="action-btn" type="button" onclick="document.getElementById('coverPhotoInput').click()">사진 선택</button>
+        <button class="action-btn" type="button" onclick="removeCoverPhoto()" style="margin-left:6px;">삭제</button>
+        <div style="font-size:11px; color: var(--text-light); margin-top:6px;">청첩장 맨 위 커버 배경에 표시됩니다. "사진"을 선택하고 사진을 등록해야 실제로 반영되고, "영상"을 선택하면 기존 판다 인사 영상이 그대로 표시됩니다.</div>
+      </div>
+    </div>
+    <div class="acc-actions">
+      <button class="btn-primary" id="coverSaveBtn" onclick="saveCover()">저장</button>
+    </div>
+  </div>
+
   <!-- 업로드 -->
   <div class="upload-card">
     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -666,6 +697,7 @@ function checkAuth() {
     sessionStorage.setItem(AUTH_KEY, '1');
     document.getElementById('authGate').style.display = 'none';
     loadPhotos();
+    loadCover();
     loadWeddingDate();
     loadVenue();
     loadTransport();
@@ -1176,6 +1208,73 @@ async function saveTransport() {
   }
 }
 
+/* ── 메인 사진 (커버) 관리 ──
+   /api/cover 엔드포인트(Vercel KV)와 동기화
+   필드: mode('video'|'photo'), photo */
+let coverPhotoData = '';
+
+async function loadCover() {
+  try {
+    const res = await fetch('/api/cover');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data) return;
+    coverPhotoData = data.photo || '';
+    document.getElementById('coverPhotoPreview').src = coverPhotoData;
+    const mode = data.mode === 'photo' ? 'photo' : 'video';
+    document.getElementById('coverModeVideo').checked = mode === 'video';
+    document.getElementById('coverModePhoto').checked = mode === 'photo';
+  } catch (e) {
+    console.error('커버 사진 로드 실패:', e);
+  }
+}
+
+/* 커버 사진 업로드 — 다른 사진 카드와 동일한 압축 로직 재사용 */
+document.getElementById('coverPhotoInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !file.type.startsWith('image/')) return;
+  try {
+    const { src } = await compressImage(file);
+    coverPhotoData = src;
+    document.getElementById('coverPhotoPreview').src = src;
+  } catch (err) {
+    showToast('이미지를 불러오지 못했습니다');
+  }
+});
+
+function removeCoverPhoto() {
+  coverPhotoData = '';
+  document.getElementById('coverPhotoPreview').src = '';
+}
+
+async function saveCover() {
+  const btn  = document.getElementById('coverSaveBtn');
+  const mode = document.getElementById('coverModePhoto').checked ? 'photo' : 'video';
+
+  if (mode === 'photo' && !coverPhotoData) {
+    showToast('사진을 선택하거나, "영상"을 선택해 주세요');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    const res = await fetch('/api/cover', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode, photo: coverPhotoData })
+    });
+    if (!res.ok) throw new Error('서버 오류');
+    showToast('커버 설정이 저장되었습니다');
+  } catch (e) {
+    showToast('저장에 실패했습니다');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
+  }
+}
+
 /* ── 예식 일자 관리 ──
    /api/date 엔드포인트(Vercel KV)와 동기화
    필드: year, month, day, hour, minute, dayOfWeek, time */
@@ -1344,6 +1443,7 @@ async function saveAccountsAndContacts() {
 /* ── 시작 ── (인증된 세션일 때만 자동 로드) */
 if (sessionStorage.getItem(AUTH_KEY) === '1') {
   loadPhotos();
+  loadCover();
   loadWeddingDate();
   loadVenue();
   loadTransport();
