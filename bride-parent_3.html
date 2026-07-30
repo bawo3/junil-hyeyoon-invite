@@ -2425,7 +2425,7 @@ body {
   </section>
 
   <!-- ── 공유하기 ── -->
-  <section class="share-section" style="display:none">
+  <section class="share-section">
     <div class="section-label">Share</div>
     <div class="section-title">청첩장 공유</div>
     <p class="share-desc">
@@ -3337,7 +3337,7 @@ function shareKakao() {
   const dateStr = `${d.year}.${String(d.month).padStart(2,'0')}.${String(d.day).padStart(2,'0')} (${(d.dayOfWeek||'').replace('요일','')}) ${d.time}`;
 
   const base    = location.origin + '/';
-  const siteUrl = base;
+  const siteUrl = location.href;
   const mapUrl  = `${location.origin}/nav.html`;
   const calUrl  = `${location.origin}/cal.html`;
   /* 이미지 URL — 캐시 강제 무효화 */
@@ -3371,7 +3371,7 @@ function shareKakao() {
 }
 
 function copyInviteLink() {
-  const url = location.origin + '/';
+  const url = location.href;
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url)
       .then(() => showToast('청첩장 링크가 복사되었습니다'))
