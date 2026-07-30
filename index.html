@@ -2642,14 +2642,14 @@ function renderGreeting() {
 function renderFamily() {
   const g = CFG.groom, b = CFG.bride;
 
-  /* 신랑 부모님 — 2x2 그리드의 아버지/어머니 칸에 성함만 채움 */
-  document.getElementById('groom-father').textContent = g.fatherName;
-  document.getElementById('groom-mother').textContent = g.motherName;
+  /* 신랑 부모님 — 2x2 그리드의 아버지/어머니 칸에 성함만 채움 (미입력 시 — 표시) */
+  document.getElementById('groom-father').textContent = g.fatherName || '—';
+  document.getElementById('groom-mother').textContent = g.motherName || '—';
   document.getElementById('groom-name').textContent   = g.name;
 
   /* 신부 부모님 */
-  document.getElementById('bride-father').textContent = b.fatherName;
-  document.getElementById('bride-mother').textContent = b.motherName;
+  document.getElementById('bride-father').textContent = b.fatherName || '—';
+  document.getElementById('bride-mother').textContent = b.motherName || '—';
   document.getElementById('bride-name').textContent   = b.name;
 }
 
