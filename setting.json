@@ -79,10 +79,10 @@
     }
   },
   "theme": {
-    "primaryColor": "#C9A96E",
-    "accentColor": "#8B6F47",
-    "roseGold": "#B76E79",
-    "cream": "#FAF7F2",
-    "darkGold": "#8B6F47"
+    "primaryColor": "#7B95AC",
+    "accentColor": "#4A5F73",
+    "roseGold": "#A3AECF",
+    "cream": "#F4F7FA",
+    "darkGold": "#4A5F73"
   }
 }

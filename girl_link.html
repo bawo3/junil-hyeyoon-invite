@@ -11,22 +11,22 @@
 
 <style>
 :root {
-  --gold: #C9A96E;
-  --gold-light: #E8D5B0;
-  --gold-dark: #8B6F47;
-  --cream: #FAF7F2;
-  --cream-dark: #F0EAE0;
-  --text-dark: #2C2420;
-  --text-mid: #5C4A3A;
-  --text-light: #8B7355;
+  --gold: #7B95AC;
+  --gold-light: #C5D5E0;
+  --gold-dark: #4A5F73;
+  --cream: #F4F7FA;
+  --cream-dark: #E8EDF2;
+  --text-dark: #232D38;
+  --text-mid: #4C5C6B;
+  --text-light: #7C8B99;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'Noto Sans KR', sans-serif;
   background:
-    radial-gradient(ellipse at 0% 0%, rgba(232,213,176,0.22) 0%, transparent 55%),
-    radial-gradient(ellipse at 100% 100%, rgba(183,110,121,0.12) 0%, transparent 55%),
-    linear-gradient(160deg, #FAF7F2 0%, #F0EAE0 100%);
+    radial-gradient(ellipse at 0% 0%, rgba(197,213,224,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(163,174,207,0.12) 0%, transparent 55%),
+    linear-gradient(160deg, #F4F7FA 0%, #E8EDF2 100%);
   color: var(--text-dark);
   min-height: 100vh;
   padding: 40px 20px;
@@ -41,7 +41,7 @@ body {
   backdrop-filter: blur(14px);
   border-radius: 28px;
   padding: 40px 26px;
-  box-shadow: 0 20px 60px rgba(139,111,71,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 20px 60px rgba(74,95,115,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
   text-align: center;
 }
 
@@ -83,15 +83,15 @@ body {
   display: flex; align-items: center; gap: 14px;
   width: 100%;
   padding: 16px 20px;
-  border: 1px solid rgba(201,169,110,0.22);
+  border: 1px solid rgba(123,149,172,0.22);
   border-radius: 16px;
-  background: rgba(250,247,242,0.7);
+  background: rgba(244,247,250,0.7);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   text-align: left;
   transition: all 0.22s;
 }
-.share-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,111,71,0.14); }
+.share-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,95,115,0.14); }
 .share-btn:active { transform: translateY(0); }
 
 .share-icon {

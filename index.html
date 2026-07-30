@@ -27,7 +27,7 @@
 <meta name="twitter:image"       content="https://junil-hyeyoon-invite.vercel.app/images/og-cover.png?v=6">
 
 <!-- 테마 컬러 (모바일 브라우저 상단바) -->
-<meta name="theme-color" content="#C9A96E">
+<meta name="theme-color" content="#7B95AC">
 
 <!-- 카카오톡 공유 SDK -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
@@ -36,16 +36,16 @@
 <style>
 /* ── 전역 변수 & 리셋 ── */
 :root {
-  --gold: #C9A96E;
-  --gold-light: #E8D5B0;
-  --gold-dark: #8B6F47;
-  --rose: #B76E79;
-  --rose-light: #D4A0A8;
-  --cream: #FAF7F2;
-  --cream-dark: #F0EAE0;
-  --text-dark: #2C2420;
-  --text-mid: #5C4A3A;
-  --text-light: #8B7355;
+  --gold: #7B95AC;
+  --gold-light: #C5D5E0;
+  --gold-dark: #4A5F73;
+  --rose: #A3AECF;
+  --rose-light: #C9D2E8;
+  --cream: #F4F7FA;
+  --cream-dark: #E8EDF2;
+  --text-dark: #232D38;
+  --text-mid: #4C5C6B;
+  --text-light: #7C8B99;
   --white: #FFFFFF;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -153,36 +153,29 @@ body {
   overflow: hidden;
   z-index: 9000;
 }
-/* 단풍잎 — 화면 곳곳에 분산 배치, 제자리에서 살랑살랑
-   clip-path 로 5각 단풍 실루엣을 만들고, 깊은 메이플 톤을 그라데이션으로 입힌다. */
+/* 눈송이 — 화면 곳곳에 분산 배치, 천천히 흩날리며 떨어짐
+   부드러운 원형 + 라디얼 그라데이션으로 은은하게 빛나는 눈 느낌을 낸다. */
 .petal {
   position: absolute;
   width: 16px; height: 16px;
-  /* 단풍잎 실루엣 — 5점(top·upper-right·lower-right·lower-left·upper-left) + 줄기 */
-  clip-path: polygon(
-    50%  2%,
-    62% 30%, 92% 30%,
-    75% 52%, 86% 82%,
-    60% 66%, 50% 98%, 40% 66%,
-    14% 82%, 25% 52%,
-     8% 30%, 38% 30%
-  );
+  border-radius: 50%;
   opacity: 0;
   animation-name: gentleSway;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  filter: drop-shadow(0 2px 5px rgba(139,72,45,0.20));
+  filter: drop-shadow(0 2px 6px rgba(74,95,115,0.22)) blur(0.2px);
 }
-/* 메이플 톤 — 더 연하게 (은은한 느낌) */
-.petal.p-gold   { background: linear-gradient(135deg, #E2C19A, #B49274); }   /* 옅은 가을 골드 */
-.petal.p-rose   { background: linear-gradient(135deg, #D08077, #9B564E); }   /* 옅은 메이플 레드 */
-.petal.p-cream  { background: linear-gradient(135deg, #E2A57B, #BE7E55); }   /* 옅은 번트 오렌지 */
+/* 눈 톤 — 순백~은청 그라데이션으로 은은하게 */
+.petal.p-gold   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #D8E4EC 65%, transparent 100%); }
+.petal.p-rose   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #C9D2E8 65%, transparent 100%); }
+.petal.p-cream  { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #E8EDF2 65%, transparent 100%); }
 
 @keyframes gentleSway {
-  0%, 100% { transform: translate(0, 0)        rotate(0deg);   opacity: 0.10; }
-  25%      { transform: translate(9px, -10px)  rotate(15deg);  opacity: 0.32; }
-  50%      { transform: translate(-7px, -16px) rotate(-10deg); opacity: 0.24; }
-  75%      { transform: translate(11px, -6px)  rotate(18deg);  opacity: 0.28; }
+  0%   { transform: translate(0, 0);        opacity: 0; }
+  10%  { opacity: 0.65; }
+  50%  { transform: translate(9px, 78px);   opacity: 0.85; }
+  90%  { opacity: 0.30; }
+  100% { transform: translate(-6px, 150px); opacity: 0; }
 }
 /* 모션 줄이기 설정 사용자 — 애니메이션 끔 */
 @media (prefers-reduced-motion: reduce) {
@@ -200,7 +193,7 @@ body {
   padding: 0 24px 60px;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, #FAF7F2 0%, #F5EFE6 40%, #F0E8DA 100%);
+  background: linear-gradient(160deg, #F4F7FA 0%, #EEF2F6 40%, #E4EAF0 100%);
 }
 /* 상단 영상 — 영상 자체 비율 그대로, 잘리지 않음, 좌우반전 */
 .cover-bg {
@@ -232,6 +225,19 @@ body {
 /* 영상이 위쪽에 있고 텍스트는 크림 배경 위에 놓이므로
    has-photo 모드는 사용하지 않음 — 기본 다크/골드 톤 유지 */
 
+/* 후지산 실루엣 — 커버 맨 뒤에 은은한 워터마크로, 눈꽃축제 밤 풍경 느낌 */
+#cover-fuji {
+  position: absolute;
+  left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  width: 150%;
+  max-width: 640px;
+  height: auto;
+  opacity: 0.16;
+  z-index: 0;
+  pointer-events: none;
+}
+
 
 /* 상단 라벨 — 영상 아래 중앙에 자연스럽게 */
 .cover-eyebrow {
@@ -258,7 +264,7 @@ body {
 .emblem-ring::before {
   content: '';
   position: absolute; inset: 8px;
-  border: 1px solid rgba(201,169,110,0.3);
+  border: 1px solid rgba(123,149,172,0.3);
   border-radius: 50%;
 }
 .emblem-initials {
@@ -383,7 +389,7 @@ body {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .greeting {
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(232,213,176,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(197,213,224,0.15) 0%, transparent 60%),
     var(--white);
   text-align: center;
   position: relative;
@@ -471,7 +477,7 @@ body {
   border-radius: 24px;
   padding: 22px 14px 24px;
   box-shadow:
-    0 4px 32px rgba(139,111,71,0.08),
+    0 4px 32px rgba(74,95,115,0.08),
     0 1px 0 rgba(255,255,255,0.9) inset;
   border: none;
   position: relative; overflow: hidden;
@@ -488,7 +494,7 @@ body {
   content: '';
   position: absolute; bottom: -20px; right: -20px;
   width: 80px; height: 80px;
-  background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(123,149,172,0.08) 0%, transparent 70%);
   border-radius: 50%;
 }
 .family-role {
@@ -527,13 +533,13 @@ body {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: white; font-size: 13px;
   text-decoration: none;
-  box-shadow: 0 2px 10px rgba(139,111,71,0.25);
+  box-shadow: 0 2px 10px rgba(74,95,115,0.25);
   transition: all 0.25s;
   justify-self: center;
 }
 .family-parent-phone:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(139,111,71,0.38);
+  box-shadow: 0 4px 14px rgba(74,95,115,0.38);
 }
 .family-parent-phone[hidden] { display: none; }
 /* 부모님 ↔ 자녀 사이 짧은 골드 구분선 */
@@ -552,19 +558,19 @@ body {
   display: inline-flex; align-items: center; gap: 6px;
   margin-top: 14px;
   padding: 7px 18px;
-  background: linear-gradient(135deg, rgba(232,213,176,0.4), rgba(201,169,110,0.15));
+  background: linear-gradient(135deg, rgba(197,213,224,0.4), rgba(123,149,172,0.15));
   border: none;
   border-radius: 30px;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 11px; color: var(--gold-dark);
   text-decoration: none; cursor: pointer;
   transition: all 0.35s;
-  box-shadow: 0 2px 12px rgba(139,111,71,0.1);
+  box-shadow: 0 2px 12px rgba(74,95,115,0.1);
 }
 .family-contact:hover {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: var(--white);
-  box-shadow: 0 4px 20px rgba(139,111,71,0.3);
+  box-shadow: 0 4px 20px rgba(74,95,115,0.3);
   transform: translateY(-1px);
 }
 
@@ -632,14 +638,14 @@ body {
   display: inline-block;
   margin-top: 28px;
   padding: 12px 40px;
-  background: linear-gradient(135deg, rgba(232,213,176,0.5), rgba(240,234,224,0.8));
+  background: linear-gradient(135deg, rgba(197,213,224,0.5), rgba(232,237,242,0.8));
   border: none;
   border-radius: 40px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px; font-weight: 400;
   color: var(--gold-dark); letter-spacing: 4px;
   box-shadow:
-    0 2px 20px rgba(139,111,71,0.12),
+    0 2px 20px rgba(74,95,115,0.12),
     0 1px 0 rgba(255,255,255,0.8) inset;
 }
 
@@ -670,15 +676,15 @@ body {
   border: none;
   border-radius: 28px; overflow: hidden;
   box-shadow:
-    0 8px 40px rgba(139,111,71,0.10),
+    0 8px 40px rgba(74,95,115,0.10),
     0 1px 0 rgba(255,255,255,0.9) inset;
   background: rgba(255,255,255,0.65);
   backdrop-filter: blur(12px);
 }
 .calendar-header {
   background: linear-gradient(135deg,
-    rgba(232,213,176,0.65) 0%,
-    rgba(240,234,224,0.85) 100%);
+    rgba(197,213,224,0.65) 0%,
+    rgba(232,237,242,0.85) 100%);
   padding: 18px 12px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 17px; letter-spacing: 6px; font-weight: 500;
@@ -729,14 +735,14 @@ body {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   border-radius: 50%;
   box-shadow:
-    0 4px 16px rgba(201,169,110,0.5),
-    0 0 0 4px rgba(232,213,176,0.35);
+    0 4px 16px rgba(123,149,172,0.5),
+    0 0 0 4px rgba(197,213,224,0.35);
   z-index: -1;
   animation: weddingPulse 2.4s ease-in-out infinite;
 }
 @keyframes weddingPulse {
-  0%, 100% { box-shadow: 0 4px 16px rgba(201,169,110,0.5), 0 0 0 4px rgba(232,213,176,0.35); }
-  50%      { box-shadow: 0 6px 22px rgba(201,169,110,0.7), 0 0 0 8px rgba(232,213,176,0.20); }
+  0%, 100% { box-shadow: 0 4px 16px rgba(123,149,172,0.5), 0 0 0 4px rgba(197,213,224,0.35); }
+  50%      { box-shadow: 0 6px 22px rgba(123,149,172,0.7), 0 0 0 8px rgba(197,213,224,0.20); }
 }
 /* 예식일 위에 작은 하트 */
 .cal-day.wedding::after {
@@ -765,14 +771,14 @@ body {
   backdrop-filter: blur(10px);
   border: none;
   border-radius: 30px;
-  box-shadow: 0 4px 20px rgba(139,111,71,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 4px 20px rgba(74,95,115,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.25s;
 }
 .venue-addr-card:hover {
   background: rgba(255,255,255,0.92);
-  box-shadow: 0 6px 28px rgba(139,111,71,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 6px 28px rgba(74,95,115,0.16), 0 1px 0 rgba(255,255,255,0.9) inset;
   transform: translateY(-1px);
 }
 .venue-addr-card:active { transform: scale(0.98); }
@@ -801,8 +807,8 @@ body {
   position: relative;
   margin-bottom: 28px;
   box-shadow:
-    0 20px 60px rgba(139,111,71,0.18),
-    0 4px 16px rgba(139,111,71,0.10);
+    0 20px 60px rgba(74,95,115,0.18),
+    0 4px 16px rgba(74,95,115,0.10);
 }
 .venue-photo-wrap img {
   width: 100%; height: 100%;
@@ -819,9 +825,9 @@ body {
   position: absolute; inset: 0; z-index: 1;
   background:
     linear-gradient(to top,
-      rgba(44,36,32,0.85) 0%,
-      rgba(44,36,32,0.55) 30%,
-      rgba(44,36,32,0.15) 55%,
+      rgba(35,45,56,0.85) 0%,
+      rgba(35,45,56,0.55) 30%,
+      rgba(35,45,56,0.15) 55%,
       transparent          75%);
   pointer-events: none;
 }
@@ -845,7 +851,7 @@ body {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 15px;
-  color: #F5E6C0;
+  color: #D8E4EC;
   letter-spacing: 2.5px; margin-top: 6px;
   text-shadow:
     0 2px 6px rgba(0,0,0,0.6),
@@ -870,8 +876,8 @@ body {
   margin-bottom: 20px;
   position: relative;
   box-shadow:
-    0 12px 48px rgba(139,111,71,0.14),
-    0 2px 8px rgba(139,111,71,0.08);
+    0 12px 48px rgba(74,95,115,0.14),
+    0 2px 8px rgba(74,95,115,0.08);
 }
 .naver-map-wrap iframe {
   width: 100%; height: 100%;
@@ -900,15 +906,15 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 12px; font-weight: 400;
   text-decoration: none; letter-spacing: 1px;
-  box-shadow: 0 4px 20px rgba(139,111,71,0.3);
+  box-shadow: 0 4px 20px rgba(74,95,115,0.3);
   transition: all 0.3s; border: none; cursor: pointer;
 }
-.map-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(139,111,71,0.4); }
+.map-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,95,115,0.4); }
 
 /* 길찾기 모달 */
 .nav-modal-backdrop {
   position: fixed; inset: 0;
-  background: rgba(44,36,32,0.45);
+  background: rgba(35,45,56,0.45);
   backdrop-filter: blur(4px);
   z-index: 8000;
   display: flex; align-items: flex-end; justify-content: center;
@@ -918,13 +924,13 @@ body {
 .nav-modal-backdrop.show { opacity: 1; pointer-events: all; }
 .nav-modal {
   width: 100%; max-width: 480px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(250,247,242,0.98));
+  background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(244,247,250,0.98));
   backdrop-filter: blur(20px);
   border-radius: 32px 32px 0 0;
   padding: 28px 24px 48px;
   transform: translateY(100%);
   transition: transform 0.45s cubic-bezier(0.34,1.26,0.64,1);
-  box-shadow: 0 -8px 60px rgba(139,111,71,0.15);
+  box-shadow: 0 -8px 60px rgba(74,95,115,0.15);
 }
 .nav-modal-backdrop.show .nav-modal { transform: translateY(0); }
 .nav-modal-handle {
@@ -955,8 +961,8 @@ body {
   padding: 16px 8px;
   border: none;
   border-radius: 20px;
-  background: rgba(250,247,242,0.7);
-  box-shadow: 0 2px 16px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  background: rgba(244,247,250,0.7);
+  box-shadow: 0 2px 16px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
   cursor: pointer; transition: all 0.25s;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 11px; font-weight: 400;
@@ -964,9 +970,9 @@ body {
   text-align: center;
 }
 .nav-app-btn:hover {
-  background: rgba(232,213,176,0.35);
+  background: rgba(197,213,224,0.35);
   transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(139,111,71,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 8px 28px rgba(74,95,115,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 .nav-app-btn:active { transform: scale(0.96); }
 .nav-app-icon {
@@ -985,14 +991,14 @@ body {
   padding: 13px;
   border: none;
   border-radius: 16px;
-  background: rgba(240,234,224,0.5);
+  background: rgba(232,237,242,0.5);
   font-family: 'Noto Serif KR', serif;
   font-size: 13px; font-weight: 300;
   color: var(--text-light); cursor: pointer;
   transition: all 0.25s;
 }
 .nav-modal-cancel:hover {
-  background: rgba(232,213,176,0.3);
+  background: rgba(197,213,224,0.3);
   color: var(--text-mid);
 }
 
@@ -1007,7 +1013,7 @@ body {
   border: none;
   border-radius: 20px;
   padding: 18px;
-  box-shadow: 0 4px 24px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 4px 24px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 .transport-type {
   font-family: 'Cormorant Garamond', serif;
@@ -1045,9 +1051,9 @@ body {
   padding: 18px 24px 16px;
   border: none;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(250,247,242,0.9), rgba(240,234,224,0.7));
+  background: linear-gradient(135deg, rgba(244,247,250,0.9), rgba(232,237,242,0.7));
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 24px rgba(139,111,71,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 4px 24px rgba(74,95,115,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
   font-family: 'Noto Serif KR', serif;
   font-size: 13px; font-weight: 300;
   color: var(--text-mid); cursor: pointer;
@@ -1057,8 +1063,8 @@ body {
   overflow: visible;
 }
 .acc-btn:hover {
-  background: linear-gradient(135deg, rgba(232,213,176,0.5), rgba(201,169,110,0.2));
-  box-shadow: 0 8px 32px rgba(139,111,71,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
+  background: linear-gradient(135deg, rgba(197,213,224,0.5), rgba(123,149,172,0.2));
+  box-shadow: 0 8px 32px rgba(74,95,115,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
   transform: translateY(-2px);
 }
 /* 카드 위 귀여운 캐릭터 */
@@ -1067,7 +1073,7 @@ body {
   top: -24px;
   width: 56px; height: 56px;
   pointer-events: none;
-  filter: drop-shadow(0 3px 8px rgba(139,111,71,0.2));
+  filter: drop-shadow(0 3px 8px rgba(74,95,115,0.2));
   transition: filter 0.3s ease;
 }
 .acc-character.groom { right: -12px; animation: charBounceR 3s ease-in-out infinite; transform-origin: bottom center; }
@@ -1081,7 +1087,7 @@ body {
   50%      { transform: rotate(-10deg) translateY(-5px); }
 }
 .acc-btn:hover .acc-character {
-  filter: drop-shadow(0 5px 12px rgba(139,111,71,0.32));
+  filter: drop-shadow(0 5px 12px rgba(74,95,115,0.32));
 }
 .acc-btn-label {
   font-family: 'Cormorant Garamond', serif;
@@ -1096,7 +1102,7 @@ body {
 .parents-section {
   margin-top: 28px;
   padding-top: 24px;
-  border-top: 1px solid rgba(201,169,110,0.2);
+  border-top: 1px solid rgba(123,149,172,0.2);
 }
 .parents-label {
   font-family: 'Cormorant Garamond', serif;
@@ -1118,10 +1124,10 @@ body {
 .parents-side.groom { color: var(--groom-color); }
 .parents-side.bride { color: var(--bride-color); }
 .parent-card {
-  background: linear-gradient(135deg, rgba(250,247,242,0.9), rgba(240,234,224,0.7));
+  background: linear-gradient(135deg, rgba(244,247,250,0.9), rgba(232,237,242,0.7));
   border-radius: 14px;
   padding: 12px 14px;
-  box-shadow: 0 2px 12px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 2px 12px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
   cursor: pointer;
   transition: all 0.25s;
   position: relative;
@@ -1129,7 +1135,7 @@ body {
 }
 .parent-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(139,111,71,0.13);
+  box-shadow: 0 6px 20px rgba(74,95,115,0.13);
 }
 .parent-relation {
   font-family: 'Cormorant Garamond', serif;
@@ -1149,7 +1155,7 @@ body {
 .parent-copy {
   position: absolute; top: 10px; right: 10px;
   font-size: 10px; color: var(--gold);
-  background: rgba(201,169,110,0.12);
+  background: rgba(123,149,172,0.12);
   padding: 2px 7px; border-radius: 10px;
   letter-spacing: 0.5px;
 }
@@ -1162,7 +1168,7 @@ body {
 /* 송금 모달 (길찾기 모달과 동일 패턴) */
 .pay-modal-backdrop {
   position: fixed; inset: 0;
-  background: rgba(44,36,32,0.45);
+  background: rgba(35,45,56,0.45);
   backdrop-filter: blur(4px);
   z-index: 8000;
   display: flex; align-items: flex-end; justify-content: center;
@@ -1172,13 +1178,13 @@ body {
 .pay-modal-backdrop.show { opacity: 1; pointer-events: all; }
 .pay-modal {
   width: 100%; max-width: 480px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(250,247,242,0.98));
+  background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(244,247,250,0.98));
   backdrop-filter: blur(20px);
   border-radius: 32px 32px 0 0;
   padding: 28px 24px 48px;
   transform: translateY(100%);
   transition: transform 0.45s cubic-bezier(0.34,1.26,0.64,1);
-  box-shadow: 0 -8px 60px rgba(139,111,71,0.15);
+  box-shadow: 0 -8px 60px rgba(74,95,115,0.15);
 }
 .pay-modal-backdrop.show .pay-modal { transform: translateY(0); }
 .pay-modal-handle {
@@ -1222,8 +1228,8 @@ body {
   padding: 18px 8px;
   border: none;
   border-radius: 20px;
-  background: rgba(250,247,242,0.7);
-  box-shadow: 0 2px 16px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  background: rgba(244,247,250,0.7);
+  box-shadow: 0 2px 16px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
   cursor: pointer; transition: all 0.25s;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 11px; font-weight: 400;
@@ -1231,9 +1237,9 @@ body {
   text-align: center;
 }
 .pay-app-btn:hover {
-  background: rgba(232,213,176,0.35);
+  background: rgba(197,213,224,0.35);
   transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(139,111,71,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 8px 28px rgba(74,95,115,0.15), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 .pay-app-btn:active { transform: scale(0.96); }
 .pay-app-icon {
@@ -1247,7 +1253,7 @@ body {
 }
 .pay-icon-toss   { background: linear-gradient(135deg, #0064FF, #0050CC); }
 .pay-icon-kakao  { background: linear-gradient(135deg, #FEE500, #F0D000); color: #3A1D1D !important; }
-.pay-icon-copy   { background: linear-gradient(135deg, #C9A96E, #8B6F47); }
+.pay-icon-copy   { background: linear-gradient(135deg, #7B95AC, #4A5F73); }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SECTION 7 · 참석 여부
@@ -1287,7 +1293,7 @@ body {
   border-radius: 16px;
   background: rgba(255,255,255,0.75);
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 16px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 2px 16px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 13px; font-weight: 300;
   color: var(--text-dark); outline: none;
@@ -1295,7 +1301,7 @@ body {
 }
 .form-input:focus {
   background: rgba(255,255,255,0.95);
-  box-shadow: 0 4px 24px rgba(139,111,71,0.13), 0 1px 0 rgba(255,255,255,1) inset;
+  box-shadow: 0 4px 24px rgba(74,95,115,0.13), 0 1px 0 rgba(255,255,255,1) inset;
 }
 .form-radio-group {
   display: flex; gap: 12px;
@@ -1307,14 +1313,14 @@ body {
   border-radius: 16px;
   background: rgba(255,255,255,0.7);
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 14px rgba(139,111,71,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  box-shadow: 0 2px 14px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
   cursor: pointer; text-align: center;
   transition: all 0.3s;
 }
 .radio-option input { display: none; }
 .radio-option:has(input:checked) {
-  background: linear-gradient(135deg, rgba(232,213,176,0.6), rgba(240,234,224,0.8));
-  box-shadow: 0 4px 20px rgba(139,111,71,0.13), 0 1px 0 rgba(255,255,255,0.9) inset;
+  background: linear-gradient(135deg, rgba(197,213,224,0.6), rgba(232,237,242,0.8));
+  box-shadow: 0 4px 20px rgba(74,95,115,0.13), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 .radio-label {
   font-family: 'Noto Serif KR', serif;
@@ -1330,15 +1336,15 @@ body {
   font-family: 'Noto Serif KR', serif;
   font-size: 14px; font-weight: 300;
   letter-spacing: 4px; cursor: pointer;
-  box-shadow: 0 4px 20px rgba(139,111,71,0.3);
+  box-shadow: 0 4px 20px rgba(74,95,115,0.3);
   transition: all 0.3s;
 }
-.rsvp-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(139,111,71,0.4); }
+.rsvp-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,95,115,0.4); }
 
 /* ── 캘린더 추가 모달 ── */
 .cal-modal-backdrop {
   position: fixed; inset: 0;
-  background: rgba(44,36,32,0.5);
+  background: rgba(35,45,56,0.5);
   backdrop-filter: blur(4px);
   z-index: 9500;
   display: flex; align-items: center; justify-content: center;
@@ -1387,9 +1393,9 @@ body {
 .cal-btn {
   display: flex; align-items: center; gap: 14px;
   padding: 14px 18px;
-  border: 1px solid rgba(201,169,110,0.2);
+  border: 1px solid rgba(123,149,172,0.2);
   border-radius: 14px;
-  background: rgba(250,247,242,0.6);
+  background: rgba(244,247,250,0.6);
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 13px; color: var(--text-mid);
@@ -1398,7 +1404,7 @@ body {
   text-decoration: none;
   transition: all 0.2s;
 }
-.cal-btn:hover { background: white; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(139,111,71,0.12); }
+.cal-btn:hover { background: white; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(74,95,115,0.12); }
 .cal-btn-icon {
   width: 36px; height: 36px;
   border-radius: 10px;
@@ -1407,7 +1413,7 @@ body {
   flex-shrink: 0;
   font-family: 'Cormorant Garamond', serif;
 }
-.cal-btn-icon.apple   { background: linear-gradient(135deg, #1A1410, #5C4A3A); }
+.cal-btn-icon.apple   { background: linear-gradient(135deg, #1A1410, #4C5C6B); }
 .cal-btn-icon.google  { background: linear-gradient(135deg, #4285F4, #1A73E8); }
 .cal-btn-icon.naver   { background: linear-gradient(135deg, #03C75A, #02A14A); }
 .cal-btn-icon.kakao   { background: linear-gradient(135deg, #FEE500, #F0D000); color: #3A1D1D; }
@@ -1455,12 +1461,12 @@ body {
   font-size: 13px; font-weight: 400;
   letter-spacing: 2px;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(139,111,71,0.12);
+  box-shadow: 0 4px 18px rgba(74,95,115,0.12);
   transition: all 0.25s;
   min-width: 140px;
   justify-content: center;
 }
-.share-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,111,71,0.20); }
+.share-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,95,115,0.20); }
 .share-btn.kakao {
   background: #FEE500;
   color: #3A1D1D;
@@ -1471,9 +1477,9 @@ body {
   background-size: contain; background-repeat: no-repeat;
 }
 .share-btn.copy {
-  background: rgba(250,247,242,0.9);
+  background: rgba(244,247,250,0.9);
   color: var(--text-mid);
-  border: 1px solid rgba(201,169,110,0.25);
+  border: 1px solid rgba(123,149,172,0.25);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1481,9 +1487,9 @@ body {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .gallery {
   background:
-    radial-gradient(ellipse at 20% 0%,  rgba(232,213,176,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 100%, rgba(183,110,121,0.10) 0%, transparent 55%),
-    linear-gradient(180deg, #FBF8F3 0%, #F5EFE6 100%);
+    radial-gradient(ellipse at 20% 0%,  rgba(197,213,224,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(163,174,207,0.10) 0%, transparent 55%),
+    linear-gradient(180deg, #F6F9FB 0%, #EEF2F6 100%);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -1514,9 +1520,9 @@ body {
   background: transparent;
   padding: 0;
   box-shadow:
-    0 40px 80px -30px rgba(139,111,71,0.22),
-    0 20px 40px -20px rgba(183,110,121,0.10),
-    0 8px 24px -12px rgba(44,36,32,0.08);
+    0 40px 80px -30px rgba(74,95,115,0.22),
+    0 20px 40px -20px rgba(163,174,207,0.10),
+    0 8px 24px -12px rgba(35,45,56,0.08);
 }
 /* 사진 가장자리에 은은한 골드 글로우 */
 .slider-wrap::before {
@@ -1527,10 +1533,10 @@ body {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(232,213,176,0.45),
+    rgba(197,213,224,0.45),
     rgba(255,255,255,0.15) 35%,
-    rgba(183,110,121,0.20) 70%,
-    rgba(232,213,176,0.4)
+    rgba(163,174,207,0.20) 70%,
+    rgba(197,213,224,0.4)
   );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -1597,8 +1603,8 @@ body {
   background:
     radial-gradient(ellipse at center,
       transparent 70%,
-      rgba(44,36,32,0.05) 92%,
-      rgba(44,36,32,0.10) 100%);
+      rgba(35,45,56,0.05) 92%,
+      rgba(35,45,56,0.10) 100%);
   pointer-events: none;
 }
 .slide-caption {
@@ -1606,8 +1612,8 @@ body {
   bottom: 0; left: 0; right: 0;
   padding: 60px 20px 22px;
   background: linear-gradient(to top,
-    rgba(44,36,32,0.55) 0%,
-    rgba(44,36,32,0.20) 60%,
+    rgba(35,45,56,0.55) 0%,
+    rgba(35,45,56,0.20) 60%,
     transparent 100%);
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -1659,7 +1665,7 @@ body {
 .dot {
   width: 18px; height: 2px;
   border-radius: 1px;
-  background: rgba(201,169,110,0.3);
+  background: rgba(123,149,172,0.3);
   cursor: pointer;
   transition: all 0.5s ease;
   border: none; padding: 0;
@@ -1691,7 +1697,7 @@ body {
   width: 44px; height: 56px;
   border-radius: 2px; overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(201,169,110,0.25);
+  border: 1px solid rgba(123,149,172,0.25);
   transition: all 0.4s ease;
   flex-shrink: 0;
   opacity: 0.5;
@@ -1706,7 +1712,7 @@ body {
   opacity: 1;
   filter: saturate(1);
   border-color: var(--gold);
-  box-shadow: 0 4px 14px rgba(139,111,71,0.22);
+  box-shadow: 0 4px 14px rgba(74,95,115,0.22);
   transform: translateY(-2px);
 }
 .thumb:hover { opacity: 0.85; }
@@ -1715,7 +1721,7 @@ body {
    FOOTER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .footer {
-  background: linear-gradient(160deg, #2C2420 0%, #1A1410 100%);
+  background: linear-gradient(160deg, #232D38 0%, #1A1410 100%);
   padding: 60px 40px;
   text-align: center;
 }
@@ -1729,7 +1735,7 @@ body {
 .footer-date {
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px; letter-spacing: 4px;
-  color: rgba(201,169,110,0.6); margin-bottom: 32px;
+  color: rgba(123,149,172,0.6); margin-bottom: 32px;
 }
 .footer-deco {
   width: 40px; height: 1px;
@@ -1832,6 +1838,34 @@ body {
 
   <!-- ── 커버 ── -->
   <section class="cover" id="cover">
+    <!-- 후지산 실루엣 — 은은한 워터마크, 눈꽃축제 밤 풍경 느낌 -->
+    <svg id="cover-fuji" viewBox="0 0 400 180" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="fujiGlow" cx="50%" cy="28%" r="55%">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="fujiBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7B95AC"/>
+          <stop offset="100%" stop-color="#4A5F73"/>
+        </linearGradient>
+      </defs>
+      <circle cx="200" cy="55" r="95" fill="url(#fujiGlow)"/>
+      <path d="M200 18
+               C 208 42, 222 66, 246 104
+               C 263 128, 286 148, 322 165
+               L 78 165
+               C 114 148, 137 128, 154 104
+               C 178 66, 192 42, 200 18 Z"
+            fill="url(#fujiBody)"/>
+      <path d="M200 18 C 206 30, 214 44, 224 60 C 214 65, 200 67, 186 60 C 196 44, 194 30, 200 18 Z"
+            fill="#FFFFFF" opacity="0.85"/>
+      <path d="M176 68 C 168 80, 159 95, 147 111" stroke="#FFFFFF" stroke-width="2" opacity="0.4" fill="none" stroke-linecap="round"/>
+      <path d="M224 68 C 232 80, 241 95, 253 111" stroke="#FFFFFF" stroke-width="2" opacity="0.4" fill="none" stroke-linecap="round"/>
+      <path d="M58 165 L64 147 L70 165 Z" fill="#4A5F73" opacity="0.55"/>
+      <path d="M328 165 L335 143 L342 165 Z" fill="#4A5F73" opacity="0.55"/>
+      <path d="M344 165 L350 151 L356 165 Z" fill="#4A5F73" opacity="0.55"/>
+    </svg>
     <!-- 배경 영상 (좌우반전, 자동재생, 무한반복, 음소거) — photo.html에 커버 사진을 등록하면 아래 사진으로 대체됨 -->
     <video class="cover-bg" id="cover-bg"
            src="./images/top.mp4"
@@ -1915,20 +1949,20 @@ body {
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 중앙 꽃 -->
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
         <!-- 좌측 흩날리는 꽃잎 -->
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(20,-70,2)"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(20,-70,2)"/>
         <!-- 우측 흩날리는 꽃잎 -->
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
-        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(-20,70,-2)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(-20,70,-2)"/>
       </svg>
     </div>
   </div>
@@ -1975,20 +2009,20 @@ body {
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 중앙 꽃 -->
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
         <!-- 좌측 흩날리는 꽃잎 -->
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(20,-70,2)"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(20,-70,2)"/>
         <!-- 우측 흩날리는 꽃잎 -->
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
-        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(-20,70,-2)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(-20,70,-2)"/>
       </svg>
     </div>
   </div>
@@ -2039,20 +2073,20 @@ body {
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 중앙 꽃 -->
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
         <!-- 좌측 흩날리는 꽃잎 -->
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(20,-70,2)"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(20,-70,2)"/>
         <!-- 우측 흩날리는 꽃잎 -->
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
-        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(-20,70,-2)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(-20,70,-2)"/>
       </svg>
     </div>
   </div>
@@ -2071,14 +2105,14 @@ body {
     <button class="venue-addr-card" onclick="copyAddr()" title="클릭하면 주소가 복사됩니다">
       <div class="venue-addr-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z" fill="#C9A96E"/>
+          <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z" fill="#7B95AC"/>
         </svg>
       </div>
       <div class="venue-addr-text" id="venue-addr">—</div>
       <div class="venue-addr-copy-icon" aria-hidden="true">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <rect x="6" y="6" width="12" height="14" rx="2" stroke="#C9A96E" stroke-width="1.6" fill="none"/>
-          <path d="M9 4h7a2 2 0 012 2v2" stroke="#C9A96E" stroke-width="1.6" fill="none"/>
+          <rect x="6" y="6" width="12" height="14" rx="2" stroke="#7B95AC" stroke-width="1.6" fill="none"/>
+          <path d="M9 4h7a2 2 0 012 2v2" stroke="#7B95AC" stroke-width="1.6" fill="none"/>
         </svg>
       </div>
     </button>
@@ -2123,20 +2157,20 @@ body {
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 중앙 꽃 -->
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
         <!-- 좌측 흩날리는 꽃잎 -->
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(20,-70,2)"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(20,-70,2)"/>
         <!-- 우측 흩날리는 꽃잎 -->
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
-        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(-20,70,-2)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(-20,70,-2)"/>
       </svg>
     </div>
   </div>
@@ -2155,36 +2189,36 @@ body {
         <!-- 신랑 캐릭터 -->
         <svg class="acc-character groom" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
           <!-- 머리카락 (뒤) -->
-          <path d="M9 26 C9 10 51 10 51 26 C51 20 47 15 30 15 C13 15 9 20 9 26 Z" fill="#2C2420"/>
+          <path d="M9 26 C9 10 51 10 51 26 C51 20 47 15 30 15 C13 15 9 20 9 26 Z" fill="#232D38"/>
           <!-- 귀 -->
           <ellipse cx="11" cy="30" rx="4" ry="5" fill="#FFDCB8"/>
           <ellipse cx="49" cy="30" rx="4" ry="5" fill="#FFDCB8"/>
           <!-- 얼굴 -->
           <ellipse cx="30" cy="31" rx="21" ry="19" fill="#FFDCB8"/>
           <!-- 앞머리 -->
-          <path d="M11 24 C11 13 49 13 49 24 C46 17 38 14 30 14 C22 14 14 17 11 24 Z" fill="#2C2420"/>
+          <path d="M11 24 C11 13 49 13 49 24 C46 17 38 14 30 14 C22 14 14 17 11 24 Z" fill="#232D38"/>
           <!-- 볼 (분홍) -->
           <ellipse cx="15" cy="35" rx="4" ry="2.6" fill="#FFB8C8" opacity="0.6"/>
           <ellipse cx="45" cy="35" rx="4" ry="2.6" fill="#FFB8C8" opacity="0.6"/>
           <!-- 눈썹 -->
-          <path d="M17 25 Q21 23 25 25" stroke="#2C2420" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-          <path d="M35 25 Q39 23 43 25" stroke="#2C2420" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <path d="M17 25 Q21 23 25 25" stroke="#232D38" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <path d="M35 25 Q39 23 43 25" stroke="#232D38" stroke-width="1.1" fill="none" stroke-linecap="round"/>
           <!-- 눈 -->
-          <circle cx="21" cy="30" r="2.1" fill="#2C2420"/>
-          <circle cx="39" cy="30" r="2.1" fill="#2C2420"/>
+          <circle cx="21" cy="30" r="2.1" fill="#232D38"/>
+          <circle cx="39" cy="30" r="2.1" fill="#232D38"/>
           <circle cx="21.7" cy="29.2" r="0.7" fill="#FFFFFF"/>
           <circle cx="39.7" cy="29.2" r="0.7" fill="#FFFFFF"/>
           <!-- 코 -->
           <path d="M30 33 L30 36" stroke="#E0A878" stroke-width="1.1" stroke-linecap="round"/>
           <!-- 입 -->
-          <path d="M26 39 Q30 41.5 34 39" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M26 39 Q30 41.5 34 39" stroke="#232D38" stroke-width="1.2" fill="none" stroke-linecap="round"/>
           <!-- 셔츠 칼라 -->
           <path d="M22 48 L30 42 L27 52 Z" fill="#FFFFFF"/>
           <path d="M38 48 L30 42 L33 52 Z" fill="#FFFFFF"/>
           <!-- 나비넥타이 -->
-          <path d="M26 49 L30 51.5 L26 54 Z" fill="#B76E79"/>
-          <path d="M34 49 L30 51.5 L34 54 Z" fill="#B76E79"/>
-          <circle cx="30" cy="51.5" r="1.5" fill="#8B6F47"/>
+          <path d="M26 49 L30 51.5 L26 54 Z" fill="#A3AECF"/>
+          <path d="M34 49 L30 51.5 L34 54 Z" fill="#A3AECF"/>
+          <circle cx="30" cy="51.5" r="1.5" fill="#4A5F73"/>
         </svg>
 
         <span class="acc-btn-label">Groom</span>
@@ -2217,15 +2251,15 @@ body {
           <ellipse cx="15" cy="36" rx="3.8" ry="2.5" fill="#FFB8C8" opacity="0.7"/>
           <ellipse cx="45" cy="36" rx="3.8" ry="2.5" fill="#FFB8C8" opacity="0.7"/>
           <!-- 눈 (감은 듯한 행복한 눈) -->
-          <path d="M17 30 Q21 27 25 30" stroke="#2C2420" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <path d="M35 30 Q39 27 43 30" stroke="#2C2420" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M17 30 Q21 27 25 30" stroke="#232D38" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M35 30 Q39 27 43 30" stroke="#232D38" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <!-- 속눈썹 -->
-          <path d="M17 29 L15.5 27.5" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
-          <path d="M43 29 L44.5 27.5" stroke="#2C2420" stroke-width="1" stroke-linecap="round"/>
+          <path d="M17 29 L15.5 27.5" stroke="#232D38" stroke-width="1" stroke-linecap="round"/>
+          <path d="M43 29 L44.5 27.5" stroke="#232D38" stroke-width="1" stroke-linecap="round"/>
           <!-- 코 -->
           <path d="M30 34 L30 37" stroke="#E0A878" stroke-width="1" stroke-linecap="round"/>
           <!-- 입 -->
-          <path d="M27 40 Q30 42 33 40" stroke="#2C2420" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M27 40 Q30 42 33 40" stroke="#232D38" stroke-width="1.2" fill="none" stroke-linecap="round"/>
           <!-- 드레스 네크라인 -->
           <path d="M16 50 Q30 44 44 50 L44 58 L16 58 Z" fill="#FFFFFF" stroke="#EDE0D4" stroke-width="0.6"/>
           <!-- 꽃 장식 -->
@@ -2264,20 +2298,20 @@ body {
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 중앙 꽃 -->
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
         <!-- 좌측 흩날리는 꽃잎 -->
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(20,-70,2)"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="-70" cy="2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(20,-70,2)"/>
         <!-- 우측 흩날리는 꽃잎 -->
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
-        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#C9A96E" opacity="0.25" transform="rotate(-20,70,-2)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="70" cy="-2" rx="3" ry="1.5" fill="#7B95AC" opacity="0.25" transform="rotate(-20,70,-2)"/>
       </svg>
     </div>
   </div>
@@ -2302,16 +2336,16 @@ body {
   <div class="divider" id="gallery-divider" style="display:none">
     <div class="divider-petals">
       <svg viewBox="-80 -15 160 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.55" transform="rotate(0)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(60)"/>
-        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#C9A96E" opacity="0.45" transform="rotate(120)"/>
-        <circle cx="0" cy="0" r="2" fill="#C9A96E" opacity="0.7"/>
-        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
-        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(15,-38,3)"/>
-        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
-        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#E8D5B0" opacity="0.55" transform="rotate(25,22,3)"/>
-        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#C9A96E" opacity="0.35" transform="rotate(-15,38,-3)"/>
-        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#E8D5B0" opacity="0.4" transform="rotate(35,55,4)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.55" transform="rotate(0)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(60)"/>
+        <ellipse cx="0" cy="0" rx="3.5" ry="5.5" fill="#7B95AC" opacity="0.45" transform="rotate(120)"/>
+        <circle cx="0" cy="0" r="2" fill="#7B95AC" opacity="0.7"/>
+        <ellipse cx="-22" cy="-3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(-25,-22,-3)"/>
+        <ellipse cx="-38" cy="3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(15,-38,3)"/>
+        <ellipse cx="-55" cy="-4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(-35,-55,-4)"/>
+        <ellipse cx="22" cy="3" rx="5" ry="2.5" fill="#C5D5E0" opacity="0.55" transform="rotate(25,22,3)"/>
+        <ellipse cx="38" cy="-3" rx="4" ry="2" fill="#7B95AC" opacity="0.35" transform="rotate(-15,38,-3)"/>
+        <ellipse cx="55" cy="4" rx="3.5" ry="1.8" fill="#C5D5E0" opacity="0.4" transform="rotate(35,55,4)"/>
       </svg>
     </div>
   </div>
@@ -2867,14 +2901,14 @@ function renderExtraNavLocations() {
       <button class="venue-addr-card" onclick="copyExtraAddr(${i})" title="클릭하면 주소가 복사됩니다">
         <div class="venue-addr-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z" fill="#C9A96E"/>
+            <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z" fill="#7B95AC"/>
           </svg>
         </div>
         <div class="venue-addr-text">${escapeHtml(loc.name)}<br>${escapeHtml(loc.address)}</div>
         <div class="venue-addr-copy-icon" aria-hidden="true">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <rect x="6" y="6" width="12" height="14" rx="2" stroke="#C9A96E" stroke-width="1.6" fill="none"/>
-            <path d="M9 4h7a2 2 0 012 2v2" stroke="#C9A96E" stroke-width="1.6" fill="none"/>
+            <rect x="6" y="6" width="12" height="14" rx="2" stroke="#7B95AC" stroke-width="1.6" fill="none"/>
+            <path d="M9 4h7a2 2 0 012 2v2" stroke="#7B95AC" stroke-width="1.6" fill="none"/>
           </svg>
         </div>
       </button>
@@ -3414,7 +3448,7 @@ async function renderGallery() {
   track.innerHTML = photos.map(p => `
     <div class="slide">
       <img src="${p.src}" alt="${p.caption || ''}" decoding="async"
-           onerror="this.parentElement.style.background='linear-gradient(135deg,#FAF7F2,#F0EAE0)'">
+           onerror="this.parentElement.style.background='linear-gradient(135deg,#F4F7FA,#E8EDF2)'">
       ${p.caption ? `<div class="slide-caption">${p.caption}</div>` : ''}
     </div>
   `).join('');
