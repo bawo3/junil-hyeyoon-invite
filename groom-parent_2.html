@@ -2571,6 +2571,31 @@ body {
   </div>
 </div>
 
+<!-- 배경음악 — music 폴더의 정적 mp3 재생, KV(/api/music)엔 파일명+on/off만 저장 -->
+<audio id="bgm" loop preload="none"></audio>
+<button id="bgmToggle" class="bgm-toggle" type="button" aria-label="배경음악 켜기/끄기" onclick="toggleBgm()">
+  <span id="bgmIcon" class="bgm-icon">🎵</span>
+</button>
+<style>
+  .bgm-toggle{
+    position: fixed; right: 16px; bottom: 18px; z-index: 70;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid rgba(201,169,110,0.55);
+    background: rgba(255,255,255,0.72);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 6px 18px rgba(139,111,71,0.22);
+    display: none; align-items: center; justify-content: center;
+    font-size: 20px; line-height: 1; cursor: pointer;
+    color: var(--gold-dark); padding: 0;
+    transition: transform .18s ease;
+  }
+  .bgm-toggle:active{ transform: scale(0.9); }
+  .bgm-toggle .bgm-icon{ display: inline-block; }
+  .bgm-toggle.off{ opacity: 0.72; }
+  .bgm-toggle.playing .bgm-icon{ animation: bgmSpin 3.6s linear infinite; }
+  @keyframes bgmSpin{ to{ transform: rotate(360deg); } }
+</style>
+
 <!-- 토스트 -->
 <div class="toast" id="toast"></div>
 
@@ -2580,7 +2605,142 @@ let CFG = null;
 let coverPhotoUrl = null;
 let coverMode = 'video';
 
+/* ── 배경음악 (BGM) ──
+   music 폴더의 정적 mp3를 재생한다. 어떤 곡을 틀지·켤지는 photo.html에서
+   /api/music(Vercel KV)에 "파일명 + on/off"만 저장한다(파일 자체는 KV에 안 넣음 → 가볍고 빠름).
+   볼륨은 Web Audio GainNode로 조절한다 — iOS Safari는 audio.volume 을 무시하므로
+   GainNode 를 거쳐야 아이폰에서도 실제로 소리가 작아지고, 시작할 때 페이드인도 줄 수 있다.
+   모바일·데스크톱 모두 자동재생이 막히므로, 버튼은 🔇로 두고 첫 상호작용에서 재생한다. */
+let bgmEl = null, bgmCtx = null, bgmGain = null;
+let bgmTargetVolume = 0.15;   /* 기본 15% — photo.html에서 저장한 최대 볼륨(%)으로 덮어씀 */
+const BGM_FADE_SEC = 2.5;         /* 페이드인 시간(초) — 갑자기 커지지 않게 */
+
+/* audio 요소를 Web Audio 그래프(GainNode)에 한 번만 연결한다.
+   미지원(구형) 환경이면 bgmGain 없이 audio.volume 으로 폴백한다. */
+function bgmEnsureGraph() {
+  if (bgmCtx || !bgmEl) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  try {
+    bgmCtx = new AC();
+    const src = bgmCtx.createMediaElementSource(bgmEl);
+    bgmGain = bgmCtx.createGain();
+    bgmGain.gain.value = 0;      /* 0에서 시작해 페이드인 */
+    src.connect(bgmGain).connect(bgmCtx.destination);
+    bgmEl.volume = 1.0;          /* 실제 볼륨은 GainNode가 담당 */
+  } catch (e) { bgmCtx = null; bgmGain = null; }
+}
+
+/* 현재 볼륨 → 목표 볼륨까지 부드럽게 올린다(페이드인) */
+function bgmFadeIn() {
+  if (!bgmGain || !bgmCtx) return;
+  const now = bgmCtx.currentTime;
+  const cur = Math.max(bgmGain.gain.value, 0.0001);
+  bgmGain.gain.cancelScheduledValues(now);
+  bgmGain.gain.setValueAtTime(cur, now);
+  bgmGain.gain.linearRampToValueAtTime(bgmTargetVolume, now + BGM_FADE_SEC);
+}
+
+/* 재생 — Web Audio 컨텍스트를 깨우고(사용자 제스처 필요), 재생 후 페이드인 */
+function bgmPlay() {
+  if (!bgmEl) return;
+  bgmEnsureGraph();
+  if (bgmCtx && bgmCtx.state === 'suspended') bgmCtx.resume();
+  if (!bgmGain) bgmEl.volume = bgmTargetVolume;   /* Web Audio 미지원 폴백 */
+  const p = bgmEl.play();
+  if (p && typeof p.then === 'function') p.then(bgmFadeIn).catch(() => {});
+  else bgmFadeIn();
+}
+
+function setupBgm(music) {
+  /* 꺼져 있거나 파일이 없으면 버튼도 숨긴 채 종료 */
+  if (!music || !music.enabled || !music.file) return;
+
+  bgmEl = document.getElementById('bgm');
+  const btn = document.getElementById('bgmToggle');
+  const icon = document.getElementById('bgmIcon');
+  if (!bgmEl || !btn) return;
+
+  /* photo.html에서 저장한 최대 볼륨(%) 반영 — 없으면 기본값(15%) 유지 */
+  if (typeof music.volume === 'number' && isFinite(music.volume)) {
+    bgmTargetVolume = Math.max(0, Math.min(1, music.volume / 100));
+  }
+  bgmEl.src = 'music/' + encodeURIComponent(music.file);
+  bgmEl.loop = true;
+  bgmEl.volume = bgmTargetVolume;   /* Web Audio 연결되면 1.0로 덮어쓰고 GainNode로 제어 */
+  btn.style.display = 'flex';
+
+  /* 첫 사용자 상호작용에서 재생 — 데스크톱·모바일 공통.
+     PC 크롬 등은 pointerdown만으로 안 걸리는 경우가 있어 touchstart·click·keydown까지
+     캡처 단계(true)로 함께 듣는다. */
+  const gestureEvents = ['pointerdown', 'touchstart', 'click', 'keydown'];
+  function removeGesture() {
+    gestureEvents.forEach(ev => document.removeEventListener(ev, startOnGesture, true));
+  }
+  function startOnGesture(e) {
+    if (btn.contains(e.target)) return;   /* 버튼 클릭은 toggleBgm이 처리 */
+    if (bgmEl.paused) bgmPlay();
+    removeGesture();
+  }
+  function armGesture() {
+    /* 자동재생이 막히면 버튼을 꺼진 모습(🔇)으로 두고, 첫 상호작용에서 재생 */
+    btn.classList.add('off');
+    if (icon) icon.textContent = '🔇';
+    gestureEvents.forEach(ev => document.addEventListener(ev, startOnGesture, true));
+  }
+
+  /* 재생/정지 상태를 버튼 아이콘에 반영 */
+  bgmEl.addEventListener('play', () => {
+    btn.classList.add('playing'); btn.classList.remove('off');
+    if (icon) icon.textContent = '🎵';
+    removeGesture();   /* 한 번 재생되면 자동 시작 리스너 정리 */
+  });
+  bgmEl.addEventListener('pause', () => {
+    btn.classList.remove('playing'); btn.classList.add('off');
+    if (icon) icon.textContent = '🔇';
+  });
+
+  /* 홈 화면으로 나가거나 다른 앱/탭으로 이동하면(백그라운드) 노래를 멈춘다.
+     다시 청첩장으로 돌아오면, 나갈 때 재생 중이었을 때만 이어서(페이드인) 재생한다. */
+  let wasPlayingBeforeHide = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      wasPlayingBeforeHide = !bgmEl.paused;
+      if (!bgmEl.paused) bgmEl.pause();
+    } else if (wasPlayingBeforeHide) {
+      bgmPlay();
+    }
+  });
+  /* iOS Safari 등 일부 환경은 pagehide 로만 잡히는 경우가 있어 정지만 한 번 더 건다 */
+  window.addEventListener('pagehide', () => { if (!bgmEl.paused) bgmEl.pause(); });
+
+  /* Web Audio 컨텍스트는 사용자 제스처로만 깨울 수 있어 자동재생을 시도하지 않고
+     첫 상호작용에서 재생한다(버튼은 그때까지 🔇). 미지원 환경만 예전처럼 자동재생 시도. */
+  bgmEnsureGraph();
+  if (bgmGain) {
+    armGesture();
+  } else {
+    const playP = bgmEl.play();
+    if (playP && typeof playP.then === 'function') playP.catch(armGesture);
+    else armGesture();
+  }
+}
+
+/* 우하단 버튼 — 하객이 직접 끄고 켜기 */
+function toggleBgm() {
+  if (!bgmEl) return;
+  if (bgmEl.paused) bgmPlay();
+  else bgmEl.pause();
+}
+
+/* ── 방문 횟수 카운팅 ──
+   새로고침·재접속할 때마다 +1 (총 열어본 횟수). result.html에서 총합 확인. */
+function countVisit() {
+  fetch('/api/visits', { method: 'POST' }).catch(() => {});
+}
+
 async function init() {
+  countVisit();   /* 방문 횟수 +1 (setting.json 로드와 무관하게 항상) */
   try {
     /* setting.json 로드 */
     const res = await fetch('./setting.json');
@@ -2630,6 +2790,12 @@ async function init() {
         if (cData?.mode)  coverMode = cData.mode;
       }
     } catch (e) { console.warn('커버 설정 로드 실패:', e); }
+
+    /* 배경음악 — photo.html에서 저장한 설정(파일명 + on/off + 볼륨%) */
+    try {
+      const mRes = await fetch('/api/music');
+      if (mRes.ok) setupBgm(await mRes.json());
+    } catch (e) { console.warn('배경음악 로드 실패:', e); }
 
     /* 렌더링 */
     renderCover();

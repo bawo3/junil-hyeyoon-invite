@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/music.js": {
+      "includeFiles": "music/**"
+    }
+  }
+}
