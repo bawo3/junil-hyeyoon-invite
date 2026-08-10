@@ -2556,6 +2556,8 @@ let coverMode = 'video';
 let bgmEl = null, bgmCtx = null, bgmGain = null;
 let bgmTargetVolume = 0.15;   /* 기본 15% — photo.html에서 저장한 최대 볼륨(%)으로 덮어씀 */
 const BGM_FADE_SEC = 2.5;         /* 페이드인 시간(초) — 갑자기 커지지 않게 */
+const BGM_AUTOPLAY_TRIES = 10;    /* 로딩 직후 자동재생 시도 횟수(1초 간격) — 이만큼 실패하면 정지 상태로 둠 */
+let bgmAutoTimer = null;          /* 자동재생 재시도 타이머(성공/수동조작 시 취소) */
 
 /* audio 요소를 Web Audio 그래프(GainNode)에 한 번만 연결한다.
    미지원(구형) 환경이면 bgmGain 없이 audio.volume 으로 폴백한다. */
@@ -2592,6 +2594,24 @@ function bgmPlay() {
   const p = bgmEl.play();
   if (p && typeof p.then === 'function') p.then(bgmFadeIn).catch(() => {});
   else bgmFadeIn();
+}
+
+/* 자동재생 재시도 타이머 정리 — 재생에 성공했거나 하객이 직접 조작하면 더 시도하지 않는다. */
+function bgmStopAutoRetry() {
+  if (bgmAutoTimer) { clearTimeout(bgmAutoTimer); bgmAutoTimer = null; }
+}
+
+/* 페이지 로딩 직후 자동재생을 시도한다.
+   브라우저 자동재생 정책으로 막혀 소리가 안 나면 1초 간격으로 최대 BGM_AUTOPLAY_TRIES번 재시도하고,
+   그래도 모두 실패하면 정지 상태로 두고(폴백) 하객의 첫 상호작용에서 재생한다.
+   재시도가 도는 동안에도 하객이 화면을 탭하면(gesture 리스너) 그 즉시 재생된다. */
+function bgmAutoplay(triesLeft) {
+  if (!bgmEl || !bgmEl.paused) return;   /* 이미 재생 중이면 더 시도하지 않음 */
+  bgmPlay();
+  bgmStopAutoRetry();
+  if (triesLeft <= 1) return;            /* 마지막 시도까지 실패 → 정지 상태 유지(폴백은 gesture) */
+  /* play()는 비동기라 1초 뒤 실제 재생 여부(paused)를 확인하고 여전히 멈춰 있으면 재시도한다. */
+  bgmAutoTimer = setTimeout(() => bgmAutoplay(triesLeft - 1), 1000);
 }
 
 function setupBgm(music) {
@@ -2635,12 +2655,15 @@ function setupBgm(music) {
   bgmEl.addEventListener('play', () => {
     btn.classList.add('playing'); btn.classList.remove('off');
     if (icon) icon.textContent = '🎵';
-    removeGesture();   /* 한 번 재생되면 자동 시작 리스너 정리 */
+    removeGesture();      /* 한 번 재생되면 자동 시작 리스너 정리 */
+    bgmStopAutoRetry();   /* 재생 성공 → 자동재생 재시도 타이머 정리 */
   });
   bgmEl.addEventListener('pause', () => {
     btn.classList.remove('playing'); btn.classList.add('off');
     if (icon) icon.textContent = '🔇';
   });
+  /* loop=true 라 보통은 안 끝나지만, 혹시 loop가 무시되는 환경 대비 — 끝나면 처음부터 다시 재생(무한 반복) */
+  bgmEl.addEventListener('ended', () => { try { bgmEl.currentTime = 0; } catch (e) {} bgmPlay(); });
 
   /* 홈 화면으로 나가거나 다른 앱/탭으로 이동하면(백그라운드) 노래를 멈춘다.
      다시 청첩장으로 돌아오면, 나갈 때 재생 중이었을 때만 이어서(페이드인) 재생한다. */
@@ -2656,23 +2679,20 @@ function setupBgm(music) {
   /* iOS Safari 등 일부 환경은 pagehide 로만 잡히는 경우가 있어 정지만 한 번 더 건다 */
   window.addEventListener('pagehide', () => { if (!bgmEl.paused) bgmEl.pause(); });
 
-  /* Web Audio 컨텍스트는 사용자 제스처로만 깨울 수 있어 자동재생을 시도하지 않고
-     첫 상호작용에서 재생한다(버튼은 그때까지 🔇). 미지원 환경만 예전처럼 자동재생 시도. */
+  /* 로딩 직후 곧바로 자동재생을 시도한다(무조건 재생 시도).
+     막혀서 소리가 안 나면 1초 간격으로 최대 10번 재시도하고, 그래도 안 되면
+     정지 상태로 두고(폴백) 하객의 첫 상호작용에서 재생한다.
+     재시도가 도는 동안에도 하객이 화면을 탭하면 바로 재생되도록 gesture 리스너를 함께 켜 둔다. */
   bgmEnsureGraph();
-  if (bgmGain) {
-    armGesture();
-  } else {
-    const playP = bgmEl.play();
-    if (playP && typeof playP.then === 'function') playP.catch(armGesture);
-    else armGesture();
-  }
+  armGesture();                        /* 폴백: 끝내 막히면 첫 상호작용에서 재생 */
+  bgmAutoplay(BGM_AUTOPLAY_TRIES);     /* 로딩 직후부터 1초 간격 최대 10회 자동재생 시도 */
 }
 
 /* 우하단 버튼 — 하객이 직접 끄고 켜기 */
 function toggleBgm() {
   if (!bgmEl) return;
   if (bgmEl.paused) bgmPlay();
-  else bgmEl.pause();
+  else { bgmStopAutoRetry(); bgmEl.pause(); }   /* 하객이 직접 끄면 자동 재시도도 멈춘다 */
 }
 
 /* ── 방문 횟수 카운팅 ──
