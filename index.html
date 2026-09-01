@@ -3908,8 +3908,8 @@ function updateSliderHeight() {
     if (!activeImg.naturalWidth || !activeImg.naturalHeight) return;
     const ratio = activeImg.naturalWidth / activeImg.naturalHeight;
     /* 세로 사진처럼 비율이 너무 좁으면(=박스가 지나치게 커짐) 최소 비율로 눌러서
-       상하가 살짝만 잘리게 두고, 박스 자체가 화면을 압도하지 않게 한다. */
-    const clampedRatio = Math.max(ratio, 1.15);
+       박스 자체가 화면을 압도하지 않게 한다 (실제 사진 잘림은 max-height 안에서만). */
+    const clampedRatio = Math.max(ratio, 0.85);
     wrap.style.aspectRatio = clampedRatio;
   };
 
