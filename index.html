@@ -166,18 +166,18 @@ body {
   animation-name: gentleSway;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  filter: drop-shadow(0 2px 5px rgba(74,95,115,0.14)) blur(0.2px);
+  filter: drop-shadow(0 2px 5px rgba(74,95,115,0.2)) blur(0.2px);
 }
-/* 눈 톤 — 반투명 순백~은청 그라데이션으로 결정처럼 은은하게 */
-.petal.p-gold   { background: radial-gradient(circle at 35% 32%, rgba(255,255,255,0.75) 0%, rgba(216,228,236,0.45) 65%, transparent 100%); }
-.petal.p-rose   { background: radial-gradient(circle at 35% 32%, rgba(255,255,255,0.75) 0%, rgba(201,210,232,0.45) 65%, transparent 100%); }
-.petal.p-cream  { background: radial-gradient(circle at 35% 32%, rgba(255,255,255,0.75) 0%, rgba(232,237,242,0.45) 65%, transparent 100%); }
+/* 눈 톤 — 순백~은청 그라데이션, 가장자리가 투명으로 빠지며 결정처럼 은은하게 */
+.petal.p-gold   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #D8E4EC 65%, transparent 100%); }
+.petal.p-rose   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #C9D2E8 65%, transparent 100%); }
+.petal.p-cream  { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #E8EDF2 65%, transparent 100%); }
 
 @keyframes gentleSway {
   0%   { transform: translate(0, 0);        opacity: 0; }
-  10%  { opacity: 0.45; }
-  50%  { transform: translate(9px, 78px);   opacity: 0.55; }
-  90%  { opacity: 0.20; }
+  10%  { opacity: 0.55; }
+  50%  { transform: translate(9px, 78px);   opacity: 0.75; }
+  90%  { opacity: 0.25; }
   100% { transform: translate(-6px, 150px); opacity: 0; }
 }
 /* 모션 줄이기 설정 사용자 — 애니메이션 끔 */
@@ -2541,7 +2541,7 @@ body.lightbox-open { overflow: hidden; }
 </div>
 
 <!-- 갤러리 라이트박스 (사진 탭 시 확대, 좌우 스와이프로 넘김) -->
-<div class="lightbox-backdrop" id="lightboxBackdrop" onclick="closeLightbox(event)">
+<div class="lightbox-backdrop" id="lightboxBackdrop">
   <button class="lightbox-close" onclick="closeLightbox()" aria-label="닫기">&times;</button>
   <div class="lightbox-stage" id="lightboxStage"></div>
   <div class="lightbox-caption" id="lightboxCaption"></div>
@@ -3834,8 +3834,8 @@ function openLightbox(idx) {
   lightboxGoTo(idx);
 }
 
-function closeLightbox(e) {
-  if (e && e.target && e.target.closest && e.target.closest('.lightbox-slide img')) return;
+function closeLightbox() {
+  /* 닫기(X) 버튼으로만 닫힘 — 사진 탭/스와이프로는 닫히지 않음 */
   document.getElementById('lightboxBackdrop').classList.remove('show');
   document.body.classList.remove('lightbox-open');
 }
