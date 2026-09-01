@@ -1744,7 +1744,7 @@ body.lightbox-open { overflow: hidden; }
   background: rgba(255,255,255,0.12);
   color: #fff; font-size: 26px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 2;
+  cursor: pointer; z-index: 5;
   transition: background 0.25s ease;
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.22); }
@@ -2199,8 +2199,8 @@ body.lightbox-open { overflow: hidden; }
         <div class="transport-info" id="transport-bus-info">—</div>
       </div>
       <div class="transport-card">
-        <div class="transport-type">Taxi</div>
-        <div class="transport-info" id="transport-taxi-info">—</div>
+        <div class="transport-type">Subway</div>
+        <div class="transport-info" id="transport-subway-info">—</div>
       </div>
       <div class="transport-card">
         <div class="transport-type">Parking</div>
@@ -3072,7 +3072,7 @@ function renderVenue() {
       if (el) el.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
     };
     setTransportInfo('transport-bus-info', t.bus);
-    setTransportInfo('transport-taxi-info', t.taxi);
+    setTransportInfo('transport-subway-info', t.subway);
     setTransportInfo('transport-parking-info', t.parking);
     setTransportInfo('transport-car-info', t.car);
   }
@@ -3882,6 +3882,9 @@ function setupLightboxSwipe() {
     active = false;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
       dx < 0 ? lightboxNext() : lightboxPrev();
+    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      /* 스와이프가 아닌 짧은 탭 — 사진을 선택(탭)하면 라이트박스 닫기 */
+      closeLightbox();
     }
   };
 

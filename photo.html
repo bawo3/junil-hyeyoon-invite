@@ -606,8 +606,8 @@ body {
       <textarea class="acc-input" id="transport-bus" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="정류장 이름&#10;버스 번호"></textarea>
     </div>
     <div class="acc-group">
-      <div class="acc-group-label">🚕 택시</div>
-      <textarea class="acc-input" id="transport-taxi" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="기사님께 말씀드릴 장소명&#10;주소"></textarea>
+      <div class="acc-group-label">🚇 지하철</div>
+      <textarea class="acc-input" id="transport-subway" rows="3" style="resize:vertical; min-height:56px; width:100%; font-family:inherit;" placeholder="가까운 역 이름·출구 번호&#10;도보 소요 시간"></textarea>
     </div>
     <div class="acc-group">
       <div class="acc-group-label">🅿️ 주차</div>
@@ -1184,18 +1184,18 @@ async function saveVenue() {
   }
 }
 
-/* ── 오시는 길 교통정보 (Bus/Taxi/Parking/Car) ──
+/* ── 오시는 길 교통정보 (Bus/Subway/Parking/Car) ──
    /api/venue 의 transport 필드에 저장 — 다른 필드를 덮어쓰지 않도록 읽기→병합→쓰기 */
 const DEFAULT_TRANSPORT = {
   bus: '',
-  taxi: '"국민연금 부산회관" 말씀 후\n연제구 중앙대로 1000',
+  subway: '',
   parking: '건물 전용 주차장\n이용 가능',
   car: '',
 };
 
 function fillTransportFields(t) {
   document.getElementById('transport-bus').value     = t.bus || '';
-  document.getElementById('transport-taxi').value    = t.taxi || '';
+  document.getElementById('transport-subway').value  = t.subway || '';
   document.getElementById('transport-parking').value = t.parking || '';
   document.getElementById('transport-car').value     = t.car || '';
 }
@@ -1216,7 +1216,7 @@ async function saveTransport() {
   const btn = document.getElementById('transportSaveBtn');
   const transport = {
     bus:     document.getElementById('transport-bus').value.trim(),
-    taxi:    document.getElementById('transport-taxi').value.trim(),
+    subway:  document.getElementById('transport-subway').value.trim(),
     parking: document.getElementById('transport-parking').value.trim(),
     car:     document.getElementById('transport-car').value.trim(),
   };

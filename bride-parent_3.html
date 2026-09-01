@@ -2201,8 +2201,8 @@ body {
         <div class="transport-info" id="transport-bus-info">—</div>
       </div>
       <div class="transport-card">
-        <div class="transport-type">Taxi</div>
-        <div class="transport-info" id="transport-taxi-info">—</div>
+        <div class="transport-type">Subway</div>
+        <div class="transport-info" id="transport-subway-info">—</div>
       </div>
       <div class="transport-card">
         <div class="transport-type">Parking</div>
@@ -3074,7 +3074,7 @@ function renderVenue() {
       if (el) el.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
     };
     setTransportInfo('transport-bus-info', t.bus);
-    setTransportInfo('transport-taxi-info', t.taxi);
+    setTransportInfo('transport-subway-info', t.subway);
     setTransportInfo('transport-parking-info', t.parking);
     setTransportInfo('transport-car-info', t.car);
   }
