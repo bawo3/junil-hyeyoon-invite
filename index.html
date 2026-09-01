@@ -1584,14 +1584,17 @@ body {
      외곽 라운드는 부모 .slider-wrap 의 overflow:hidden 으로 처리. */
   display: grid;
   grid-template-areas: 'stack';
+  grid-template-columns: 100%;
   grid-template-rows: 100%;
   position: relative;
+  width: 100%;
   height: 100%;
 }
 .slide {
   grid-area: stack;
   position: relative;
   overflow: hidden;
+  width: 100%;
   height: 100%;
   pointer-events: none;
   /* 옆에서 밀려 들어오고 반대쪽으로 밀려나가는 수평 슬라이드 전환 */
@@ -3891,15 +3894,22 @@ function slidePrev() { goSlide(slideIndex - 1); resetAutoSlide(); }
 
 /* 슬라이더 박스 높이를 현재 활성 사진의 실제 비율(naturalWidth/naturalHeight)에 맞춰
    동적으로 조정 — 가로/세로 사진이 섞여 있어도 잘리지 않고 그대로 보여준다. */
+/* wrap 너비는 리사이즈 시에만 다시 재는 캐시값 — 매 전환마다 wrap.clientWidth 를
+   다시 읽으면(그 사이 자신의 height 가 바뀌는 element 라) 미세한 오차가 전환마다
+   누적되어 사진이 점점 커지는 현상이 있었음. 너비는 한 번만 측정해 고정한다. */
+let _sliderWrapWidth = 0;
+
 function updateSliderHeight() {
   const wrap = document.querySelector('.slider-wrap');
   const activeImg = document.querySelector('.slide.is-active img');
   if (!wrap || !activeImg) return;
 
+  if (!_sliderWrapWidth) _sliderWrapWidth = wrap.clientWidth;
+
   const apply = () => {
     if (!activeImg.naturalWidth || !activeImg.naturalHeight) return;
     const ratio = activeImg.naturalWidth / activeImg.naturalHeight;
-    wrap.style.height = (wrap.clientWidth / ratio) + 'px';
+    wrap.style.height = (_sliderWrapWidth / ratio) + 'px';
   };
 
   if (activeImg.complete) apply();
@@ -3910,7 +3920,10 @@ let _sliderResizeBound = false;
 function setupSliderResize() {
   if (_sliderResizeBound) return;
   _sliderResizeBound = true;
-  window.addEventListener('resize', updateSliderHeight);
+  window.addEventListener('resize', () => {
+    _sliderWrapWidth = 0;   /* 창 크기 변경 시에만 강제 재측정 */
+    updateSliderHeight();
+  });
 }
 
 /* ── 갤러리 라이트박스 (확대 보기) ──
