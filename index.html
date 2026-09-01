@@ -1763,6 +1763,22 @@ body.lightbox-open { overflow: hidden; }
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.22); }
 
+/* 좌우 이동 버튼 — 갤러리 화살표와 동일하게 배경 없이 반투명 화살표만 */
+.lightbox-nav-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  background: none; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  cursor: pointer; z-index: 5;
+  transition: all 0.3s ease;
+}
+.lightbox-nav-btn:hover { color: rgba(255,255,255,0.95); }
+.lightbox-nav-btn.prev { left: 6px; }
+.lightbox-nav-btn.next { right: 6px; }
+
 .lightbox-stage {
   position: relative;
   width: 100%; max-width: 100%;
@@ -1787,7 +1803,7 @@ body.lightbox-open { overflow: hidden; }
   z-index: 2;
 }
 .lightbox-slide img {
-  max-width: 92vw; max-height: 74vh;
+  max-width: 92%; max-height: 100%;
   width: auto; height: auto;
   object-fit: contain;
   display: block;
@@ -2571,9 +2587,11 @@ body.lightbox-open { overflow: hidden; }
   </div>
 </div>
 
-<!-- 갤러리 라이트박스 (사진 탭 시 확대, 좌우 스와이프로 넘김) -->
+<!-- 갤러리 라이트박스 (사진 탭 시 확대, 좌우 스와이프/버튼으로 넘김) -->
 <div class="lightbox-backdrop" id="lightboxBackdrop">
   <button class="lightbox-close" onclick="closeLightbox()" aria-label="닫기">&times;</button>
+  <button class="lightbox-nav-btn prev" onclick="lightboxPrev()" aria-label="이전 사진">&#8249;</button>
+  <button class="lightbox-nav-btn next" onclick="lightboxNext()" aria-label="다음 사진">&#8250;</button>
   <div class="lightbox-stage" id="lightboxStage"></div>
   <div class="lightbox-caption" id="lightboxCaption"></div>
   <div class="lightbox-counter" id="lightboxCounter"></div>
