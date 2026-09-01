@@ -3824,16 +3824,29 @@ function setupSliderSwipe() {
 }
 
 function goSlide(idx) {
+  const prevIndex = slideIndex;
   slideIndex = (idx + slideTotal) % slideTotal;
 
-  /* 수평 슬라이드 전환 — 각 슬라이드를 현재 인덱스 기준 최단 방향으로 배치 */
+  /* 수평 슬라이드 전환 — 각 슬라이드를 현재 인덱스 기준 최단 방향으로 배치.
+     방금 활성이었던 슬라이드/새로 활성될 슬라이드만 실제로 애니메이션하고,
+     그 외 슬라이드는 좌우 대기 위치가 바뀌어도(반대편 경계를 넘는 경우) 트랜지션 없이
+     즉시 재배치한다 — 안 그러면 화면 밖에 있던 큰 사진이 화면을 가로질러 훑고 지나가 보인다. */
   document.querySelectorAll('.slide').forEach((s, i) => {
     let offset = i - slideIndex;
     if (offset > slideTotal / 2) offset -= slideTotal;
     if (offset < -slideTotal / 2) offset += slideTotal;
+
+    const animated = (i === slideIndex || i === prevIndex);
+    if (!animated) s.style.transition = 'none';
+
     s.classList.toggle('is-active', offset === 0);
     s.classList.toggle('is-prev', offset < 0);
     s.classList.toggle('is-next', offset > 0);
+
+    if (!animated) {
+      void s.offsetWidth;   /* 강제 리플로우로 트랜지션 없이 즉시 위치 반영 */
+      s.style.transition = '';
+    }
   });
 
   /* 점 업데이트 */
@@ -3898,15 +3911,27 @@ function closeLightbox() {
 }
 
 function lightboxGoTo(idx) {
+  const prevIndex = lightboxIndex;
   lightboxIndex = (idx + slideTotal) % slideTotal;
 
+  /* goSlide()와 동일한 이유로, 실제 전/후 슬라이드만 애니메이션하고
+     반대편 경계를 넘어가는 나머지 슬라이드는 트랜지션 없이 즉시 재배치 */
   document.querySelectorAll('#lightboxStage .lightbox-slide').forEach((s, i) => {
     let offset = i - lightboxIndex;
     if (offset > slideTotal / 2) offset -= slideTotal;
     if (offset < -slideTotal / 2) offset += slideTotal;
+
+    const animated = (i === lightboxIndex || i === prevIndex);
+    if (!animated) s.style.transition = 'none';
+
     s.classList.toggle('is-active', offset === 0);
     s.classList.toggle('is-prev', offset < 0);
     s.classList.toggle('is-next', offset > 0);
+
+    if (!animated) {
+      void s.offsetWidth;
+      s.style.transition = '';
+    }
   });
 
   const p = galleryPhotos[lightboxIndex] || {};
