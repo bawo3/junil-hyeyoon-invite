@@ -2850,12 +2850,12 @@ async function init() {
     /* 렌더링 */
     renderCover();
     renderGreeting();
+    await renderAccount();   /* 부모님 성함 표시(renderFamily)가 계좌 예금주 이름을 우선하므로 먼저 로드 */
     renderFamily();
     renderParentPhones();    /* 부모님 4명 📞 아이콘 (혼주 grid 내부) */
     renderDateTime();
     renderVenue();
     renderGallery();
-    renderAccount();
     renderGuestbook();
     renderFooter();
 
@@ -2916,14 +2916,21 @@ function renderGreeting() {
 function renderFamily() {
   const g = CFG.groom, b = CFG.bride;
 
+  /* 부모님 성함은 계좌(예금주) 관리에서 입력한 이름을 우선 — renderAccount()가 채운
+     ACCOUNTS.*.name 이 있으면 그걸 쓰고, 없으면 setting.json 기본값으로 폴백 */
+  const gf = ACCOUNTS?.groomFather?.name || g.fatherName || '—';
+  const gm = ACCOUNTS?.groomMother?.name || g.motherName || '—';
+  const bf = ACCOUNTS?.brideFather?.name || b.fatherName || '—';
+  const bm = ACCOUNTS?.brideMother?.name || b.motherName || '—';
+
   /* 신랑 부모님 — 2x2 그리드의 아버지/어머니 칸에 성함만 채움 (미입력 시 — 표시) */
-  document.getElementById('groom-father').textContent = g.fatherName || '—';
-  document.getElementById('groom-mother').textContent = g.motherName || '—';
+  document.getElementById('groom-father').textContent = gf;
+  document.getElementById('groom-mother').textContent = gm;
   document.getElementById('groom-name').textContent   = g.name;
 
   /* 신부 부모님 */
-  document.getElementById('bride-father').textContent = b.fatherName || '—';
-  document.getElementById('bride-mother').textContent = b.motherName || '—';
+  document.getElementById('bride-father').textContent = bf;
+  document.getElementById('bride-mother').textContent = bm;
   document.getElementById('bride-name').textContent   = b.name;
 }
 
