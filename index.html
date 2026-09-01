@@ -157,21 +157,26 @@ body {
   z-index: 9000;
 }
 /* 눈 결정 — 화면 곳곳에 분산 배치, 천천히 흩날리며 떨어짐
-   기존 대비 20% 축소된 반투명 크리스털 느낌의 눈 결정. */
+   6방향 대칭 결정 모양 SVG로, 기존 대비 20% 축소된 크기 유지. */
 .petal {
   position: absolute;
   width: 13px; height: 13px;
-  border-radius: 50%;
+  overflow: visible;
   opacity: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   animation-name: gentleSway;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   filter: drop-shadow(0 2px 5px rgba(74,95,115,0.2)) blur(0.2px);
 }
-/* 눈 톤 — 순백~은청 그라데이션, 가장자리가 투명으로 빠지며 결정처럼 은은하게 */
-.petal.p-gold   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #D8E4EC 65%, transparent 100%); }
-.petal.p-rose   { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #C9D2E8 65%, transparent 100%); }
-.petal.p-cream  { background: radial-gradient(circle at 35% 32%, #FFFFFF 0%, #E8EDF2 65%, transparent 100%); }
+/* 눈 톤 — 순백~은청 계열로 결정마다 살짝 다른 색감 */
+.petal.p-gold   { color: #FFFFFF; }
+.petal.p-rose   { color: #D8E4EC; }
+.petal.p-cream  { color: #C9D2E8; }
 
 @keyframes gentleSway {
   0%   { transform: translate(0, 0);        opacity: 0; }
@@ -1901,22 +1906,43 @@ body.lightbox-open { overflow: hidden; }
 </head>
 <body>
 
-<!-- 단풍잎 오버레이 — 화면 곳곳에 분산, 제자리 살랑살랑 -->
+<!-- 눈 결정 도형 정의 — 6방향 대칭 결정(가지) 하나를 60도씩 회전 복제 -->
+<svg style="position:absolute; width:0; height:0; overflow:hidden" aria-hidden="true">
+  <defs>
+    <g id="snowArm">
+      <path d="M50 50 L50 8" />
+      <path d="M50 30 L38 18" />
+      <path d="M50 30 L62 18" />
+      <path d="M50 8  L42 2" />
+      <path d="M50 8  L58 2" />
+    </g>
+    <symbol id="snowCrystal" viewBox="0 0 100 100">
+      <use href="#snowArm" transform="rotate(0 50 50)" />
+      <use href="#snowArm" transform="rotate(60 50 50)" />
+      <use href="#snowArm" transform="rotate(120 50 50)" />
+      <use href="#snowArm" transform="rotate(180 50 50)" />
+      <use href="#snowArm" transform="rotate(240 50 50)" />
+      <use href="#snowArm" transform="rotate(300 50 50)" />
+    </symbol>
+  </defs>
+</svg>
+
+<!-- 눈 결정 오버레이 — 화면 곳곳에 분산, 흩날리며 떨어짐 -->
 <div class="petals-overlay" aria-hidden="true">
-  <span class="petal p-gold"  style="top:  6%; left:  7%; animation-duration: 7s;   animation-delay: 0s;   width: 11px; height: 11px;"></span>
-  <span class="petal p-rose"  style="top: 13%; left: 28%; animation-duration: 9s;   animation-delay: 1.5s; width: 13px; height: 13px;"></span>
-  <span class="petal p-cream" style="top: 22%; left: 58%; animation-duration: 8s;   animation-delay: 3s;   width: 12px; height: 12px;"></span>
-  <span class="petal p-gold"  style="top: 10%; left: 82%; animation-duration: 6.5s; animation-delay: 0.5s; width: 11px; height: 11px;"></span>
-  <span class="petal p-rose"  style="top: 30%; left: 14%; animation-duration: 10s;  animation-delay: 2s;   width: 14px; height: 14px;"></span>
-  <span class="petal p-cream" style="top: 38%; left: 42%; animation-duration: 7.5s; animation-delay: 4s;   width: 13px; height: 13px;"></span>
-  <span class="petal p-gold"  style="top: 28%; left: 72%; animation-duration: 8.5s; animation-delay: 2.5s; width: 12px; height: 12px;"></span>
-  <span class="petal p-rose"  style="top: 48%; left:  9%; animation-duration: 9.5s; animation-delay: 1s;   width: 14px; height: 14px;"></span>
-  <span class="petal p-cream" style="top: 52%; left: 60%; animation-duration: 7s;   animation-delay: 3.5s; width: 11px; height: 11px;"></span>
-  <span class="petal p-gold"  style="top: 58%; left: 88%; animation-duration: 8s;   animation-delay: 5s;   width: 12px; height: 12px;"></span>
-  <span class="petal p-rose"  style="top: 68%; left: 22%; animation-duration: 9s;   animation-delay: 2s;   width: 13px; height: 13px;"></span>
-  <span class="petal p-cream" style="top: 75%; left: 50%; animation-duration: 6s;   animation-delay: 0s;   width: 11px; height: 11px;"></span>
-  <span class="petal p-gold"  style="top: 82%; left: 78%; animation-duration: 10s;  animation-delay: 4.5s; width: 14px; height: 14px;"></span>
-  <span class="petal p-rose"  style="top: 90%; left: 36%; animation-duration: 7.5s; animation-delay: 1.5s; width: 12px; height: 12px;"></span>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top:  6%; left:  7%; animation-duration: 7s;   animation-delay: 0s;   width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 13%; left: 28%; animation-duration: 9s;   animation-delay: 1.5s; width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 22%; left: 58%; animation-duration: 8s;   animation-delay: 3s;   width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 10%; left: 82%; animation-duration: 6.5s; animation-delay: 0.5s; width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 30%; left: 14%; animation-duration: 10s;  animation-delay: 2s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 38%; left: 42%; animation-duration: 7.5s; animation-delay: 4s;   width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 28%; left: 72%; animation-duration: 8.5s; animation-delay: 2.5s; width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 48%; left:  9%; animation-duration: 9.5s; animation-delay: 1s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 52%; left: 60%; animation-duration: 7s;   animation-delay: 3.5s; width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 58%; left: 88%; animation-duration: 8s;   animation-delay: 5s;   width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 68%; left: 22%; animation-duration: 9s;   animation-delay: 2s;   width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 75%; left: 50%; animation-duration: 6s;   animation-delay: 0s;   width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 82%; left: 78%; animation-duration: 10s;  animation-delay: 4.5s; width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 90%; left: 36%; animation-duration: 7.5s; animation-delay: 1.5s; width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
 </div>
 
 <!-- 로딩 -->
