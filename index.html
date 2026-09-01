@@ -1029,6 +1029,8 @@ body {
   font-size: 11px; font-weight: 300;
   color: var(--text-mid); line-height: 1.8;
 }
+/* 주차 카드 — 아래 줄에서 2칸을 모두 차지하는 가로로 넓은 카드 */
+.transport-card-wide { grid-column: 1 / -1; }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SECTION 6 · 마음 전하기 (계좌)
@@ -2199,16 +2201,12 @@ body.lightbox-open { overflow: hidden; }
         <div class="transport-info" id="transport-bus-info">—</div>
       </div>
       <div class="transport-card">
-        <div class="transport-type">Taxi</div>
-        <div class="transport-info" id="transport-taxi-info">—</div>
-      </div>
-      <div class="transport-card">
-        <div class="transport-type">Parking</div>
-        <div class="transport-info" id="transport-parking-info">건물 전용 주차장<br>이용 가능</div>
-      </div>
-      <div class="transport-card">
         <div class="transport-type">Subway</div>
         <div class="transport-info" id="transport-subway-info">—</div>
+      </div>
+      <div class="transport-card transport-card-wide">
+        <div class="transport-type">Parking</div>
+        <div class="transport-info" id="transport-parking-info">건물 전용 주차장<br>이용 가능</div>
       </div>
     </div>
   </section>
@@ -3072,9 +3070,8 @@ function renderVenue() {
       if (el) el.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
     };
     setTransportInfo('transport-bus-info', t.bus);
-    setTransportInfo('transport-taxi-info', t.taxi);
-    setTransportInfo('transport-parking-info', t.parking);
     setTransportInfo('transport-subway-info', t.subway);
+    setTransportInfo('transport-parking-info', t.parking);
   }
 
   /* 추가 장소 (지상/지하주차장 등) 렌더링 */
