@@ -2201,16 +2201,16 @@ body {
         <div class="transport-info" id="transport-bus-info">—</div>
       </div>
       <div class="transport-card">
-        <div class="transport-type">Subway</div>
-        <div class="transport-info" id="transport-subway-info">—</div>
+        <div class="transport-type">Taxi</div>
+        <div class="transport-info" id="transport-taxi-info">—</div>
       </div>
       <div class="transport-card">
         <div class="transport-type">Parking</div>
         <div class="transport-info" id="transport-parking-info">건물 전용 주차장<br>이용 가능</div>
       </div>
       <div class="transport-card">
-        <div class="transport-type">Car</div>
-        <div class="transport-info" id="transport-car-info">—</div>
+        <div class="transport-type">Subway</div>
+        <div class="transport-info" id="transport-subway-info">—</div>
       </div>
     </div>
   </section>
@@ -3074,9 +3074,9 @@ function renderVenue() {
       if (el) el.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
     };
     setTransportInfo('transport-bus-info', t.bus);
-    setTransportInfo('transport-subway-info', t.subway);
+    setTransportInfo('transport-taxi-info', t.taxi);
     setTransportInfo('transport-parking-info', t.parking);
-    setTransportInfo('transport-car-info', t.car);
+    setTransportInfo('transport-subway-info', t.subway);
   }
 
   /* 추가 장소 (지상/지하주차장 등) 렌더링 */
