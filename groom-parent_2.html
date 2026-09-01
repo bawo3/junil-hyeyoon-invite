@@ -1583,6 +1583,10 @@ body {
   border-radius: 28px;
   background: transparent;
   padding: 0;
+  /* 실제 사진 비율을 JS(updateSliderHeight)가 측정해 height를 직접 지정 —
+     측정 전/실패 시 폴백으로만 aspect-ratio 사용 */
+  aspect-ratio: 3/2;
+  transition: height 0.5s ease;
   box-shadow:
     0 40px 80px -30px rgba(74,95,115,0.22),
     0 20px 40px -20px rgba(163,174,207,0.10),
@@ -1612,16 +1616,19 @@ body {
 }
 .slider-track {
   /* 그리드 스택 — 모든 슬라이드가 같은 셀에 겹쳐져 opacity + 마스크 그라데이션으로 부드럽게 페이드 전환.
-     translateX 슬라이드 방식 대신 그라데이션 마스크가 '샤라락' 쓸려나가는 효과로 변경됨.
+     .slider-wrap 의 (JS가 계산한) 실제 높이를 그대로 채워야 사진이 안 잘리므로 100% 로 전달.
      외곽 라운드는 부모 .slider-wrap 의 overflow:hidden 으로 처리. */
   display: grid;
   grid-template-areas: 'stack';
+  grid-template-rows: 100%;
   position: relative;
+  height: 100%;
 }
 .slide {
   grid-area: stack;
   position: relative;
   overflow: hidden;
+  height: 100%;
   opacity: 0;
   pointer-events: none;
   /* 좌→우로 부드럽게 쓸려나가는 그라데이션 마스크 — '샤라락' 은은한 전환 */
@@ -1644,7 +1651,7 @@ body {
 }
 .slide img {
   width: 100%;
-  aspect-ratio: 3/2;
+  height: 100%;
   object-fit: cover;
   display: block;
   /* 화사한 톤 — 채도·밝기·대비 살짝 올려서 생기있게 */
@@ -3724,6 +3731,7 @@ async function renderGallery() {
   ).join('');
 
   setupSliderSwipe();
+  setupSliderResize();  /* 화면 크기 변경 시 슬라이더 높이 재계산 */
 
   goSlide(0);
   startAutoSlide();
@@ -3786,10 +3794,36 @@ function goSlide(idx) {
     const tot = String(slideTotal).padStart(2, '0');
     counter.textContent = `${cur}  /  ${tot}`;
   }
+
+  updateSliderHeight();
 }
 
 function slideNext() { goSlide(slideIndex + 1); resetAutoSlide(); }
 function slidePrev() { goSlide(slideIndex - 1); resetAutoSlide(); }
+
+/* 슬라이더 박스 높이를 현재 활성 사진의 실제 비율(naturalWidth/naturalHeight)에 맞춰
+   동적으로 조정 — 가로/세로 사진이 섞여 있어도 잘리지 않고 그대로 보여준다. */
+function updateSliderHeight() {
+  const wrap = document.querySelector('.slider-wrap');
+  const activeImg = document.querySelector('.slide.is-active img');
+  if (!wrap || !activeImg) return;
+
+  const apply = () => {
+    if (!activeImg.naturalWidth || !activeImg.naturalHeight) return;
+    const ratio = activeImg.naturalWidth / activeImg.naturalHeight;
+    wrap.style.height = (wrap.clientWidth / ratio) + 'px';
+  };
+
+  if (activeImg.complete) apply();
+  else activeImg.addEventListener('load', apply, { once: true });
+}
+
+let _sliderResizeBound = false;
+function setupSliderResize() {
+  if (_sliderResizeBound) return;
+  _sliderResizeBound = true;
+  window.addEventListener('resize', updateSliderHeight);
+}
 
 function startAutoSlide() {
   if (slideTotal <= 1) return;
