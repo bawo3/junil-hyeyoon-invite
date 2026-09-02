@@ -156,10 +156,11 @@ body {
   overflow: hidden;
   z-index: 9000;
 }
-/* 눈 결정 — 화면 곳곳에 분산 배치, 천천히 흩날리며 떨어짐. 6방향 대칭 결정 모양 SVG. */
+/* 눈 결정 — 화면 곳곳에 분산 배치, 천천히 흩날리며 떨어짐
+   6방향 대칭 결정 모양 SVG로, 기존 대비 20% 축소된 크기 유지. */
 .petal {
   position: absolute;
-  width: 16px; height: 16px;
+  width: 13px; height: 13px;
   overflow: visible;
   opacity: 0;
   fill: none;
@@ -170,7 +171,7 @@ body {
   animation-name: gentleSway;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  filter: drop-shadow(0 2px 6px rgba(74,95,115,0.22)) blur(0.2px);
+  filter: drop-shadow(0 2px 5px rgba(74,95,115,0.2)) blur(0.2px);
 }
 /* 눈 톤 — 순백~은청 계열로 결정마다 살짝 다른 색감 */
 .petal.p-gold   { color: #FFFFFF; }
@@ -179,9 +180,9 @@ body {
 
 @keyframes gentleSway {
   0%   { transform: translate(0, 0);        opacity: 0; }
-  10%  { opacity: 0.65; }
-  50%  { transform: translate(9px, 78px);   opacity: 0.85; }
-  90%  { opacity: 0.30; }
+  10%  { opacity: 0.55; }
+  50%  { transform: translate(9px, 78px);   opacity: 0.75; }
+  90%  { opacity: 0.25; }
   100% { transform: translate(-6px, 150px); opacity: 0; }
 }
 /* 모션 줄이기 설정 사용자 — 애니메이션 끔 */
@@ -232,15 +233,15 @@ body {
 /* 영상이 위쪽에 있고 텍스트는 크림 배경 위에 놓이므로
    has-photo 모드는 사용하지 않음 — 기본 다크/골드 톤 유지 */
 
-/* 후지산 실루엣 — 커버 맨 뒤에 은은한 워터마크로, 눈꽃축제 밤 풍경 느낌 */
+/* 설산 이미지 — 커버 맨 뒤에 깔리는 웅장한 배경 산 */
 #cover-fuji {
   position: absolute;
   left: 50%; bottom: 0;
   transform: translateX(-50%);
-  width: 150%;
-  max-width: 640px;
+  width: 170%;
+  max-width: 720px;
   height: auto;
-  opacity: 0.16;
+  opacity: 0.55;
   z-index: 0;
   pointer-events: none;
 }
@@ -554,66 +555,6 @@ body {
   width: 32px; height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
   margin: 14px auto 12px;
-}
-
-/* 혼주 섹션 안의 부모님 연락처 행 — 2열 (역할/이름/전화버튼) */
-.parent-contact-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 18px;
-}
-.parent-contact-item {
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 18px 12px 16px;
-  text-align: center;
-  box-shadow:
-    0 4px 22px rgba(74,95,115,0.10),
-    0 1px 0 rgba(255,255,255,0.9) inset;
-  position: relative; overflow: hidden;
-}
-.parent-contact-item::before {
-  content: '';
-  position: absolute; top: 0; left: 18%; right: 18%;
-  height: 1px;
-  background: radial-gradient(ellipse at center, var(--gold-light) 0%, transparent 70%);
-}
-.parent-contact-role {
-  font-family: 'Noto Serif KR', serif;
-  font-size: 12px; font-weight: 400;
-  color: var(--gold-dark); letter-spacing: 3px;
-  margin-bottom: 6px;
-}
-.parent-contact-name {
-  font-family: 'Noto Serif KR', serif;
-  font-size: 17px; font-weight: 500;
-  color: var(--text-dark); letter-spacing: 3px;
-  margin-bottom: 12px;
-}
-.parent-contact-phone {
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 4px;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-  color: white;
-  font-size: 16px;
-  text-decoration: none;
-  box-shadow: 0 4px 14px rgba(74,95,115,0.28);
-  transition: all 0.25s;
-}
-.parent-contact-phone:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(74,95,115,0.4);
-}
-@media (max-width: 480px) {
-  .parent-contact-row { gap: 10px; margin-top: 14px; }
-  .parent-contact-item { padding: 15px 8px 14px; }
-  .parent-contact-role { font-size: 11px; letter-spacing: 2px; }
-  .parent-contact-name { font-size: 15px; letter-spacing: 2px; }
-  .parent-contact-phone { width: 40px; height: 40px; font-size: 15px; }
 }
 .family-name {
   font-family: 'Noto Serif KR', serif;
@@ -1325,19 +1266,19 @@ body {
 .pay-icon-copy   { background: linear-gradient(135deg, #7B95AC, #4A5F73); }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   SECTION 7 · 참석 여부
+   SECTION 7 · 방명록
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-.rsvp {
+.guestbook {
   background: linear-gradient(160deg, var(--cream) 0%, var(--cream-dark) 100%);
   text-align: center;
 }
-.rsvp-desc {
+.guestbook-desc {
   font-family: 'Noto Serif KR', serif;
   font-size: 13px; font-weight: 300;
   color: var(--text-light); line-height: 2;
   margin-bottom: 28px;
 }
-.rsvp-form { text-align: left; }
+.guestbook-form { text-align: left; }
 .form-field { margin-bottom: 16px; }
 
 /* 필수 마크 */
@@ -1355,7 +1296,7 @@ body {
   color: var(--gold); text-transform: uppercase;
   margin-bottom: 8px;
 }
-.form-input {
+.form-input, .form-textarea {
   width: 100%;
   padding: 13px 18px;
   border: none;
@@ -1368,35 +1309,12 @@ body {
   color: var(--text-dark); outline: none;
   transition: all 0.3s;
 }
-.form-input:focus {
+.form-textarea { resize: vertical; min-height: 84px; line-height: 1.6; }
+.form-input:focus, .form-textarea:focus {
   background: rgba(255,255,255,0.95);
   box-shadow: 0 4px 24px rgba(74,95,115,0.13), 0 1px 0 rgba(255,255,255,1) inset;
 }
-.form-radio-group {
-  display: flex; gap: 12px;
-}
-.radio-option {
-  flex: 1;
-  padding: 13px 12px;
-  border: none;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 14px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
-  cursor: pointer; text-align: center;
-  transition: all 0.3s;
-}
-.radio-option input { display: none; }
-.radio-option:has(input:checked) {
-  background: linear-gradient(135deg, rgba(197,213,224,0.6), rgba(232,237,242,0.8));
-  box-shadow: 0 4px 20px rgba(74,95,115,0.13), 0 1px 0 rgba(255,255,255,0.9) inset;
-}
-.radio-label {
-  font-family: 'Noto Serif KR', serif;
-  font-size: 13px; font-weight: 300;
-  color: var(--text-mid); letter-spacing: 1px;
-}
-.rsvp-submit {
+.guestbook-submit {
   width: 100%; margin-top: 8px;
   padding: 14px;
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
@@ -1408,7 +1326,48 @@ body {
   box-shadow: 0 4px 20px rgba(74,95,115,0.3);
   transition: all 0.3s;
 }
-.rsvp-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,95,115,0.4); }
+.guestbook-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,95,115,0.4); }
+.guestbook-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+/* 남겨진 메시지 목록 */
+.guestbook-list {
+  margin-top: 28px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.comment-item {
+  text-align: left;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 14px rgba(74,95,115,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.comment-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; margin-bottom: 6px;
+}
+.comment-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; font-weight: 500;
+  letter-spacing: 1px; color: var(--gold-dark);
+}
+.comment-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; color: var(--text-light);
+  white-space: nowrap;
+}
+.comment-message {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px; font-weight: 300;
+  color: var(--text-mid); line-height: 1.7;
+  white-space: pre-line; word-break: break-word;
+}
+.guestbook-empty {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px; font-weight: 300;
+  color: var(--text-light); text-align: center;
+  padding: 8px 0;
+}
 
 /* ── 캘린더 추가 모달 ── */
 .cal-modal-backdrop {
@@ -1588,10 +1547,11 @@ body {
   border-radius: 28px;
   background: transparent;
   padding: 0;
-  /* 실제 사진 비율을 JS(updateSliderHeight)가 측정해 height를 직접 지정 —
-     측정 전/실패 시 폴백으로만 aspect-ratio 사용 */
+  /* 실제 사진 비율을 JS(updateSliderHeight)가 측정해 aspect-ratio 자체를 갱신 —
+     너비는 항상 부모 폭 그대로(100%)이므로 px 계산/캐시 없이 브라우저가 높이를 계산 */
   aspect-ratio: 3/2;
-  transition: height 0.5s ease;
+  max-height: 65vh;
+  transition: aspect-ratio 0.5s ease;
   box-shadow:
     0 40px 80px -30px rgba(74,95,115,0.22),
     0 20px 40px -20px rgba(163,174,207,0.10),
@@ -1620,39 +1580,34 @@ body {
   z-index: 5;
 }
 .slider-track {
-  /* 그리드 스택 — 모든 슬라이드가 같은 셀에 겹쳐져 opacity + 마스크 그라데이션으로 부드럽게 페이드 전환.
+  /* 그리드 스택 — 모든 슬라이드가 같은 셀에 겹쳐진 채 translateX 로 좌우 슬라이드 전환.
      .slider-wrap 의 (JS가 계산한) 실제 높이를 그대로 채워야 사진이 안 잘리므로 100% 로 전달.
      외곽 라운드는 부모 .slider-wrap 의 overflow:hidden 으로 처리. */
   display: grid;
   grid-template-areas: 'stack';
+  grid-template-columns: 100%;
   grid-template-rows: 100%;
   position: relative;
+  width: 100%;
   height: 100%;
 }
 .slide {
   grid-area: stack;
   position: relative;
   overflow: hidden;
+  width: 100%;
   height: 100%;
-  opacity: 0;
   pointer-events: none;
-  /* 좌→우로 부드럽게 쓸려나가는 그라데이션 마스크 — '샤라락' 은은한 전환 */
-  -webkit-mask-image: linear-gradient(105deg, transparent 0%, #000 35%, #000 65%, transparent 100%);
-          mask-image: linear-gradient(105deg, transparent 0%, #000 35%, #000 65%, transparent 100%);
-  -webkit-mask-size: 220% 100%;
-          mask-size: 220% 100%;
-  -webkit-mask-position: 100% 0;
-          mask-position: 100% 0;
-  transition: opacity 1.2s ease-in-out,
-              -webkit-mask-position 1.4s cubic-bezier(0.22, 0.61, 0.36, 1),
-                      mask-position 1.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* 옆에서 밀려 들어오고 반대쪽으로 밀려나가는 수평 슬라이드 전환 */
+  transform: translateX(100%);
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+.slide.is-prev { transform: translateX(-100%); }
+.slide.is-next { transform: translateX(100%); }
 .slide.is-active {
-  opacity: 1;
   pointer-events: auto;
   z-index: 2;
-  -webkit-mask-position: 0 0;
-          mask-position: 0 0;
+  transform: translateX(0);
 }
 .slide img {
   width: 100%;
@@ -1661,12 +1616,7 @@ body {
   display: block;
   /* 화사한 톤 — 채도·밝기·대비 살짝 올려서 생기있게 */
   filter: saturate(1.12) brightness(1.06) contrast(1.04);
-  transform: scale(1.02);
-  transition: transform 7s ease-out, filter 0.6s;
-}
-/* 현재 슬라이드 — 켄번즈 느린 줌인 */
-.slide.is-active img {
-  transform: scale(1.12);
+  cursor: zoom-in; /* 탭하면 라이트박스로 확대 */
 }
 /* SVG도 동일 비율 */
 .slide img[src$=".svg"] {
@@ -1707,31 +1657,29 @@ body {
   margin: 0 auto 10px;
 }
 
-/* 이전/다음 버튼 — 매우 절제된 글래스 */
+/* 이전/다음 버튼 — 배경 없이 반투명 화살표만, 사진을 가리지 않게 */
 .slide-btn {
   position: absolute;
   top: 50%; transform: translateY(-50%);
   width: 38px; height: 38px;
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: 50%; cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  background: none;
+  border: none;
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 300;
-  color: var(--text-dark);
-  transition: all 0.35s ease;
+  font-size: 30px; font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  transition: all 0.3s ease;
   z-index: 11;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   opacity: 0.85;
 }
 .slide-btn:hover {
-  background: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.95);
   opacity: 1;
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-50%) scale(1.1);
 }
-.slide-btn.prev { left: 22px; }
-.slide-btn.next { right: 22px; }
+.slide-btn.prev { left: 8px; }
+.slide-btn.next { right: 8px; }
 
 /* 인디케이터 — 가는 라인 스타일 */
 .slider-dots {
@@ -1792,6 +1740,101 @@ body {
   transform: translateY(-2px);
 }
 .thumb:hover { opacity: 0.85; }
+
+/* ── 갤러리 라이트박스 (확대 보기) ── */
+.lightbox-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(20,24,30,0.94);
+  z-index: 9700;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.lightbox-backdrop.show { opacity: 1; visibility: visible; pointer-events: all; }
+
+body.lightbox-open { overflow: hidden; }
+
+.lightbox-close {
+  position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px;
+  width: 40px; height: 40px;
+  border: none; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  color: #fff; font-size: 26px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 5;
+  transition: background 0.25s ease;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.22); }
+
+/* 좌우 이동 버튼 — 갤러리 화살표와 동일하게 배경 없이 반투명 화살표만 */
+.lightbox-nav-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  background: none; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  cursor: pointer; z-index: 5;
+  transition: all 0.3s ease;
+}
+.lightbox-nav-btn:hover { color: rgba(255,255,255,0.95); }
+.lightbox-nav-btn.prev { left: 6px; }
+.lightbox-nav-btn.next { right: 6px; }
+
+.lightbox-stage {
+  position: relative;
+  width: 100%; max-width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid; grid-template-areas: 'stack';
+  align-items: center; justify-items: center;
+}
+.lightbox-slide {
+  grid-area: stack;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+.lightbox-slide.is-prev { transform: translateX(-100%); }
+.lightbox-slide.is-next { transform: translateX(100%); }
+.lightbox-slide.is-active {
+  transform: translateX(0);
+  pointer-events: auto;
+  z-index: 2;
+}
+.lightbox-slide img {
+  max-width: 92%; max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none; -webkit-user-drag: none;
+}
+.lightbox-caption {
+  margin-top: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 16px; letter-spacing: 2px;
+  color: rgba(255,255,255,0.9);
+  text-align: center; padding: 0 24px;
+  min-height: 1em;
+}
+.lightbox-counter {
+  margin: 8px 0 max(16px, env(safe-area-inset-bottom));
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px; letter-spacing: 4px;
+  color: rgba(255,255,255,0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide,
+  .lightbox-slide,
+  .lightbox-backdrop { transition: none; }
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    FOOTER
@@ -1906,20 +1949,20 @@ body {
 
 <!-- 눈 결정 오버레이 — 화면 곳곳에 분산, 흩날리며 떨어짐 -->
 <div class="petals-overlay" aria-hidden="true">
-  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top:  6%; left:  7%; animation-duration: 7s;   animation-delay: 0s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 13%; left: 28%; animation-duration: 9s;   animation-delay: 1.5s; width: 16px; height: 16px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 22%; left: 58%; animation-duration: 8s;   animation-delay: 3s;   width: 15px; height: 15px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 10%; left: 82%; animation-duration: 6.5s; animation-delay: 0.5s; width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 30%; left: 14%; animation-duration: 10s;  animation-delay: 2s;   width: 18px; height: 18px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 38%; left: 42%; animation-duration: 7.5s; animation-delay: 4s;   width: 16px; height: 16px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 28%; left: 72%; animation-duration: 8.5s; animation-delay: 2.5s; width: 15px; height: 15px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 48%; left:  9%; animation-duration: 9.5s; animation-delay: 1s;   width: 17px; height: 17px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 52%; left: 60%; animation-duration: 7s;   animation-delay: 3.5s; width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 58%; left: 88%; animation-duration: 8s;   animation-delay: 5s;   width: 15px; height: 15px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 68%; left: 22%; animation-duration: 9s;   animation-delay: 2s;   width: 16px; height: 16px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 75%; left: 50%; animation-duration: 6s;   animation-delay: 0s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 82%; left: 78%; animation-duration: 10s;  animation-delay: 4.5s; width: 17px; height: 17px;"><use href="#snowCrystal"/></svg>
-  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 90%; left: 36%; animation-duration: 7.5s; animation-delay: 1.5s; width: 15px; height: 15px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top:  6%; left:  7%; animation-duration: 7s;   animation-delay: 0s;   width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 13%; left: 28%; animation-duration: 9s;   animation-delay: 1.5s; width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 22%; left: 58%; animation-duration: 8s;   animation-delay: 3s;   width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 10%; left: 82%; animation-duration: 6.5s; animation-delay: 0.5s; width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 30%; left: 14%; animation-duration: 10s;  animation-delay: 2s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 38%; left: 42%; animation-duration: 7.5s; animation-delay: 4s;   width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 28%; left: 72%; animation-duration: 8.5s; animation-delay: 2.5s; width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 48%; left:  9%; animation-duration: 9.5s; animation-delay: 1s;   width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 52%; left: 60%; animation-duration: 7s;   animation-delay: 3.5s; width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 58%; left: 88%; animation-duration: 8s;   animation-delay: 5s;   width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 68%; left: 22%; animation-duration: 9s;   animation-delay: 2s;   width: 13px; height: 13px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-cream" viewBox="0 0 100 100" style="top: 75%; left: 50%; animation-duration: 6s;   animation-delay: 0s;   width: 11px; height: 11px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-gold"  viewBox="0 0 100 100" style="top: 82%; left: 78%; animation-duration: 10s;  animation-delay: 4.5s; width: 14px; height: 14px;"><use href="#snowCrystal"/></svg>
+  <svg class="petal p-rose"  viewBox="0 0 100 100" style="top: 90%; left: 36%; animation-duration: 7.5s; animation-delay: 1.5s; width: 12px; height: 12px;"><use href="#snowCrystal"/></svg>
 </div>
 
 <!-- 로딩 -->
@@ -1935,34 +1978,8 @@ body {
 
   <!-- ── 커버 ── -->
   <section class="cover" id="cover">
-    <!-- 후지산 실루엣 — 은은한 워터마크, 눈꽃축제 밤 풍경 느낌 -->
-    <svg id="cover-fuji" viewBox="0 0 400 180" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <radialGradient id="fujiGlow" cx="50%" cy="28%" r="55%">
-          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="fujiBody" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#7B95AC"/>
-          <stop offset="100%" stop-color="#4A5F73"/>
-        </linearGradient>
-      </defs>
-      <circle cx="200" cy="55" r="95" fill="url(#fujiGlow)"/>
-      <path d="M200 18
-               C 208 42, 222 66, 246 104
-               C 263 128, 286 148, 322 165
-               L 78 165
-               C 114 148, 137 128, 154 104
-               C 178 66, 192 42, 200 18 Z"
-            fill="url(#fujiBody)"/>
-      <path d="M200 18 C 206 30, 214 44, 224 60 C 214 65, 200 67, 186 60 C 196 44, 194 30, 200 18 Z"
-            fill="#FFFFFF" opacity="0.85"/>
-      <path d="M176 68 C 168 80, 159 95, 147 111" stroke="#FFFFFF" stroke-width="2" opacity="0.4" fill="none" stroke-linecap="round"/>
-      <path d="M224 68 C 232 80, 241 95, 253 111" stroke="#FFFFFF" stroke-width="2" opacity="0.4" fill="none" stroke-linecap="round"/>
-      <path d="M58 165 L64 147 L70 165 Z" fill="#4A5F73" opacity="0.55"/>
-      <path d="M328 165 L335 143 L342 165 Z" fill="#4A5F73" opacity="0.55"/>
-      <path d="M344 165 L350 151 L356 165 Z" fill="#4A5F73" opacity="0.55"/>
-    </svg>
+    <!-- 설산 이미지 — 웅장한 눈산 배경 -->
+    <img id="cover-fuji" src="./images/cover-mountain.png" alt="" aria-hidden="true">
     <!-- 배경 영상 (좌우반전, 자동재생, 무한반복, 음소거) — photo.html에 커버 사진을 등록하면 아래 사진으로 대체됨 -->
     <video class="cover-bg" id="cover-bg"
            src="./images/top.mp4"
@@ -2148,7 +2165,6 @@ body {
       <!-- 시간 -->
       <div class="date-time" id="date-time">—</div>
 
-      <!-- 날짜 이미지 -->
       <!-- 날짜 이미지 — photo.html에서 설정한 사진이 있을 때만 표시 (JS에서 display 제어) -->
       <div class="date-photo-wrap" id="date-photo-wrap" style="display:none;">
         <img src="" alt="예식일" loading="lazy">
@@ -2379,7 +2395,6 @@ body {
         </div>
         <div class="parents-col">
           <div class="parents-side bride">👰 신부측</div>
-          <div class="parent-card" id="parent-card-bf"><div class="parent-relation">Father</div><div class="parent-name">—</div><div class="parent-bank">—</div><span class="parent-copy">송금</span></div>
           <div class="parent-card" id="parent-card-bm"><div class="parent-relation">Mother</div><div class="parent-name">—</div><div class="parent-bank">—</div><span class="parent-copy">송금</span></div>
         </div>
       </div>
@@ -2443,55 +2458,27 @@ body {
     </div>
   </div>
 
-  <!-- ── RSVP ── -->
-  <section class="section rsvp">
-    <div class="section-label">RSVP</div>
-    <div class="section-title">참석 여부 알려주세요</div>
-    <p class="rsvp-desc" id="rsvp-desc">
-      —
-    </p>
-    <div class="rsvp-form">
-      <!-- 신랑측 / 신부측 선택 -->
-      <div class="form-field">
-        <label class="form-label">신랑/신부측 <span class="required-mark">*</span></label>
-        <div class="form-radio-group">
-          <label class="radio-option">
-            <input type="radio" name="side" value="groom">
-            <div class="radio-label">🤵 신랑측</div>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="side" value="bride">
-            <div class="radio-label">👰 신부측</div>
-          </label>
-        </div>
-      </div>
+  <!-- ── 방명록 ── -->
+  <section class="section guestbook">
+    <div class="section-label">Guestbook</div>
+    <div class="section-title">축하 메시지를 남겨주세요</div>
+    <p class="guestbook-desc">신랑 신부에게 따뜻한 한마디 부탁드려요</p>
+    <div class="guestbook-form">
       <div class="form-field">
         <label class="form-label">성함 <span class="required-mark">*</span></label>
-        <input class="form-input" id="rsvp-name" name="name" type="text"
+        <input class="form-input" id="comment-name" name="name" type="text"
                placeholder="홍길동"
                autocomplete="name"
                autocapitalize="words"
                inputmode="text">
       </div>
       <div class="form-field">
-        <label class="form-label">참석 여부 <span class="required-mark">*</span></label>
-        <div class="form-radio-group">
-          <label class="radio-option">
-            <input type="radio" name="attend" value="yes">
-            <div class="radio-label">참석합니다 🌸</div>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="attend" value="no">
-            <div class="radio-label">아쉽게도 불참</div>
-          </label>
-        </div>
+        <label class="form-label">축하 메시지 <span class="required-mark">*</span></label>
+        <textarea class="form-textarea" id="comment-message" placeholder="따뜻한 축하 메시지를 남겨주세요"></textarea>
       </div>
-      <div class="form-field">
-        <label class="form-label">인원 수 (본인 포함)</label>
-        <input class="form-input" id="rsvp-count" type="number" min="1" max="10" step="1" value="1">
-      </div>
-      <button class="rsvp-submit" onclick="submitRsvp()">참석 의사 전달하기</button>
+      <button class="guestbook-submit" id="comment-submit-btn" onclick="submitComment()">메시지 남기기</button>
     </div>
+    <div class="guestbook-list" id="guestbook-list"></div>
   </section>
 
   <!-- ── 공유하기 ── -->
@@ -2600,6 +2587,16 @@ body {
     </div>
     <button class="nav-modal-cancel" onclick="closePayModal()">닫기</button>
   </div>
+</div>
+
+<!-- 갤러리 라이트박스 (사진 탭 시 확대, 좌우 스와이프/버튼으로 넘김) -->
+<div class="lightbox-backdrop" id="lightboxBackdrop">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="닫기">&times;</button>
+  <button class="lightbox-nav-btn prev" onclick="lightboxPrev()" aria-label="이전 사진">&#8249;</button>
+  <button class="lightbox-nav-btn next" onclick="lightboxNext()" aria-label="다음 사진">&#8250;</button>
+  <div class="lightbox-stage" id="lightboxStage"></div>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
 </div>
 
 <!-- 배경음악 — music 폴더의 정적 mp3 재생, KV(/api/music)엔 파일명+on/off만 저장 -->
@@ -2857,7 +2854,7 @@ async function init() {
     renderDateTime();
     renderVenue();
     renderGallery();
-    renderRsvp();
+    renderGuestbook();
     renderFooter();
 
   } catch (e) {
@@ -3361,7 +3358,6 @@ async function renderAccount() {
   const parentMap = [
     ['parent-card-gf', ACCOUNTS.groomFather, '신랑 아버지'],
     ['parent-card-gm', ACCOUNTS.groomMother, '신랑 어머니'],
-    ['parent-card-bf', ACCOUNTS.brideFather, '신부 아버지'],
     ['parent-card-bm', ACCOUNTS.brideMother, '신부 어머니'],
   ];
   parentMap.forEach(([id, acc, relation]) => {
@@ -3534,80 +3530,83 @@ function fallbackCopy(text, msg) {
   document.body.removeChild(ta);
 }
 
-/* ── RSVP ── */
-function renderRsvp() {
-  const r = CFG.rsvp;
-  if (!r || !r.enabled) {
-    document.querySelector('.rsvp').style.display = 'none';
-    return;
-  }
-  /* 회신 마감일 = 예식일 3주 전 (자동 계산, setting.json의 deadline 값은 더 이상 사용하지 않음) */
-  const d = CFG.date;
-  const deadlineDate = new Date(d.year, d.month - 1, d.day);
-  deadlineDate.setDate(deadlineDate.getDate() - 21);
-  const dl = `${deadlineDate.getFullYear()}.${String(deadlineDate.getMonth() + 1).padStart(2, '0')}.${String(deadlineDate.getDate()).padStart(2, '0')}`;
-  document.getElementById('rsvp-desc').textContent = `${dl} 까지 회신 부탁드립니다`;
+/* ── 방명록 ── */
+function formatCommentDate(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 }
 
-async function submitRsvp() {
-  const name   = document.getElementById('rsvp-name').value.trim();
-  const side   = document.querySelector('input[name="side"]:checked');
-  const attend = document.querySelector('input[name="attend"]:checked');
-  let   count  = parseInt(document.getElementById('rsvp-count').value, 10);
-  /* 인원 수 — 최소 1명 보장 */
-  if (!Number.isFinite(count) || count < 1) count = 1;
-  if (count > 10) count = 10;
-
-  /* 필수 입력 검증 */
-  if (!side)            return showToast('신랑측/신부측을 선택해 주세요');
-  if (!name)            return showToast('성함을 입력해 주세요');
-  if (!attend)          return showToast('참석 여부를 반드시 선택해 주세요');
-  if (attend.value !== 'yes' && attend.value !== 'no') {
-    return showToast('참석 여부를 선택해 주세요');
+async function renderGuestbook() {
+  const list = document.getElementById('guestbook-list');
+  let comments = [];
+  try {
+    const res = await fetch('/api/comments');
+    if (res.ok) comments = await res.json();
+  } catch (e) {
+    console.error('방명록 로드 실패:', e);
   }
+
+  if (!comments.length) {
+    list.innerHTML = '<p class="guestbook-empty">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨보세요 🌸</p>';
+    return;
+  }
+
+  list.innerHTML = comments.slice().reverse().map(c => `
+    <div class="comment-item">
+      <div class="comment-head">
+        <span class="comment-name">${escapeHtml(c.name)}</span>
+        <span class="comment-date">${formatCommentDate(c.createdAt)}</span>
+      </div>
+      <div class="comment-message">${escapeHtml(c.message)}</div>
+    </div>
+  `).join('');
+}
+
+async function submitComment() {
+  const nameEl = document.getElementById('comment-name');
+  const msgEl  = document.getElementById('comment-message');
+  const name   = nameEl.value.trim();
+  const message = msgEl.value.trim();
+
+  if (!name)    return showToast('성함을 입력해 주세요');
+  if (!message) return showToast('축하 메시지를 입력해 주세요');
 
   const entry = {
     id:        Date.now(),
-    side:      side.value,
     name:      name,
-    attend:    attend.value,
-    count:     count,
-    source:    'bride-parent',            /* 신부측 부모님용 청첩장에서 전달 */
+    message:   message,
     createdAt: new Date().toISOString()
   };
 
   /* 버튼 비활성화 (중복 제출 방지) */
-  const btn = document.querySelector('.rsvp-submit');
+  const btn = document.getElementById('comment-submit-btn');
   btn.disabled = true;
   btn.textContent = '전송 중...';
 
   try {
-    const res = await fetch('/api/rsvp', {
+    const res = await fetch('/api/comments', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(entry)
     });
     if (!res.ok) throw new Error('서버 오류');
   } catch (e) {
-    console.error('RSVP 저장 실패:', e);
+    console.error('방명록 저장 실패:', e);
     btn.disabled = false;
-    btn.textContent = '참석 의사 전달하기';
+    btn.textContent = '메시지 남기기';
     return showToast('저장에 실패했습니다. 잠시 후 다시 시도해 주세요');
   }
 
   btn.disabled = false;
-  btn.textContent = '참석 의사 전달하기';
+  btn.textContent = '메시지 남기기';
 
   /* 폼 초기화 */
-  document.getElementById('rsvp-name').value  = '';
-  document.getElementById('rsvp-count').value = '1';
-  document.querySelectorAll('input[name="side"]').forEach(r => r.checked = false);
-  document.querySelectorAll('input[name="attend"]').forEach(r => r.checked = false);
+  nameEl.value = '';
+  msgEl.value  = '';
 
-  const msg = attend.value === 'yes'
-    ? `${name}님의 참석 의사가 전달되었습니다 감사합니다 🌸`
-    : `${name}님의 회신이 전달되었습니다 감사합니다`;
-  showToast(msg);
+  showToast(`${name}님의 메시지가 전달되었습니다 감사합니다 🌸`);
+  renderGuestbook();
 }
 
 /* ── 카카오톡 공유 ── */
@@ -3702,6 +3701,8 @@ function showToast(msg) {
 let slideIndex = 0;
 let slideTotal = 0;
 let slideTimer = null;
+let galleryPhotos = [];   /* renderGallery()가 로드한 사진 배열 — 라이트박스가 재사용 (재fetch 방지) */
+let lightboxIndex = 0;
 
 async function renderGallery() {
   /* [diag 이력 2026-05-17] renderGallery 진입 추적 */
@@ -3721,7 +3722,8 @@ async function renderGallery() {
   //   const srcLen   = p.src?.length || 0;
   //   const srcStart = (p.src || '').substring(0, 50);
   //   const isData   = (p.src || '').startsWith('data:image');
-  //   console.log(`  [${i+1}] id=${p.id || '?'} len=${srcLen} ${isData ? '(base64)' : '(url)'} ${srcStart}...`);
+  //   const isUrl    = (p.src || '').startsWith('http') || (p.src || '').startsWith('./');
+  //   console.log(`  [${i+1}] id=${p.id || '?'} len=${srcLen} ${isData ? '(base64)' : isUrl ? '(url)' : '(?)'} ${srcStart}...`);
   // });
 
   /* API에 사진이 없으면 setting.json 의 기본 사진 사용 (폴백) */
@@ -3735,17 +3737,19 @@ async function renderGallery() {
   document.getElementById('gallery-section').style.display = '';
   document.getElementById('gallery-divider').style.display = '';
 
+  galleryPhotos = photos;   /* 라이트박스에서 재사용 */
   slideTotal = photos.length;
 
   const track = document.getElementById('sliderTrack');
   const dots  = document.getElementById('sliderDots');
   const thumbs = document.getElementById('thumbStrip');
 
-  /* 슬라이드 생성 — lazy 제거 (off-screen lazy 미로드 회피)
-     [diag 이력 2026-05-17] 과거 onerror 핸들러에 console.error('slide image load failed:', i) 함께 호출했었음 (배경 폴백만 유지) */
-  track.innerHTML = photos.map(p => `
+  /* 슬라이드 생성 — lazy 미사용 (off-screen 미로드 회피), decoding async
+     [diag 이력 2026-05-17] 과거 onload="console.log('✅ slide i+1 이미지 로드됨', wxh)" + onerror="console.error('❌ slide i+1 이미지 로드 실패')" 함께 호출했었음 (배경 폴백만 유지) */
+  track.innerHTML = photos.map((p, i) => `
     <div class="slide">
       <img src="${p.src}" alt="${p.caption || ''}" decoding="async"
+           onclick="openLightbox(${i})"
            onerror="this.parentElement.style.background='linear-gradient(135deg,#F4F7FA,#E8EDF2)'">
       ${p.caption ? `<div class="slide-caption">${p.caption}</div>` : ''}
     </div>
@@ -3756,28 +3760,46 @@ async function renderGallery() {
     `<button class="dot${i===0?' active':''}" onclick="goSlide(${i})"></button>`
   ).join('');
 
-  /* 썸네일 */
+  /* 썸네일 — 작은 이미지라 lazy 유지 (성능 OK) */
   thumbs.innerHTML = photos.map((p, i) =>
     `<div class="thumb${i===0?' active':''}" onclick="goSlide(${i})">
        <img src="${p.src}" alt="${p.caption||''}" loading="lazy" decoding="async">
      </div>`
   ).join('');
 
-  setupSliderSwipe();
+  setupSliderSwipe();   /* 양옆 스와이프로 사진 넘기기 (touch + mouse drag) */
   setupSliderResize();  /* 화면 크기 변경 시 슬라이더 높이 재계산 */
+
+  /* 라이트박스용 풀사이즈 슬라이드 생성 (같은 photos 배열 재사용) */
+  const lbStage = document.getElementById('lightboxStage');
+  if (lbStage) {
+    lbStage.innerHTML = photos.map(p => `
+      <div class="lightbox-slide">
+        <img src="${p.src}" alt="${p.caption || ''}" decoding="async" draggable="false">
+      </div>
+    `).join('');
+  }
+  setupLightboxSwipe();
 
   goSlide(0);
   startAutoSlide();
 }
 
-/* ── 슬라이더 스와이프 제스처 (터치 + 마우스 드래그) ── */
+/* ── 슬라이더 스와이프 제스처 ──
+   터치(모바일) + 마우스 드래그(데스크톱) 모두 지원.
+   임계값 40px 넘으면 좌→우 = prev, 우→좌 = next. */
 let _swipeBound = false;
 function setupSliderSwipe() {
   if (_swipeBound) return;
   _swipeBound = true;
+
   const wrap = document.querySelector('.slider-wrap');
   if (!wrap) return;
-  let startX = 0, startY = 0, dx = 0, dy = 0, active = false;
+
+  let startX = 0, startY = 0;
+  let dx = 0, dy = 0;
+  let active = false;
+
   const onStart = x => { startX = x; dx = 0; active = true; };
   const onMove  = x => { if (active) dx = x - startX; };
   const onEnd   = () => {
@@ -3787,6 +3809,8 @@ function setupSliderSwipe() {
       dx < 0 ? slideNext() : slidePrev();
     }
   };
+
+  /* 터치 — passive: true 로 스크롤 성능 유지 */
   wrap.addEventListener('touchstart', e => {
     startY = e.touches[0].clientY; dy = 0;
     onStart(e.touches[0].clientX);
@@ -3797,6 +3821,8 @@ function setupSliderSwipe() {
   }, { passive: true });
   wrap.addEventListener('touchend', onEnd);
   wrap.addEventListener('touchcancel', () => { active = false; });
+
+  /* 마우스 — 데스크톱 드래그 지원 */
   wrap.addEventListener('mousedown', e => { onStart(e.clientX); e.preventDefault(); });
   wrap.addEventListener('mousemove', e => onMove(e.clientX));
   wrap.addEventListener('mouseup',   onEnd);
@@ -3804,13 +3830,30 @@ function setupSliderSwipe() {
 }
 
 function goSlide(idx) {
+  const prevIndex = slideIndex;
   slideIndex = (idx + slideTotal) % slideTotal;
-  /* 그리드 스택 + opacity/마스크 그라데이션 전환 방식 — translateX 불필요
-     (기존 translateX 라인은 그라데이션 페이드 전환으로 대체) */
 
-  /* 활성 슬라이드 — 켄번즈 줌인 효과 */
-  document.querySelectorAll('.slide').forEach((s, i) =>
-    s.classList.toggle('is-active', i === slideIndex));
+  /* 수평 슬라이드 전환 — 각 슬라이드를 현재 인덱스 기준 최단 방향으로 배치.
+     방금 활성이었던 슬라이드/새로 활성될 슬라이드만 실제로 애니메이션하고,
+     그 외 슬라이드는 좌우 대기 위치가 바뀌어도(반대편 경계를 넘는 경우) 트랜지션 없이
+     즉시 재배치한다 — 안 그러면 화면 밖에 있던 큰 사진이 화면을 가로질러 훑고 지나가 보인다. */
+  document.querySelectorAll('.slide').forEach((s, i) => {
+    let offset = i - slideIndex;
+    if (offset > slideTotal / 2) offset -= slideTotal;
+    if (offset < -slideTotal / 2) offset += slideTotal;
+
+    const animated = (i === slideIndex || i === prevIndex);
+    if (!animated) s.style.transition = 'none';
+
+    s.classList.toggle('is-active', offset === 0);
+    s.classList.toggle('is-prev', offset < 0);
+    s.classList.toggle('is-next', offset > 0);
+
+    if (!animated) {
+      void s.offsetWidth;   /* 강제 리플로우로 트랜지션 없이 즉시 위치 반영 */
+      s.style.transition = '';
+    }
+  });
 
   /* 점 업데이트 */
   document.querySelectorAll('.dot').forEach((d, i) =>
@@ -3834,8 +3877,12 @@ function goSlide(idx) {
 function slideNext() { goSlide(slideIndex + 1); resetAutoSlide(); }
 function slidePrev() { goSlide(slideIndex - 1); resetAutoSlide(); }
 
-/* 슬라이더 박스 높이를 현재 활성 사진의 실제 비율(naturalWidth/naturalHeight)에 맞춰
-   동적으로 조정 — 가로/세로 사진이 섞여 있어도 잘리지 않고 그대로 보여준다. */
+/* 슬라이더 박스의 세로 비율을 현재 활성 사진의 실제 비율(naturalWidth/naturalHeight)에
+   맞춰 동적으로 조정 — 가로/세로 사진이 섞여 있어도 크게 잘리지 않고 보여준다.
+   너비는 항상 부모(.gallery 섹션 안쪽 여백)를 그대로 채우는 100%이므로,
+   px 로 직접 계산하지 않고 aspect-ratio 자체를 바꿔 브라우저가 높이를 계산하게 한다
+   (wrap.clientWidth 를 직접 재서 px 로 지정하면, 매 전환마다 자기 자신의 크기를
+   다시 재는 셈이라 미세한 오차가 누적되거나 좌우 폭이 어긋나는 문제가 있었음). */
 function updateSliderHeight() {
   const wrap = document.querySelector('.slider-wrap');
   const activeImg = document.querySelector('.slide.is-active img');
@@ -3844,7 +3891,10 @@ function updateSliderHeight() {
   const apply = () => {
     if (!activeImg.naturalWidth || !activeImg.naturalHeight) return;
     const ratio = activeImg.naturalWidth / activeImg.naturalHeight;
-    wrap.style.height = (wrap.clientWidth / ratio) + 'px';
+    /* 세로 사진처럼 비율이 너무 좁으면(=박스가 지나치게 커짐) 최소 비율로 눌러서
+       박스 자체가 화면을 압도하지 않게 한다 (실제 사진 잘림은 max-height 안에서만). */
+    const clampedRatio = Math.max(ratio, 0.85);
+    wrap.style.aspectRatio = clampedRatio;
   };
 
   if (activeImg.complete) apply();
@@ -3856,6 +3906,98 @@ function setupSliderResize() {
   if (_sliderResizeBound) return;
   _sliderResizeBound = true;
   window.addEventListener('resize', updateSliderHeight);
+}
+
+/* ── 갤러리 라이트박스 (확대 보기) ──
+   화살표/점/썸네일/자동재생 없이 좌우 스와이프로만 넘김. */
+function openLightbox(idx) {
+  if (!galleryPhotos.length) return;
+  document.body.classList.add('lightbox-open');
+  document.getElementById('lightboxBackdrop').classList.add('show');
+  lightboxGoTo(idx);
+}
+
+function closeLightbox() {
+  /* 닫기(X) 버튼으로만 닫힘 — 사진 탭/스와이프로는 닫히지 않음 */
+  document.getElementById('lightboxBackdrop').classList.remove('show');
+  document.body.classList.remove('lightbox-open');
+}
+
+function lightboxGoTo(idx) {
+  const prevIndex = lightboxIndex;
+  lightboxIndex = (idx + slideTotal) % slideTotal;
+
+  /* goSlide()와 동일한 이유로, 실제 전/후 슬라이드만 애니메이션하고
+     반대편 경계를 넘어가는 나머지 슬라이드는 트랜지션 없이 즉시 재배치 */
+  document.querySelectorAll('#lightboxStage .lightbox-slide').forEach((s, i) => {
+    let offset = i - lightboxIndex;
+    if (offset > slideTotal / 2) offset -= slideTotal;
+    if (offset < -slideTotal / 2) offset += slideTotal;
+
+    const animated = (i === lightboxIndex || i === prevIndex);
+    if (!animated) s.style.transition = 'none';
+
+    s.classList.toggle('is-active', offset === 0);
+    s.classList.toggle('is-prev', offset < 0);
+    s.classList.toggle('is-next', offset > 0);
+
+    if (!animated) {
+      void s.offsetWidth;
+      s.style.transition = '';
+    }
+  });
+
+  const p = galleryPhotos[lightboxIndex] || {};
+  const cap = document.getElementById('lightboxCaption');
+  if (cap) cap.textContent = p.caption || '';
+
+  const counter = document.getElementById('lightboxCounter');
+  if (counter) {
+    counter.textContent =
+      `${String(lightboxIndex + 1).padStart(2, '0')}  /  ${String(slideTotal).padStart(2, '0')}`;
+  }
+}
+
+function lightboxNext() { lightboxGoTo(lightboxIndex + 1); }
+function lightboxPrev() { lightboxGoTo(lightboxIndex - 1); }
+
+let _lightboxSwipeBound = false;
+function setupLightboxSwipe() {
+  if (_lightboxSwipeBound) return;
+  _lightboxSwipeBound = true;
+
+  const stage = document.getElementById('lightboxStage');
+  if (!stage) return;
+
+  let startX = 0, startY = 0, dx = 0, dy = 0, active = false;
+  const onStart = x => { startX = x; dx = 0; active = true; };
+  const onMove  = x => { if (active) dx = x - startX; };
+  const onEnd   = () => {
+    if (!active) return;
+    active = false;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      dx < 0 ? lightboxNext() : lightboxPrev();
+    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      /* 스와이프가 아닌 짧은 탭 — 사진을 선택(탭)하면 라이트박스 닫기 */
+      closeLightbox();
+    }
+  };
+
+  stage.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY; dy = 0;
+    onStart(e.touches[0].clientX);
+  }, { passive: true });
+  stage.addEventListener('touchmove', e => {
+    dy = e.touches[0].clientY - startY;
+    onMove(e.touches[0].clientX);
+  }, { passive: true });
+  stage.addEventListener('touchend', onEnd);
+  stage.addEventListener('touchcancel', () => { active = false; });
+
+  stage.addEventListener('mousedown', e => { onStart(e.clientX); e.preventDefault(); });
+  stage.addEventListener('mousemove', e => onMove(e.clientX));
+  stage.addEventListener('mouseup', onEnd);
+  stage.addEventListener('mouseleave', () => { active = false; });
 }
 
 function startAutoSlide() {
