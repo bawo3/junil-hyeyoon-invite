@@ -1048,7 +1048,13 @@ body {
   font-family: 'Noto Serif KR', serif;
   font-size: 13px; font-weight: 300;
   color: var(--text-light); line-height: 2;
-  margin-bottom: 28px;
+  margin-bottom: 14px;
+}
+.account-hint {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-weight: 400;
+  color: var(--gold-dark); letter-spacing: 0.3px;
+  margin-bottom: 24px;
 }
 .account-toggle {
   display: grid;
@@ -1071,6 +1077,7 @@ body {
   min-width: 180px;
   position: relative;
   overflow: visible;
+  -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 }
 .acc-btn:hover {
   background: linear-gradient(135deg, rgba(197,213,224,0.5), rgba(123,149,172,0.2));
@@ -1106,7 +1113,10 @@ body {
   display: block; margin-bottom: 6px;
 }
 .acc-btn-name { font-size: 15px; color: var(--text-dark); letter-spacing: 2px; }
-.acc-btn-bank { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+.acc-btn-bank {
+  font-size: 12px; font-weight: 600; color: var(--text-dark);
+  margin-top: 8px; line-height: 1.6;
+}
 
 /* 부모님 계좌 */
 .parents-section {
@@ -1142,6 +1152,7 @@ body {
   transition: all 0.25s;
   position: relative;
   text-align: left;
+  -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 }
 .parent-card:hover {
   transform: translateY(-1px);
@@ -1159,8 +1170,8 @@ body {
   color: var(--text-dark);
 }
 .parent-bank {
-  font-size: 10px; color: var(--text-light);
-  margin-top: 2px; letter-spacing: 0.5px;
+  font-size: 11px; font-weight: 600; color: var(--text-dark);
+  margin-top: 6px; letter-spacing: 0.3px; line-height: 1.6;
 }
 .parent-copy {
   position: absolute; top: 10px; right: 10px;
@@ -1224,8 +1235,8 @@ body {
 }
 .pay-modal-number {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 18px; color: var(--text-dark);
-  text-align: center; letter-spacing: 2px;
+  font-size: 22px; font-weight: 600; color: var(--text-dark);
+  text-align: center; letter-spacing: 1px;
   margin-bottom: 24px;
 }
 .pay-app-grid {
@@ -1902,7 +1913,7 @@ body.lightbox-open { overflow: hidden; }
   .account-toggle { gap: 10px; }
   .acc-btn        { padding: 16px 14px 14px; }
   .acc-btn-name   { font-size: 14px; letter-spacing: 1px; }
-  .acc-btn-bank   { font-size: 10px; }
+  .acc-btn-bank   { font-size: 12px; }
   .acc-character  { width: 46px; height: 46px; top: -20px; }
   /* 교통 정보는 좁아서 1열 유지 */
   /* 교통 정보도 모바일에서 2x2 유지 */
@@ -2294,6 +2305,7 @@ body.lightbox-open { overflow: hidden; }
       축하의 마음을 전해 주시는 분들께<br>
       진심으로 감사드립니다
     </p>
+    <p class="account-hint">카드를 터치하면 계좌번호 복사와 간편 송금을 하실 수 있어요</p>
     <div class="account-toggle">
       <!-- 신랑 카드 (오른쪽 상단에 판다) -->
       <button class="acc-btn" onclick="openPayModal('groom')">
@@ -3373,9 +3385,9 @@ async function renderAccount() {
 
   /* 신랑/신부 본인 카드 */
   document.getElementById('acc-groom-name').textContent = ACCOUNTS.groom.name;
-  document.getElementById('acc-groom-bank').textContent = `${ACCOUNTS.groom.bank} ${ACCOUNTS.groom.number}`;
+  document.getElementById('acc-groom-bank').innerHTML = `${ACCOUNTS.groom.bank}<br>${ACCOUNTS.groom.number}`;
   document.getElementById('acc-bride-name').textContent = ACCOUNTS.bride.name;
-  document.getElementById('acc-bride-bank').textContent = `${ACCOUNTS.bride.bank} ${ACCOUNTS.bride.number}`;
+  document.getElementById('acc-bride-bank').innerHTML = `${ACCOUNTS.bride.bank}<br>${ACCOUNTS.bride.number}`;
 
   /* 부모님 카드 동적 채우기 */
   const parentMap = [
@@ -3387,10 +3399,58 @@ async function renderAccount() {
     const el = document.getElementById(id);
     if (!el || !acc) return;
     el.querySelector('.parent-name').textContent = acc.name || '—';
-    el.querySelector('.parent-bank').textContent =
-      (acc.bank || acc.number) ? `${acc.bank} ${acc.number}` : '—';
+    el.querySelector('.parent-bank').innerHTML =
+      (acc.bank || acc.number) ? `${acc.bank}<br>${acc.number}` : '—';
     el.onclick = () => openParentPayModal(acc.name, relation, acc.bank, acc.number);
+    attachLongPressCopy(el, () => acc);
   });
+
+  /* 신랑/신부 카드 — 길게 누르면 계좌만 복사 */
+  attachLongPressCopy(document.getElementById('acc-groom-name').closest('.acc-btn'), () => ACCOUNTS.groom);
+  attachLongPressCopy(document.getElementById('acc-bride-name').closest('.acc-btn'), () => ACCOUNTS.bride);
+}
+
+/* 길게 누르면(2.5초) 모달을 열지 않고 계좌번호만 바로 복사 */
+function attachLongPressCopy(el, getAcc) {
+  if (!el) return;
+  const HOLD_MS = 2500;
+  let timer = null;
+  let longPressed = false;
+
+  const start = () => {
+    longPressed = false;
+    timer = setTimeout(() => {
+      longPressed = true;
+      const acc = getAcc();
+      if (!acc || (!acc.bank && !acc.number)) return;
+      const text = `${acc.bank || ''} ${acc.number || ''}`.trim();
+      if (navigator.vibrate) navigator.vibrate(30);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => showToast('계좌번호가 복사되었습니다'))
+          .catch(() => fallbackCopy(text, '계좌번호가 복사되었습니다'));
+      } else {
+        fallbackCopy(text, '계좌번호가 복사되었습니다');
+      }
+    }, HOLD_MS);
+  };
+  const cancel = () => { clearTimeout(timer); };
+
+  el.addEventListener('mousedown', start);
+  el.addEventListener('mouseup', cancel);
+  el.addEventListener('mouseleave', cancel);
+  el.addEventListener('touchstart', start, { passive: true });
+  el.addEventListener('touchend', cancel);
+  el.addEventListener('touchmove', cancel);
+  el.addEventListener('touchcancel', cancel);
+  /* 길게 눌러 복사된 경우, 뒤이어 발생하는 클릭(모달 열기)은 무시 */
+  el.addEventListener('click', (e) => {
+    if (longPressed) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      longPressed = false;
+    }
+  }, true);
 }
 
 /* 현재 모달에 표시 중인 계좌 정보 */
